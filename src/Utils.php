@@ -33,33 +33,18 @@ class Utils
      * @const array
      */
     const UNITS = [
-        'noether' => '0',
-        'wei' => '1',
+        'nohuc' => '0',
+         'wei' => '1',
         'kwei' => '1000',
-        'Kwei' => '1000',
-        'babbage' => '1000',
-        'femtoether' => '1000',
         'mwei' => '1000000',
-        'Mwei' => '1000000',
-        'lovelace' => '1000000',
-        'picoether' => '1000000',
         'gwei' => '1000000000',
-        'Gwei' => '1000000000',
-        'shannon' => '1000000000',
-        'nanoether' => '1000000000',
-        'nano' => '1000000000',
-        'szabo' => '1000000000000',
-        'microether' => '1000000000000',
-        'micro' => '1000000000000',
-        'finney' => '1000000000000000',
-        'milliether' => '1000000000000000',
-        'milli' => '1000000000000000',
-        'ether' => '1000000000000000000',
-        'kether' => '1000000000000000000000',
-        'grand' => '1000000000000000000000',
-        'mether' => '1000000000000000000000000',
-        'gether' => '1000000000000000000000000000',
-        'tether' => '1000000000000000000000000000000'
+        'twei' => '1000000000000',
+        'pwei' => '1000000000000000',
+         'huc' => '1000000000000000000',
+        'khuc' => '1000000000000000000000',
+        'mhuc' => '1000000000000000000000000',
+        'ghuc' => '1000000000000000000000000000',
+        'thuc' => '1000000000000000000000000000000'
     ];
 
     /**
@@ -325,23 +310,23 @@ class Utils
     }
 
     /**
-     * toHucer
-     * Change number from unit to ether.
+     * toHuc
+     * Change number from unit to huc.
      * For example:
-     * list($bnq, $bnr) = Utils::toHucer('1', 'kether'); 
+     * list($bnq, $bnr) = Utils::toHuc('1', 'khuc'); 
      * $bnq->toString(); // 1000
      * 
      * @param BigNumber|string|int $number
      * @param string $unit
      * @return array
      */
-    public static function toHucer($number, $unit)
+    public static function toHuc($number, $unit)
     {
-        // if ($unit === 'ether') {
+        // if ($unit === 'huc') {
         //     throw new InvalidArgumentException('Please use another unit.');
         // }
         $wei = self::toWei($number, $unit);
-        $bnt = new BigNumber(self::UNITS['ether']);
+        $bnt = new BigNumber(self::UNITS['huc']);
 
         return $wei->divide($bnt);
     }
