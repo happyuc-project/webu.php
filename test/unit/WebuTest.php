@@ -49,7 +49,7 @@ class WebuTest extends TestCase
      */
     public function testInstance()
     {
-        $requestManager = new HttpRequestManager('http://193.112.32.158:8545');
+        $requestManager = new HttpRequestManager('http://localhost:8545');
         $webu = new Webu(new HttpProvider($requestManager));
 
         $this->assertTrue($webu->provider instanceof HttpProvider);

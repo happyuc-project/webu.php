@@ -26,7 +26,7 @@ class TestCase extends BaseTestCase
      * 
      * @var string
      */
-    protected $testHost = 'http://193.112.32.158:8545';
+    protected $testHost = 'http://localhost:8545';
 
     /**
      * coinbase

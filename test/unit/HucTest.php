@@ -51,14 +51,14 @@ class HucTest extends TestCase
     public function testSetProvider()
     {
         $eth = $this->huc;
-        $requestManager = new HttpRequestManager('http://193.112.32.158:8545');
+        $requestManager = new HttpRequestManager('http://localhost:8545');
         $eth->provider = new HttpProvider($requestManager);
 
-        $this->assertEquals($eth->provider->requestManager->host, 'http://193.112.32.158:8545');
+        $this->assertEquals($eth->provider->requestManager->host, 'http://localhost:8545');
 
         $eth->provider = null;
 
-        $this->assertEquals($eth->provider->requestManager->host, 'http://193.112.32.158:8545');
+        $this->assertEquals($eth->provider->requestManager->host, 'http://localhost:8545');
     }
 
     /**

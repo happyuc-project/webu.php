@@ -42,10 +42,10 @@ use Webu\Webu;
 use Webu\Providers\HttpProvider;
 use Webu\RequestManagers\HttpRequestManager;
 
-$webu = new Webu(new HttpProvider(new HttpRequestManager('http://193.112.32.158:8545')));
+$webu = new Webu(new HttpProvider(new HttpRequestManager('http://localhost:8545')));
 
 // timeout
-$webu = new Webu(new HttpProvider(new HttpRequestManager('http://193.112.32.158:8545', 0.1)));
+$webu = new Webu(new HttpProvider(new HttpRequestManager('http://localhost:8545', 0.1)));
 ```
 
 ### You can use callback to each rpc call:
