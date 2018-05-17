@@ -12,7 +12,7 @@ class NetApiTest extends TestCase
     /**
      * net
      * 
-     * @var Webu\Net
+     * @var \Webu\Net
      */
     protected $net;
 

@@ -2,10 +2,8 @@
 
 /**
  * This file is part of webu.php package.
- * 
- * (c) Kuan-Cheng,Lai <alk03073135@gmail.com>
- * 
- * @author Peter Lai <alk03073135@gmail.com>
+ *
+ * @author dreamxyp <dreamxyp@gmail.com>
  * @license MIT
  */
 
@@ -33,7 +31,7 @@ class Utils
      * @const array
      */
     const UNITS = [
-        'nohuc' => '0',
+       'nohuc' => '0',
          'wei' => '1',
         'kwei' => '1000',
         'mwei' => '1000000',

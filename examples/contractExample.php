@@ -271,9 +271,11 @@ $testBytecode = '0x60606040526040805190810160405280600581526020017f4552433230000
 $contract = new Contract($webu->provider, $testAbi);
 $webu->huc->accounts(function ($err, $accounts) use ($contract, $testBytecode) {
     if ($err === null) {
-        if (isset($accounts)) {
+        if (isset($accounts))
+        {
             $accounts = $accounts;
-        } else {
+        } else
+        {
             throw new RuntimeException('Please ensure you have access to webu json rpc provider.');
         }
         $fromAccount = $accounts[0];

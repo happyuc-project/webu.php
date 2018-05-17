@@ -2,17 +2,13 @@
 
 /**
  * This file is part of webu.php package.
- * 
- * (c) Kuan-Cheng,Lai <alk03073135@gmail.com>
- * 
- * @author Peter Lai <alk03073135@gmail.com>
+ *
+ * @author dreamxyp <dreamxyp@gmail.com>
  * @license MIT
  */
 
 namespace Webu\Providers;
 
-use Webu\Providers\Provider;
-use Webu\Providers\IProvider;
 use Webu\RequestManagers\RequestManager;
 
 class HttpProvider extends Provider implements IProvider

@@ -5,13 +5,14 @@ require('./exampleBase.php');
 $huc = $webu->huc;
 
 echo 'Huc Send Transaction' . PHP_EOL;
+
 $huc->accounts(function ($err, $accounts) use ($huc) {
     if ($err !== null) {
         echo 'Error: ' . $err->getMessage();
         return;
     }
     $fromAccount = $accounts[0];
-    $toAccount = $accounts[1];
+    $toAccount   = $accounts[1];
 
     // get balance
     $huc->getBalance($fromAccount, function ($err, $balance) use($fromAccount) {

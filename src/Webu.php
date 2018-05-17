@@ -3,22 +3,14 @@
 /**
  * This file is part of webu.php package.
  * 
- * (c) Kuan-Cheng,Lai <alk03073135@gmail.com>
- * 
- * @author Peter Lai <alk03073135@gmail.com>
+ * @author dreamxyp <dreamxyp@gmail.com>
  * @license MIT
  */
 
 namespace Webu;
 
-use Webu\Huc;
-use Webu\Net;
-use Webu\Personal;
-use Webu\Shh;
-use Webu\Utils;
 use Webu\Providers\Provider;
 use Webu\Providers\HttpProvider;
-use Webu\RequestManagers\RequestManager;
 use Webu\RequestManagers\HttpRequestManager;
 
 class Webu
@@ -31,11 +23,11 @@ class Webu
     protected $provider;
 
     /**
-     * eth
+     * huc
      * 
      * @var \Webu\Huc
      */
-    protected $eth;
+    protected $huc;
 
     /**
      * net
@@ -212,11 +204,11 @@ class Webu
      */
     public function getHuc()
     {
-        if (!isset($this->eth)) {
+        if (!isset($this->huc)) {
             $eth = new Huc($this->provider);
-            $this->eth = $eth;
+            $this->huc = $eth;
         }
-        return $this->eth;
+        return $this->huc;
     }
 
     /**

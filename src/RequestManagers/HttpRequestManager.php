@@ -2,10 +2,8 @@
 
 /**
  * This file is part of webu.php package.
- * 
- * (c) Kuan-Cheng,Lai <alk03073135@gmail.com>
- * 
- * @author Peter Lai <alk03073135@gmail.com>
+ *
+ * @author dreamxyp <dreamxyp@gmail.com>
  * @license MIT
  */
 
@@ -13,11 +11,8 @@ namespace Webu\RequestManagers;
 
 use InvalidArgumentException;
 use RuntimeException as RPCException;
-use Psr\Http\Message\ResponseInterface;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Client;
-use Webu\RequestManagers\RequestManager;
-use Webu\RequestManagers\IRequestManager;
 
 class HttpRequestManager extends RequestManager implements IRequestManager
 {

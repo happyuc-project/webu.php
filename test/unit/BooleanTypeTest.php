@@ -2,7 +2,6 @@
 
 namespace Test\Unit;
 
-use InvalidArgumentException;
 use Test\TestCase;
 use Webu\Contracts\Types\Boolean;
 

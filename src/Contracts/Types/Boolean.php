@@ -2,10 +2,8 @@
 
 /**
  * This file is part of webu.php package.
- * 
- * (c) Kuan-Cheng,Lai <alk03073135@gmail.com>
- * 
- * @author Peter Lai <alk03073135@gmail.com>
+ *
+ * @author dreamxyp <dreamxyp@gmail.com>
  * @license MIT
  */
 
@@ -13,7 +11,6 @@ namespace Webu\Contracts\Types;
 
 use InvalidArgumentException;
 use Webu\Contracts\SolidityType;
-use Webu\Contracts\Types\IType;
 
 class Boolean extends SolidityType implements IType
 {

@@ -2,10 +2,8 @@
 
 /**
  * This file is part of webu.php package.
- * 
- * (c) Kuan-Cheng,Lai <alk03073135@gmail.com>
- * 
- * @author Peter Lai <alk03073135@gmail.com>
+ *
+ * @author dreamxyp <dreamxyp@gmail.com>
  * @license MIT
  */
 
@@ -74,7 +72,7 @@ class SolidityType
     public function nestedTypes($name)
     {
         if (!is_string($name)) {
-            throw new InvalidArgumentException('nestedTypes name must string.');
+            throw new \InvalidArgumentException('nestedTypes name must string.');
         }
         $matches = [];
 
@@ -93,7 +91,7 @@ class SolidityType
     public function nestedName($name)
     {
         if (!is_string($name)) {
-            throw new InvalidArgumentException('nestedName name must string.');
+            throw new \InvalidArgumentException('nestedName name must string.');
         }
         $nestedTypes = $this->nestedTypes($name);
 

@@ -8,7 +8,6 @@ use Webu\RequestManagers\RequestManager;
 use Webu\RequestManagers\HttpRequestManager;
 use Webu\Contract;
 use Webu\Utils;
-use Webu\Contracts\Hucabi;
 use Webu\Formatters\IntegerFormatter;
 
 class ContractTest extends TestCase
