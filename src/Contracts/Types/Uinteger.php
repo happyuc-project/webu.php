@@ -9,9 +9,7 @@
 
 namespace Webu\Contracts\Types;
 
-use Webu\Utils;
 use Webu\Contracts\SolidityType;
-use Webu\Contracts\Types\IType;
 use Webu\Formatters\IntegerFormatter;
 use Webu\Formatters\BigNumberFormatter;
 

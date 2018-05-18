@@ -21,10 +21,10 @@ class Str extends SolidityType implements IType
      * 
      * @return void
      */
-    public function __construct()
-    {
-        //
-    }
+//    public function __construct()
+//    {
+//        //
+//    }
 
     /**
      * isType

@@ -369,12 +369,12 @@ class UtilsTest extends TestCase
         $this->assertEquals($bnq->toString(), '18');
         $this->assertEquals($bnr->toString(), '0');
 
-        list($bnq, $bnr) = Utils::fromWei(1, 'femtohuc');
+        list($bnq, $bnr) = Utils::fromWei(1, 'huc');
 
         $this->assertEquals($bnq->toString(), '0');
         $this->assertEquals($bnr->toString(), '1');
 
-        list($bnq, $bnr) = Utils::fromWei(0x11, 'nano');
+        list($bnq, $bnr) = Utils::fromWei(0x11, 'wei');
 
         $this->assertEquals($bnq->toString(), '0');
         $this->assertEquals($bnr->toString(), '17');

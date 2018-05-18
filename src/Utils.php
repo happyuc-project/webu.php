@@ -9,7 +9,6 @@
 
 namespace Webu;
 
-use RuntimeException;
 use InvalidArgumentException;
 use stdClass;
 use kornrunner\Keccak;

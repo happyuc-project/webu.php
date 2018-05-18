@@ -81,7 +81,7 @@ class HttpRequestManager extends RequestManager implements IRequestManager
             if (is_array($json)) {
                 // batch results
                 $results = [];
-                $errors = [];
+                $errors  = [];
 
                 foreach ($json as $result) {
                     if (isset($result->result)) {

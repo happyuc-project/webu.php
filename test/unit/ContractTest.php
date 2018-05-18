@@ -415,7 +415,7 @@ class ContractTest extends TestCase
         parent::setUp();
 
         $this->contract = new Contract($this->webu->provider, $this->testAbi);
-        $this->contract->eth->accounts(function ($err, $accounts) {
+        $this->contract->huc->accounts(function ($err, $accounts) {
             if ($err === null) {
                 if (isset($accounts)) {
                     $this->accounts = $accounts;

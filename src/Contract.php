@@ -162,7 +162,7 @@ class Contract
      */
     public function __get($name)
     {
-        $mhucod = 'get' . ucfirst($name);
+        $method = 'get' . ucfirst($name);
 
         if (method_exists($this, $method)) {
             return call_user_func_array([$this, $method], []);

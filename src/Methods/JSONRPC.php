@@ -51,7 +51,7 @@ class JSONRPC implements IRPC
      */
     public function __construct($method, $arguments)
     {
-        $this->method = $method;
+        $this->method    = $method;
         $this->arguments = $arguments;
     }
 
@@ -180,7 +180,7 @@ class JSONRPC implements IRPC
     public function toPayload()
     {
         if (empty($this->method) || !is_string($this->method)) {
-            throw new InvalidArgumentException('Please check the method set properly.');
+            throw new \InvalidArgumentException('Please check the method set properly.');
         }
         if (empty($this->id)) {
             $id = rand();
@@ -188,9 +188,9 @@ class JSONRPC implements IRPC
             $id = $this->id;
         }
         $rpc = [
-            'id' => $id,
+            'id'      => $id,
             'jsonrpc' => $this->rpcVersion,
-            'method' => $this->method
+            'method'  => $this->method
         ];
 
         if (count($this->arguments) > 0) {

@@ -45,6 +45,7 @@ class Huc
         'huc_accounts',
         'huc_blockNumber',
         'huc_getBalance',
+        'huc_getBlock',
         'huc_getStorageAt',
         'huc_getTransactionCount',
         'huc_getBlockTransactionCountByHash',
@@ -114,6 +115,8 @@ class Huc
             throw new \RuntimeException('Please set provider first.');
         }
 
+        print_r(['$name'=>$name,'$arguments'=>$arguments]);
+
         $class = explode('\\', get_class());
 
         if (preg_match('/^[a-zA-Z0-9]+$/', $name) === 1) {
@@ -122,7 +125,7 @@ class Huc
             if (!in_array($method, $this->allowedMethods)) {
                 throw new \RuntimeException('Unallowed rpc method: ' . $method);
             }
-            if ($this->provider->isBatch) {
+            if ($this->provider->getIsBatch() ) {
                 $callback = null;
             } else {
                 $callback = array_pop($arguments);
@@ -156,7 +159,6 @@ class Huc
     public function __get($name)
     {
         $method = 'get' . ucfirst($name);
-
         if (method_exists($this, $method)) {
             return call_user_func_array([$this, $method], []);
         }

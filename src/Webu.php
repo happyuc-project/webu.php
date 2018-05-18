@@ -6,12 +6,7 @@
  * @author dreamxyp <dreamxyp@gmail.com>
  * @license MIT
  */
-
 namespace Webu;
-
-use Webu\Providers\Provider;
-use Webu\Providers\HttpProvider;
-use Webu\RequestManagers\HttpRequestManager;
 
 class Webu
 {
@@ -70,27 +65,20 @@ class Webu
      * @var array
      */
     private $allowedMethods = [
-        'webu_clientVersion', 'webu_sha3'
+        'webu_clientVersion',
+        'webu_sha3'
     ];
 
     /**
      * construct
      *
-     * @param string|\Webu\Providers\Provider $provider
+     * @param string
      * @return void
      */
-    public function __construct($provider)
+    public function __construct($host,$port)
     {
-        if (is_string($provider) && (filter_var($provider, FILTER_VALIDATE_URL) !== false)) {
-            // check the uri schema
-            if (preg_match('/^https?:\/\//', $provider) === 1) {
-                $requestManager = new HttpRequestManager($provider);
-
-                $this->provider = new HttpProvider($requestManager);
-            }
-        } else if ($provider instanceof Provider) {
-            $this->provider = $provider;
-        }
+        $requestManager = new \Webu\RequestManagers\HttpRequestManager($provider);
+        $this->provider = new \Webu\Providers\HttpProvider($requestManager);
     }
 
     /**
@@ -114,7 +102,7 @@ class Webu
             if (!in_array($method, $this->allowedMethods)) {
                 throw new \RuntimeException('Unallowed rpc method: ' . $method);
             }
-            if ($this->provider->isBatch) {
+            if ($this->provider->getIsBatch() ) {
                 $callback = null;
             } else {
                 $callback = array_pop($arguments);
@@ -140,39 +128,6 @@ class Webu
     }
 
     /**
-     * get
-     * 
-     * @param string $name
-     * @return mixed
-     */
-    public function __get($name)
-    {
-        $method = 'get' . ucfirst($name);
-
-        if (method_exists($this, $method)) {
-            return call_user_func_array([$this, $method], []);
-        }
-        return false;
-    }
-
-    /**
-     * set
-     * 
-     * @param string $name
-     * @param mixed $value
-     * @return mixed
-     */
-    public function __set($name, $value)
-    {
-        $method = 'set' . ucfirst($name);
-
-        if (method_exists($this, $method)) {
-            return call_user_func_array([$this, $method], [$value]);
-        }
-        return false;
-    }
-
-    /**
      * getProvider
      * 
      * @return \Webu\Providers\Provider
@@ -190,7 +145,7 @@ class Webu
      */
     public function setProvider($provider)
     {
-        if ($provider instanceof Provider) {
+        if ($provider instanceof \Webu\Providers\Provider) {
             $this->provider = $provider;
             return true;
         }

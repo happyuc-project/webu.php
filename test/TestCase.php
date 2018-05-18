@@ -42,7 +42,7 @@ class TestCase extends BaseTestCase
      */
     public function setUp()
     {
-        $webu = new Webu($this->testHost);
+        $webu       = new Webu($this->testHost);
         $this->webu = $webu;
 
         $webu->huc->coinbase(function ($err, $coinbase) {
