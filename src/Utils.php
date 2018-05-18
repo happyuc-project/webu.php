@@ -9,8 +9,6 @@
 
 namespace Webu;
 
-use InvalidArgumentException;
-use stdClass;
 use kornrunner\Keccak;
 use phpseclib\Math\BigInteger as BigNumber;
 
@@ -81,7 +79,7 @@ class Utils
             $hex = $value->toHex(true);
             $hex = preg_replace('/^0+(?!$)/', '', $hex);
         } else {
-            throw new InvalidArgumentException('The value to toHex function is not support.');
+            throw new \InvalidArgumentException('The value to toHex function is not support.');
         }
         if ($isPrefix) {
             return '0x' . $hex;
@@ -98,7 +96,7 @@ class Utils
     public static function hexToBin($value)
     {
         if (!is_string($value)) {
-            throw new InvalidArgumentException('The value to hexToBin function must be string.');
+            throw new \InvalidArgumentException('The value to hexToBin function must be string.');
         }
         if (self::isZeroPrefixed($value)) {
             $count = 1;
@@ -116,7 +114,7 @@ class Utils
     public static function isZeroPrefixed($value)
     {
         if (!is_string($value)) {
-            throw new InvalidArgumentException('The value to isZeroPrefixed function must be string.');
+            throw new \InvalidArgumentException('The value to isZeroPrefixed function must be string.');
         }
         return (strpos($value, '0x') === 0);
     }
@@ -145,7 +143,7 @@ class Utils
     public static function isNegative($value)
     {
         if (!is_string($value)) {
-            throw new InvalidArgumentException('The value to isNegative function must be string.');
+            throw new \InvalidArgumentException('The value to isNegative function must be string.');
         }
         return (strpos($value, '-') === 0);
     }
@@ -159,7 +157,7 @@ class Utils
     public static function isAddress($value)
     {
         if (!is_string($value)) {
-            throw new InvalidArgumentException('The value to isAddress function must be string.');
+            throw new \InvalidArgumentException('The value to isAddress function must be string.');
         }
         if (preg_match('/^(0x|0X)?[a-f0-9A-F]{40}$/', $value) !== 1) {
             return false;
@@ -178,7 +176,7 @@ class Utils
     public static function isAddressChecksum($value)
     {
         if (!is_string($value)) {
-            throw new InvalidArgumentException('The value to isAddressChecksum function must be string.');
+            throw new \InvalidArgumentException('The value to isAddressChecksum function must be string.');
         }
         $value = self::stripZero($value);
         $hash = self::stripZero(self::sha3(mb_strtolower($value)));
@@ -215,7 +213,7 @@ class Utils
     public static function sha3($value)
     {
         if (!is_string($value)) {
-            throw new InvalidArgumentException('The value to sha3 function must be string.');
+            throw new \InvalidArgumentException('The value to sha3 function must be string.');
         }
         if (strpos($value, '0x') === 0) {
             $value = self::hexToBin($value);
@@ -257,10 +255,10 @@ class Utils
         $bn = self::toBn($number);
 
         if (!is_string($unit)) {
-            throw new InvalidArgumentException('toWei unit must be string.');
+            throw new \InvalidArgumentException('toWei unit must be string.');
         }
         if (!isset(self::UNITS[$unit])) {
-            throw new InvalidArgumentException('toWei doesn\'t support ' . $unit . ' unit.');
+            throw new \InvalidArgumentException('toWei doesn\'t support ' . $unit . ' unit.');
         }
         $bnt = new BigNumber(self::UNITS[$unit]);
 
@@ -271,7 +269,7 @@ class Utils
             $fractionLength = strlen($fraction->toString());
 
             if ($fractionLength > strlen(self::UNITS[$unit])) {
-                throw new InvalidArgumentException('toWei fraction part is out of limit.');
+                throw new \InvalidArgumentException('toWei fraction part is out of limit.');
             }
             $whole = $whole->multiply($bnt);
 
@@ -344,10 +342,10 @@ class Utils
         $bn = self::toBn($number);
 
         if (!is_string($unit)) {
-            throw new InvalidArgumentException('fromWei unit must be string.');
+            throw new \InvalidArgumentException('fromWei unit must be string.');
         }
         if (!isset(self::UNITS[$unit])) {
-            throw new InvalidArgumentException('fromWei doesn\'t support ' . $unit . ' unit.');
+            throw new \InvalidArgumentException('fromWei doesn\'t support ' . $unit . ' unit.');
         }
         $bnt = new BigNumber(self::UNITS[$unit]);
 
@@ -362,7 +360,7 @@ class Utils
      */
     public static function jsonMethodToString($json)
     {
-        if ($json instanceof stdClass) {
+        if ($json instanceof \stdClass) {
             // one way to change whole json stdClass to array type
             // $jsonString = json_encode($json);
 
@@ -385,7 +383,7 @@ class Utils
             }
             return $json['name'] . '(' . implode(',', $typeName) . ')';
         } elseif (!is_array($json)) {
-            throw new InvalidArgumentException('jsonMethodToString json must be array or stdClass.');
+            throw new \InvalidArgumentException('jsonMethodToString json must be array or stdClass.');
         }
         if (isset($json['name']) && strpos($json['name'], '(') > 0) {
             return $json['name'];
@@ -410,9 +408,9 @@ class Utils
     public static function jsonToArray($json, $depth=1)
     {
         if (!is_int($depth) || $depth <= 0) {
-            throw new InvalidArgumentException('jsonToArray depth must be int and depth must bigger than 0.');
+            throw new \InvalidArgumentException('jsonToArray depth must be int and depth must bigger than 0.');
         }
-        if ($json instanceof stdClass) {
+        if ($json instanceof \stdClass) {
             $json = (array) $json;
             $typeName = [];
 
@@ -422,7 +420,7 @@ class Utils
                         foreach ($param as $subKey => $subParam) {
                             $json[$key][$subKey] = self::jsonToArray($subParam, $depth-1);
                         }
-                    } elseif ($param instanceof stdClass) {
+                    } elseif ($param instanceof \stdClass) {
                         $json[$key] = self::jsonToArray($param, $depth-1);
                     }
                 }
@@ -435,7 +433,7 @@ class Utils
                         foreach ($param as $subKey => $subParam) {
                             $json[$key][$subKey] = self::jsonToArray($subParam, $depth-1);
                         }
-                    } elseif ($param instanceof stdClass) {
+                    } elseif ($param instanceof \stdClass) {
                         $json[$key] = self::jsonToArray($param, $depth-1);
                     }
                 }
@@ -444,11 +442,11 @@ class Utils
             $json = json_decode($json, true);
 
             if (JSON_ERROR_NONE !== json_last_error()) {
-                throw new InvalidArgumentException('json_decode error: ' . json_last_error_msg());
+                throw new \InvalidArgumentException('json_decode error: ' . json_last_error_msg());
             }
             return $json;
         } else {
-            throw new InvalidArgumentException('The json param to jsonToArray must be array or stdClass or string.');
+            throw new \InvalidArgumentException('The json param to jsonToArray must be array or stdClass or string.');
         }
         return $json;
     }
@@ -478,7 +476,7 @@ class Utils
                 $comps = explode('.', $number);
 
                 if (count($comps) > 2) {
-                    throw new InvalidArgumentException('toBn number must be a valid number.');
+                    throw new \InvalidArgumentException('toBn number must be a valid number.');
                 }
                 $whole = $comps[0];
                 $fraction = $comps[1];
@@ -508,13 +506,13 @@ class Utils
             } elseif (empty($number)) {
                 $bn = new BigNumber(0);
             } else {
-                throw new InvalidArgumentException('toBn number must be valid hex string.');
+                throw new \InvalidArgumentException('toBn number must be valid hex string.');
             }
             if (isset($negative1)) {
                 $bn = $bn->multiply($negative1);
             }
         } else {
-            throw new InvalidArgumentException('toBn number must be BigNumber, string or int.');
+            throw new \InvalidArgumentException('toBn number must be BigNumber, string or int.');
         }
         return $bn;
     }

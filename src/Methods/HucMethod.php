@@ -33,7 +33,7 @@ class HucMethod extends JSONRPC implements IMethod
      * 
      * @var array
      */
-    protected $outputFormatters = [];
+    public $outputFormatters = [];
 
     /**
      * defaultValues

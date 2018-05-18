@@ -162,11 +162,11 @@ class Hucabi
     /**
      * decodeParameters
      * 
-     * @param stdClass|array $type
+     * @param array  $type
      * @param string $param
-     * @return string
+     * @return array
      */
-    public function decodeParameters($types, $param)
+    public function decodeParameters($types, $param):array
     {
         if (!is_string($param)) {
             throw new InvalidArgumentException('The type or param to decodeParameters must be string.');
@@ -186,9 +186,9 @@ class Hucabi
                 }
             }
         }
-        $typesLength = count($types);
+        $typesLength   = count($types);
         $solidityTypes = $this->getSolidityTypes($types);
-        $offsets = array_fill(0, $typesLength, 0);
+        $offsets       = array_fill(0, $typesLength, 0);
 
         for ($i=0; $i<$typesLength; $i++) {
             $offsets[$i] = $solidityTypes[$i]->staticPartLength($types[$i]);
@@ -200,7 +200,7 @@ class Hucabi
             $offsets[$i] -= $solidityTypes[$i]->staticPartLength($types[$i]);
         }
         $result = [];
-        $param = mb_strtolower(Utils::stripZero($param));
+        $param  = mb_strtolower(Utils::stripZero($param));
 
         for ($i=0; $i<$typesLength; $i++) {
             if (isset($outputTypes['outputs'][$i]['name'])) {

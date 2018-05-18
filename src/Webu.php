@@ -85,23 +85,27 @@ class Webu
 //        'webu_clientVersion',
 //        'webu_sha3'
 //    ];
+
     /**
-     * @param $callback
+     * Returns the current client version.
      */
-    public function clientVersion($callback)
+    public function clientVersion()
     {
-        $method = new HucMethod('webu_clientVersion',[]);
-        $this->provider->send($method,$callback);
+        $params = [];
+        return $this->provider->sendReal('webu_clientVersion',$params);
     }
 
     /**
-     * @param $callback
+     * Returns Keccak-256 (not the standardized SHA3-256) of the given data.
+     *
+     * @param string $data the data to convert into a SHA3 hash
      */
-    public function sha3($callback)
+    public function sha3(string $data)
     {
-        $method = new HucMethod('webu_sha3',[]);
-        $this->provider->send($method,$callback);
+        $params = [$data];
+        return $this->provider->sendReal('webu_sha3',$params);
     }
+
     /**
      * call
      * 

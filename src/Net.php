@@ -24,27 +24,55 @@ class Net
      * 
      * @var array
      */
-    private $methods = [];
+//    private $methods = [];
 
     /**
      * allowedMethods
      * 
      * @var array
      */
-    private $allowedMethods = [
-        'net_version', 'net_peerCount', 'net_listening'
-    ];
+//    private $allowedMethods = [
+//        'net_version', 'net_peerCount', 'net_listening'
+//    ];
 
     /**
      * construct
      *
-     * @param string|\Webu\HttpProvider $provider
+     * @param \Webu\HttpProvider $provider
      * @return void
      */
     public function __construct($provider)
     {
         $this->provider = $provider;
     }
+
+    /**
+     * Returns the current network id.
+     */
+    public function version()
+    {
+        $params = [];
+        return $this->provider->sendReal('net_version',$params);
+    }
+
+    /**
+     * Returns number of peers currently connected to the client.
+     */
+    public function peerCount()
+    {
+        $params = [];
+        return $this->provider->sendReal('net_peerCount',$params);
+    }
+
+    /**
+     * Returns true if client is actively listening for network connections.
+     */
+    public function listening()
+    {
+        $params = [];
+        return $this->provider->sendReal('net_listening',$params);
+    }
+
 
     /**
      * call

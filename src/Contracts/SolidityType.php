@@ -27,15 +27,15 @@ class SolidityType
      * @param string $name
      * @return mixed
      */
-    public function __get($name)
-    {
-        $method = 'get' . ucfirst($name);
-
-        if (method_exists($this, $method)) {
-            return call_user_func_array([$this, $method], []);
-        }
-        return false;
-    }
+//    public function __get($name)
+//    {
+//        $method = 'get' . ucfirst($name);
+//
+//        if (method_exists($this, $method)) {
+//            return call_user_func_array([$this, $method], []);
+//        }
+//        return false;
+//    }
 
     /**
      * set
@@ -44,15 +44,27 @@ class SolidityType
      * @param mixed $value
      * @return mixed;
      */
-    public function __set($name, $value)
-    {
-        $method = 'set' . ucfirst($name);
+//    public function __set($name, $value)
+//    {
+//        $method = 'set' . ucfirst($name);
+//
+//        if (method_exists($this, $method)) {
+//            return call_user_func_array([$this, $method], [$value]);
+//        }
+//        return false;
+//    }
 
-        if (method_exists($this, $method)) {
-            return call_user_func_array([$this, $method], [$value]);
-        }
+
+    /**
+     * isDynamicType
+     *
+     * @return bool
+     */
+    public function isDynamicType()
+    {
         return false;
     }
+
 
     /**
      * callStatic
@@ -177,15 +189,6 @@ class SolidityType
         return $count;
     }
 
-    /**
-     * isDynamicType
-     * 
-     * @return bool
-     */
-    public function isDynamicType()
-    {
-        return false;
-    }
 
     /**
      * encode

@@ -282,8 +282,8 @@ class Contract
     {
         if (isset($this->constructor)) {
             $constructor = $this->constructor;
-            $arguments = func_get_args();
-            $callback = array_pop($arguments);
+            $arguments   = func_get_args();
+            $callback    = array_pop($arguments);
 
             if (count($arguments) < count($constructor['inputs'])) {
                 throw new \InvalidArgumentException('Please make sure you have put all constructor params and callback.');

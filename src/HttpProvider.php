@@ -20,14 +20,6 @@ class HttpProvider
     public $webu;
 
     /**
-     * isBatch
-     *
-     * @var bool
-     */
-    public $isBatch = false;
-
-
-    /**
      * requestManager
      *
      * @var \Webu\HttpRequestManager
@@ -42,24 +34,22 @@ class HttpProvider
     protected $rpcVersion = '2.0';
 
     /**
-     * batch
-     *
-     * @var array
-     */
-    protected $batch = [];
-
-    /**
      * id
      *
      * @var integer
      */
     protected $id = 0;
+
+
     /**
-     * methods
-     * 
      * @var array
      */
-    protected $methods = [];
+    protected $methods  = [];
+
+    /**
+     * @var array
+     */
+    protected $payloads = [];
 
     /**
      * construct
@@ -73,35 +63,30 @@ class HttpProvider
         $this->webu           = $webu;
     }
 
+
+    public function sendReal($method,$params)
+    {
+        $payload = json_encode([
+            'jsonrpc' => $this->rpcVersion,
+            'method'  => $method,
+            'params'  => $params,
+            'id'      => ++$this->id
+        ]);
+        return $this->requestManager->payloadReal($payload);
+    }
+
     /**
      * send
      * 
      * @param \Webu\Methods\HucMethod $method
-     * @param callable $callback
      * @return void
      */
-    public function send($method, $callback)
+    public function sendAsyn($method)
     {
-        $payload = $method->toPayloadString();
+        $payload          = $method->toPayloadString();
 
-        if (!$this->isBatch) {
-            $proxy = function ($err, $res) use ($method, $callback) {
-                if ($err !== null) {
-                    return call_user_func($callback, $err, null);
-                }
-                if (!is_array($res)) {
-                    // $res = $method->transform([$res], $method->outputFormatters);
-                    return call_user_func($callback, null, $res[0]);
-                }
-                // $res = $method->transform($res, $method->outputFormatters);
-
-                return call_user_func($callback, null, $res);
-            };
-            $this->requestManager->sendPayload($payload, $proxy);
-        } else {
-            $this->methods[] = $method;
-            $this->batch[]   = $payload;
-        }
+        $this->methods[]  = $method;
+        $this->payloads[] = $payload;
     }
 
 
@@ -113,12 +98,8 @@ class HttpProvider
      */
     public function execute($callback)
     {
-        if (!$this->isBatch) {
-            throw new \RuntimeException('Please batch json rpc first.');
-        }
-
         $methods = $this->methods;
-        $proxy = function ($err, $res) use ($methods, $callback) {
+        $proxy   = function ($err, $res) use ($methods, $callback) {
             if ($err !== null) {
                 return call_user_func($callback, $err, null);
             }
@@ -135,9 +116,9 @@ class HttpProvider
             }
             return call_user_func($callback, null, $res);
         };
-        $this->requestManager->sendPayload('[' . implode(',', $this->batch) . ']', $proxy);
-        $this->methods[] = [];
-        $this->batch     = [];
+        $this->requestManager->payloadAsyn('[' . implode(',', $this->payloads) . ']', $proxy);
+        $this->methods   = [];
+        $this->payloads  = [];
     }
 
 

@@ -10,7 +10,7 @@
 namespace Webu;
 
 
-class Huc
+class Db
 {
     /**
      * provider
@@ -24,59 +24,17 @@ class Huc
      * 
      * @var array
      */
-//  private $methods = [];
+//    private $methods = [];
 
     /**
      * allowedMethods
      * 
      * @var array
      */
-    private $allowedMethods = [
-        'huc_protocolVersion',
-        'huc_syncing',
-        'huc_coinbase',
-        'huc_mining',
-        'huc_hashrate',
-        'huc_gasPrice',
-        'huc_accounts',
-        'huc_blockNumber',
-        'huc_getBalance',
-        'huc_getBlock',
-        'huc_getStorageAt',
-        'huc_getTransactionCount',
-        'huc_getBlockTransactionCountByHash',
-        'huc_getBlockTransactionCountByNumber',
-        'huc_getUncleCountByBlockHash',
-        'huc_getUncleCountByBlockNumber',
-        'huc_getUncleByBlockHashAndIndex',
-        'huc_getUncleByBlockNumberAndIndex',
-        'huc_getCode',
-        'huc_sign',
-        'huc_sendTransaction',
-        'huc_sendRawTransaction',
-        'huc_call',
-        'huc_estimateGas',
-        'huc_getBlockByHash',
-        'huc_getBlockByNumber',
-        'huc_getTransactionByHash',
-        'huc_getTransactionByBlockHashAndIndex',
-        'huc_getTransactionByBlockNumberAndIndex',
-        'huc_getTransactionReceipt',
-        'huc_getCompilers',
-        'huc_compileSolidity',
-        'huc_compileLLL',
-        'huc_compileSerpent',
-        'huc_getWork',
-        'huc_newFilter',
-        'huc_newBlockFilter',
-        'huc_newPendingTransactionFilter',
-        'huc_uninstallFilter',
-        'huc_getFilterChanges',
-        'huc_getFilterLogs',
-        'huc_getLogs',
-        'huc_submitWork',
-        'huc_submitHashrate'
-    ];
+//    private $allowedMethods = [
+//        'db_putString', 'db_getString', 'db_putHex', 'db_getHex'
+//    ];
+
 
     /**
      * construct
@@ -88,6 +46,65 @@ class Huc
     {
         $this->provider = $provider;
     }
+
+    /**
+     * Stores a string in the local database.
+     * ** Note ** this function is deprecated and will be removed in the future.
+     *
+     * @param string $database Database name.
+     * @param string $key      Key name.
+     * @param string $store    String to store.
+     * @return array  returns true if the value was stored, otherwise false.
+     */
+    public function putString(string $database,string $key,string $store)
+    {
+        $params = [$database,$key,$store];
+        return $this->provider->sendReal('db_putString',$params);
+    }
+
+    /**
+     * Returns string from the local database.
+     * ** Note ** this function is deprecated and will be removed in the future.
+     *
+     * @param string $database  Database name.
+     * @param string $key       Key name.
+     * @return array  The previously stored string.
+     */
+    public function getString(string $database,string $key)
+    {
+        $params = [$database,$key];
+        return $this->provider->sendReal('db_getString',$params);
+    }
+
+    /**
+     * Stores binary data in the local database.
+     * ** Note ** this function is deprecated and will be removed in the future.
+     *
+     * @param string $database  Database name.
+     * @param string $key       Key name.
+     * @param string $data      The data to store.
+     * @return array returns true if the value was stored, otherwise false.
+     */
+    public function putHex(string $database,string $key,string $data)
+    {
+        $params = [$database, $key, $data];
+        return $this->provider->sendReal('db_putHex',$params);
+    }
+
+    /**
+     * Returns binary data from the local database.
+     * ** Note ** this function is deprecated and will be removed in the future.
+     *
+     * @param string $database
+     * @param string $key
+     * @return array The previously stored data.
+     */
+    public function getHex(string $database,string $key)
+    {
+        $params = [$database,$key];
+        return $this->provider->sendReal('db_getHex',$params);
+    }
+
 
     /**
      * call
@@ -102,8 +119,6 @@ class Huc
 //            throw new \RuntimeException('Please set provider first.');
 //        }
 //
-//        print_r(['$name'=>$name,'$arguments'=>$arguments]);
-//
 //        $class = explode('\\', get_class());
 //
 //        if (preg_match('/^[a-zA-Z0-9]+$/', $name) === 1) {
@@ -112,7 +127,7 @@ class Huc
 //            if (!in_array($method, $this->allowedMethods)) {
 //                throw new \RuntimeException('Unallowed rpc method: ' . $method);
 //            }
-//            if ($this->provider->getIsBatch() ) {
+//            if ($this->provider->isBatch) {
 //                $callback = null;
 //            } else {
 //                $callback = array_pop($arguments);
@@ -136,4 +151,5 @@ class Huc
 //            }
 //        }
 //    }
+//
 }

@@ -49,13 +49,55 @@ class HttpRequestManager
     }
 
     /**
-     * sendPayload
+     * getHost
+     *
+     * @return string
+     */
+    public function getHost()
+    {
+        return $this->host;
+    }
+
+    /**
+     * getTimeout
+     *
+     * @return float
+     */
+    public function getTimeout()
+    {
+        return $this->timeout;
+    }
+
+    /**
+     * payloadReal
+     *
+     * @param string $payload
+     * @return array
+     */
+    public function payloadReal($payload):array
+    {
+        try {
+            $res  = $this->client->post($this->host, [
+                'headers'         => ['content-type' => 'application/json'],
+                'body'            => $payload,
+                'timeout'         => $this->timeout,
+                'connect_timeout' => $this->timeout
+            ]);
+            $json = json_decode($res->getBody(),true);
+            return $json;
+        } catch (\Exception $err) {
+            return $err;
+        }
+    }
+
+    /**
+     * payloadAsyn
      * 
      * @param string $payload
      * @param callable $callback
      * @return void
      */
-    public function sendPayload($payload, $callback)
+    public function payloadAsyn($payload, $callback)
     {
         if (!is_string($payload)) {
             throw new \InvalidArgumentException('Payload must be string.');
@@ -102,7 +144,6 @@ class HttpRequestManager
             } else {
                 if (isset($json->error)) {
                     $error = $json->error;
-
                     call_user_func($callback, new \Exception(mb_ereg_replace('Error: ', '', $error->message), $error->code), null);
                 } else {
                     call_user_func($callback, new \Exception('Something wrong happened.'), null);
@@ -111,25 +152,5 @@ class HttpRequestManager
         } catch (\Exception $err) {
             call_user_func($callback, $err, null);
         }
-    }
-
-    /**
-     * getHost
-     *
-     * @return string
-     */
-    public function getHost()
-    {
-        return $this->host;
-    }
-
-    /**
-     * getTimeout
-     *
-     * @return float
-     */
-    public function getTimeout()
-    {
-        return $this->timeout;
     }
 }
