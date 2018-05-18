@@ -19,14 +19,14 @@ class HucMethod extends JSONRPC implements IMethod
      * 
      * @var array
      */
-    protected $validators = [];
+    protected $validators       = [];
 
     /**
      * inputFormatters
      * 
      * @var array
      */
-    protected $inputFormatters = [];
+    protected $inputFormatters  = [];
 
     /**
      * outputFormatters
@@ -40,19 +40,7 @@ class HucMethod extends JSONRPC implements IMethod
      * 
      * @var array
      */
-    protected $defaultValues = [];
-
-    /**
-     * construct
-     * 
-     * @param string $method
-     * @param array $arguments
-     * @return void
-     */
-    // public function __construct($method='', $arguments=[])
-    // {
-    //     parent::__construct($method, $arguments);
-    // }
+    protected $defaultValues    = [];
 
     /**
      * getInputFormatters
@@ -145,7 +133,7 @@ class HucMethod extends JSONRPC implements IMethod
         }
         foreach ($params as $key => $param) {
             if (isset($rules[$key])) {
-                $formatted = call_user_func([$rules[$key], 'format'], $param);
+                $formatted    = call_user_func([$rules[$key], 'format'], $param);
                 $params[$key] = $formatted;
             }
         }

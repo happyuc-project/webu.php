@@ -9,13 +9,6 @@
 
 namespace Webu;
 
-use InvalidArgumentException;
-use Webu\Providers\Provider;
-use Webu\Providers\HttpProvider;
-use Webu\RequestManagers\RequestManager;
-use Webu\RequestManagers\HttpRequestManager;
-use Webu\Utils;
-use Webu\Huc;
 use Webu\Contracts\Hucabi;
 use Webu\Contracts\Types\Address;
 use Webu\Contracts\Types\Boolean;
@@ -23,17 +16,13 @@ use Webu\Contracts\Types\Bytes;
 use Webu\Contracts\Types\Integer;
 use Webu\Contracts\Types\Str;
 use Webu\Contracts\Types\Uinteger;
-use Webu\Validators\AddressValidator;
-use Webu\Validators\HexValidator;
-use Webu\Formatters\AddressFormatter;
-use Webu\Validators\StringValidator;
 
 class Contract
 {
     /**
      * provider
      *
-     * @var \Webu\Providers\Provider
+     * @var \Webu\HttpProvider
      */
     protected $provider;
 
@@ -56,14 +45,14 @@ class Contract
      * 
      * @var array
      */
-    protected $functions = [];
+    protected $functions   = [];
 
     /**
      * events
      * 
      * @var array
      */
-    protected $events = [];
+    protected $events      = [];
 
     /**
      * toAddress
@@ -96,23 +85,14 @@ class Contract
     /**
      * construct
      *
-     * @param string|\Webu\Providers\Provider $provider
-     * @param string|\stdClass|array $abi
+     * @param \Webu\HttpProvider $provider
+     * @param array $abi
      * @return void
      */
-    public function __construct($provider, $abi)
+    public function __construct(\Webu\HttpProvider $provider, array $abi)
     {
-        if (is_string($provider) && (filter_var($provider, FILTER_VALIDATE_URL) !== false)) {
-            // check the uri schema
-            if (preg_match('/^https?:\/\//', $provider) === 1) {
-                $requestManager = new HttpRequestManager($provider);
-
-                $this->provider = new HttpProvider($requestManager);
-            }
-        } else if ($provider instanceof Provider) {
-            $this->provider = $provider;
-        }
-        $abi = Utils::jsonToArray($abi, 5);
+        $this->provider = $provider;
+        $abi            = Utils::jsonToArray($abi, 5);
 
         foreach ($abi as $item) {
             if (isset($item['type'])) {
@@ -126,7 +106,7 @@ class Contract
             }
         }
         $this->abi = $abi;
-        $this->huc = new Huc($this->provider);
+        $this->huc = $this->provider->webu->huc;
         $this->hucabi = new Hucabi([
             'address' => new Address,
             'bool' => new Boolean,
@@ -135,80 +115,6 @@ class Contract
             'string' => new Str,
             'uint' => new Uinteger,
         ]);
-    }
-
-    /**
-     * call
-     * 
-     * @param string $name
-     * @param array $arguments
-     * @return void
-     */
-    // public function __call($name, $arguments)
-    // {
-    //     if (empty($this->provider)) {
-    //         throw new \RuntimeException('Please set provider first.');
-    //     }
-    //     $class = explode('\\', get_class());
-    //     if (preg_match('/^[a-zA-Z0-9]+$/', $name) === 1) {
-    //     }
-    // }
-
-    /**
-     * get
-     * 
-     * @param string $name
-     * @return mixed
-     */
-    public function __get($name)
-    {
-        $method = 'get' . ucfirst($name);
-
-        if (method_exists($this, $method)) {
-            return call_user_func_array([$this, $method], []);
-        }
-        return false;
-    }
-
-    /**
-     * set
-     * 
-     * @param string $name
-     * @param mixed $value
-     * @return mixed
-     */
-    public function __set($name, $value)
-    {
-        $method = 'set' . ucfirst($name);
-
-        if (method_exists($this, $method)) {
-            return call_user_func_array([$this, $method], [$value]);
-        }
-        return false;
-    }
-
-    /**
-     * getProvider
-     * 
-     * @return \Webu\Providers\Provider
-     */
-    public function getProvider()
-    {
-        return $this->provider;
-    }
-
-    /**
-     * setProvider
-     * 
-     * @param \Webu\Providers\Provider $provider
-     * @return $this
-     */
-    public function setProvider($provider)
-    {
-        if ($provider instanceof Provider) {
-            $this->provider = $provider;
-        }
-        return $this;
     }
 
     /**
@@ -265,7 +171,7 @@ class Contract
     /**
      * getHucabi
      * 
-     * @return array
+     * @return \Webu\Contracts\Hucabi
      */
     public function getHucabi()
     {
@@ -312,10 +218,10 @@ class Contract
      */
     public function at($address)
     {
-        if (AddressValidator::validate($address) === false) {
-            throw new InvalidArgumentException('Please make sure address is valid.');
+        if (Validator::Address($address) === false) {
+            throw new \InvalidArgumentException('Please make sure address is valid.');
         }
-        $this->toAddress = AddressFormatter::format($address);
+        $this->toAddress = Formatter::Address($address);
 
         return $this;
     }
@@ -328,8 +234,8 @@ class Contract
      */
     public function bytecode($bytecode)
     {
-        if (HexValidator::validate($bytecode) === false) {
-            throw new InvalidArgumentException('Please make sure bytecode is valid.');
+        if (Validator::Hex($bytecode) === false) {
+            throw new \InvalidArgumentException('Please make sure bytecode is valid.');
         }
         $this->bytecode = Utils::stripZero($bytecode);
 
@@ -344,8 +250,8 @@ class Contract
      */
     public function abi($abi)
     {
-        if (StringValidator::validate($abi) === false) {
-            throw new InvalidArgumentException('Please make sure abi is valid.');
+        if (Validator::String($abi) === false) {
+            throw new \InvalidArgumentException('Please make sure abi is valid.');
         }
         $abi = Utils::jsonToArray($abi, 5);
 
@@ -380,7 +286,7 @@ class Contract
             $callback = array_pop($arguments);
 
             if (count($arguments) < count($constructor['inputs'])) {
-                throw new InvalidArgumentException('Please make sure you have put all constructor params and callback.');
+                throw new \InvalidArgumentException('Please make sure you have put all constructor params and callback.');
             }
             if (is_callable($callback) !== true) {
                 throw new \InvalidArgumentException('The last param must be callback function.');
@@ -421,12 +327,12 @@ class Contract
             $callback = array_pop($arguments);
 
             if (!is_string($method) && !isset($this->functions[$method])) {
-                throw new InvalidArgumentException('Please make sure the method is existed.');
+                throw new \InvalidArgumentException('Please make sure the method is existed.');
             }
             $function = $this->functions[$method];
 
             if (count($arguments) < count($function['inputs'])) {
-                throw new InvalidArgumentException('Please make sure you have put all function params and callback.');
+                throw new \InvalidArgumentException('Please make sure you have put all function params and callback.');
             }
             if (is_callable($callback) !== true) {
                 throw new \InvalidArgumentException('The last param must be callback function.');
@@ -467,12 +373,12 @@ class Contract
             $callback = array_pop($arguments);
 
             if (!is_string($method) && !isset($this->functions[$method])) {
-                throw new InvalidArgumentException('Please make sure the method is existed.');
+                throw new \InvalidArgumentException('Please make sure the method is existed.');
             }
             $function = $this->functions[$method];
 
             if (count($arguments) < count($function['inputs'])) {
-                throw new InvalidArgumentException('Please make sure you have put all function params and callback.');
+                throw new \InvalidArgumentException('Please make sure you have put all function params and callback.');
             }
             if (is_callable($callback) !== true) {
                 throw new \InvalidArgumentException('The last param must be callback function.');
@@ -517,7 +423,7 @@ class Contract
                 $constructor = $this->constructor;
 
                 if (count($arguments) < count($constructor['inputs'])) {
-                    throw new InvalidArgumentException('Please make sure you have put all constructor params and callback.');
+                    throw new \InvalidArgumentException('Please make sure you have put all constructor params and callback.');
                 }
                 if (is_callable($callback) !== true) {
                     throw new \InvalidArgumentException('The last param must be callback function.');
@@ -538,12 +444,12 @@ class Contract
                 $mhucod = array_splice($arguments, 0, 1)[0];
 
                 if (!is_string($method) && !isset($this->functions[$method])) {
-                    throw new InvalidArgumentException('Please make sure the method is existed.');
+                    throw new \InvalidArgumentException('Please make sure the method is existed.');
                 }
                 $function = $this->functions[$method];
 
                 if (count($arguments) < count($function['inputs'])) {
-                    throw new InvalidArgumentException('Please make sure you have put all function params and callback.');
+                    throw new \InvalidArgumentException('Please make sure you have put all function params and callback.');
                 }
                 if (is_callable($callback) !== true) {
                     throw new \InvalidArgumentException('The last param must be callback function.');
@@ -591,7 +497,7 @@ class Contract
                 $constructor = $this->constructor;
 
                 if (count($arguments) < count($constructor['inputs'])) {
-                    throw new InvalidArgumentException('Please make sure you have put all constructor params and callback.');
+                    throw new \InvalidArgumentException('Please make sure you have put all constructor params and callback.');
                 }
                 if (!isset($this->bytecode)) {
                     throw new \InvalidArgumentException('Please call bytecode($bytecode) before getData().');
@@ -603,12 +509,12 @@ class Contract
                 $method = array_splice($arguments, 0, 1)[0];
 
                 if (!is_string($method) && !isset($this->functions[$method])) {
-                    throw new InvalidArgumentException('Please make sure the method is existed.');
+                    throw new \InvalidArgumentException('Please make sure the method is existed.');
                 }
                 $function = $this->functions[$method];
 
                 if (count($arguments) < count($function['inputs'])) {
-                    throw new InvalidArgumentException('Please make sure you have put all function params and callback.');
+                    throw new \InvalidArgumentException('Please make sure you have put all function params and callback.');
                 }
                 $params = array_splice($arguments, 0, count($function['inputs']));
                 $data = $this->hucabi->encodeParameters($function, $params);

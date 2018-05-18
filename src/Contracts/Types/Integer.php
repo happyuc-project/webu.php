@@ -18,16 +18,6 @@ use Webu\Formatters\BigNumberFormatter;
 class Integer extends SolidityType implements IType
 {
     /**
-     * construct
-     * 
-     * @return void
-     */
-//    public function __construct()
-//    {
-//        //
-//    }
-
-    /**
      * isType
      * 
      * @param string $name

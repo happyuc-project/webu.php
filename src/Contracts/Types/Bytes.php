@@ -15,15 +15,6 @@ use Webu\Contracts\SolidityType;
 
 class Bytes extends SolidityType implements IType
 {
-    /**
-     * construct
-     * 
-     * @return void
-     */
-//    public function __construct()
-//    {
-//        //
-//    }
 
     /**
      * isType

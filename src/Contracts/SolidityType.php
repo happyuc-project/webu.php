@@ -9,8 +9,8 @@
 
 namespace Webu\Contracts;
 
+use Webu\Formatter;
 use Webu\Utils;
-use Webu\Formatters\IntegerFormatter;
 
 class SolidityType
 {
@@ -200,7 +200,7 @@ class SolidityType
             $length = count($value);
             $nestedName = $this->nestedName($name);
             $result = [];
-            $result[] = IntegerFormatter::format($length);
+            $result[] = Formatter::Integer($length);
 
             foreach ($value as $val) {
                 $result[] = $this->encode($val, $nestedName);

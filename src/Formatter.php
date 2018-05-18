@@ -9,9 +9,8 @@
 namespace Webu;
 
 
-class Formatters
+class Formatter
 {
-
     /**
      * Address
      * to do: iban
@@ -42,10 +41,10 @@ class Formatters
      * @param mixed $value
      * @return string
      */
-    public static function BigNumber($value)
+    public static function BigNumber($value):string
     {
         $value = Utils::toString($value);
-        $bn = Utils::toBn($value);
+        $bn    = Utils::toBn($value);
 
         return $bn;
     }

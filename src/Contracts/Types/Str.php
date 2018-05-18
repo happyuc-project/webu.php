@@ -9,23 +9,12 @@
 
 namespace Webu\Contracts\Types;
 
+use Webu\Formatter;
 use Webu\Utils;
 use Webu\Contracts\SolidityType;
-use Webu\Formatters\IntegerFormatter;
-use Webu\Formatters\BigNumberFormatter;
 
 class Str extends SolidityType implements IType
 {
-    /**
-     * construct
-     * 
-     * @return void
-     */
-//    public function __construct()
-//    {
-//        //
-//    }
-
     /**
      * isType
      * 
@@ -56,9 +45,9 @@ class Str extends SolidityType implements IType
      */
     public function inputFormat($value, $name)
     {
-        $value = Utils::toHex($value);
-        $prefix = IntegerFormatter::format(mb_strlen($value) / 2);
-        $l = floor((mb_strlen($value) + 63) / 64);
+        $value   = Utils::toHex($value);
+        $prefix  = Formatter::Integer(mb_strlen($value) / 2);
+        $l       = floor((mb_strlen($value) + 63) / 64);
         $padding = (($l * 64 - mb_strlen($value) + 1) >= 0) ? $l * 64 - mb_strlen($value) : 0;
 
         return $prefix . $value . implode('', array_fill(0, $padding, '0'));
@@ -73,14 +62,14 @@ class Str extends SolidityType implements IType
      */
     public function outputFormat($value, $name)
     {
-        $strLen = mb_substr($value, 0, 64);
+        $strLen   = mb_substr($value, 0 , 64);
         $strValue = mb_substr($value, 64, 64);
-        $match = [];
+        $match    = [];
 
         if (preg_match('/^[0]+([a-f0-9]+)$/', $strLen, $match) === 1) {
-            $strLen = BigNumberFormatter::format('0x' . $match[1])->toString();
+            $strLen = Formatter::BigNumber('0x' . $match[1]);
         }
-        $strValue = mb_substr($strValue, 0, (int) $strLen * 2);
+        $strValue   = mb_substr($strValue, 0, (int) $strLen * 2);
 
         return Utils::hexToBin($strValue);
     }

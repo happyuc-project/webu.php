@@ -10,20 +10,10 @@
 namespace Webu\Contracts\Types;
 
 use Webu\Contracts\SolidityType;
-use Webu\Formatters\IntegerFormatter;
-use Webu\Formatters\BigNumberFormatter;
+use Webu\Formatter;
 
 class Uinteger extends SolidityType implements IType
 {
-    /**
-     * construct
-     * 
-     * @return void
-     */
-    public function __construct()
-    {
-        //
-    }
 
     /**
      * isType
@@ -55,7 +45,7 @@ class Uinteger extends SolidityType implements IType
      */
     public function inputFormat($value, $name)
     {
-        return IntegerFormatter::format($value);
+        return Formatter::Integer($value);
     }
 
     /**
@@ -73,6 +63,6 @@ class Uinteger extends SolidityType implements IType
             // due to value without 0x prefix, we will parse as decimal
             $value = '0x' . $match[1];
         }
-        return BigNumberFormatter::format($value);
+        return Formatter::BigNumber($value);
     }
 }

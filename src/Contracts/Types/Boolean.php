@@ -15,16 +15,6 @@ use Webu\Contracts\SolidityType;
 class Boolean extends SolidityType implements IType
 {
     /**
-     * construct
-     * 
-     * @return void
-     */
-//    public function __construct()
-//    {
-//        //
-//    }
-
-    /**
      * isType
      * 
      * @param string $name

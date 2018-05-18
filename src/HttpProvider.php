@@ -7,12 +7,53 @@
  * @license MIT
  */
 
-namespace Webu\Providers;
+namespace Webu;
 
-use Webu\RequestManagers\RequestManager;
 
-class HttpProvider extends Provider implements IProvider
+class HttpProvider
 {
+    /**
+     * web
+     *
+     * @var Webu
+     */
+    public $webu;
+
+    /**
+     * isBatch
+     *
+     * @var bool
+     */
+    public $isBatch = false;
+
+
+    /**
+     * requestManager
+     *
+     * @var \Webu\HttpRequestManager
+     */
+    protected $requestManager;
+
+    /**
+     * rpcVersion
+     *
+     * @var string
+     */
+    protected $rpcVersion = '2.0';
+
+    /**
+     * batch
+     *
+     * @var array
+     */
+    protected $batch = [];
+
+    /**
+     * id
+     *
+     * @var integer
+     */
+    protected $id = 0;
     /**
      * methods
      * 
@@ -23,18 +64,19 @@ class HttpProvider extends Provider implements IProvider
     /**
      * construct
      * 
-     * @param \Webu\RequestManagers\RequestManager $requestManager
+     * @param \Webu\HttpRequestManager $requestManager
      * @return void
      */
-    public function __construct(RequestManager $requestManager)
+    public function __construct(HttpRequestManager $requestManager, Webu $webu)
     {
-        parent::__construct($requestManager);
+        $this->requestManager = $requestManager;
+        $this->webu           = $webu;
     }
 
     /**
      * send
      * 
-     * @param \Webu\Methods\Method $method
+     * @param \Webu\Methods\HucMethod $method
      * @param callable $callback
      * @return void
      */
@@ -48,10 +90,10 @@ class HttpProvider extends Provider implements IProvider
                     return call_user_func($callback, $err, null);
                 }
                 if (!is_array($res)) {
-                    $res = $method->transform([$res], $method->outputFormatters);
+                    // $res = $method->transform([$res], $method->outputFormatters);
                     return call_user_func($callback, null, $res[0]);
                 }
-                $res = $method->transform($res, $method->outputFormatters);
+                // $res = $method->transform($res, $method->outputFormatters);
 
                 return call_user_func($callback, null, $res);
             };
@@ -62,18 +104,6 @@ class HttpProvider extends Provider implements IProvider
         }
     }
 
-    /**
-     * batch
-     * 
-     * @param bool $status
-     * @return void
-     */
-    public function batch($status)
-    {
-        $status = is_bool($status);
-
-        $this->isBatch = $status;
-    }
 
     /**
      * execute
@@ -86,6 +116,7 @@ class HttpProvider extends Provider implements IProvider
         if (!$this->isBatch) {
             throw new \RuntimeException('Please batch json rpc first.');
         }
+
         $methods = $this->methods;
         $proxy = function ($err, $res) use ($methods, $callback) {
             if ($err !== null) {
@@ -107,5 +138,16 @@ class HttpProvider extends Provider implements IProvider
         $this->requestManager->sendPayload('[' . implode(',', $this->batch) . ']', $proxy);
         $this->methods[] = [];
         $this->batch     = [];
+    }
+
+
+    /**
+     * getRequestManager
+     *
+     * @return \Webu\HttpRequestManager
+     */
+    public function getRequestManager()
+    {
+        return $this->requestManager;
     }
 }

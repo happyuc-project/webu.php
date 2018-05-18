@@ -11,8 +11,8 @@ namespace Webu\Contracts;
 
 use InvalidArgumentException;
 use stdClass;
+use Webu\Formatter;
 use Webu\Utils;
-use Webu\Formatters\IntegerFormatter;
 
 class Hucabi
 {
@@ -37,50 +37,6 @@ class Hucabi
         $this->types = $types;
     }
 
-    /**
-     * get
-     * 
-     * @param string $name
-     * @return mixed
-     */
-    public function __get($name)
-    {
-        $method = 'get' . ucfirst($name);
-
-        if (method_exists($this, $method)) {
-            return call_user_func_array([$this, $method], []);
-        }
-        return false;
-    }
-
-    /**
-     * set
-     * 
-     * @param string $name
-     * @param mixed $value
-     * @return mixed
-     */
-    public function __set($name, $value)
-    {
-        $method = 'set' . ucfirst($name);
-
-        if (method_exists($this, $method)) {
-            return call_user_func_array([$this, $method], [$value]);
-        }
-        return false;
-    }
-
-    /**
-     * callStatic
-     * 
-     * @param string $name
-     * @param array $arguments
-     * @return void
-     */
-    public static function __callStatic($name, $arguments)
-    {
-        // 
-    }
 
     /**
      * encodeFunctionSignature
@@ -310,7 +266,7 @@ class Hucabi
                     if (isset($encoded[$i - 1])) {
                         $previousLength += abs($encoded[$i - 1][0]);
                     }
-                    $result .= IntegerFormatter::format($offset + $i * $nestedStaticPartLength + $previousLength * 32);
+                    $result .= Formatter::Integer($offset + $i * $nestedStaticPartLength + $previousLength * 32);
                 }
             }
             for ($i=0; $i<count($encoded); $i++) {
@@ -338,7 +294,7 @@ class Hucabi
                     if (isset($encoded[$i - 1])) {
                         $previousLength += abs($encoded[$i - 1])[0];
                     }
-                    $result .= IntegerFormatter::format($offset + $i * $nestedStaticPartLength + $previousLength * 32);
+                    $result .= Formatter::Integer($offset + $i * $nestedStaticPartLength + $previousLength * 32);
                 }
             }
             for ($i=0; $i<count($encoded); $i++) {
@@ -373,7 +329,7 @@ class Hucabi
 
         foreach ($solidityTypes as $key => $type) {
             if ($type->isDynamicType($types[$key]) || $type->isDynamicArray($types[$key])) {
-                $result .= IntegerFormatter::format($dynamicOffset);
+                $result .= Formatter::Integer($dynamicOffset);
                 $e = $this->encodeWithOffset($types[$key], $type, $encodes[$key], $dynamicOffset);
                 $dynamicOffset += floor(mb_strlen($e) / 2);
             } else {

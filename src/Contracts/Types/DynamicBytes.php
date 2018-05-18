@@ -16,16 +16,6 @@ use Webu\Contracts\SolidityType;
 class DynamicBytes extends SolidityType implements IType
 {
     /**
-     * construct
-     * 
-     * @return void
-     */
-//    public function __construct()
-//    {
-//        //
-//    }
-
-    /**
      * isType
      * 
      * @param string $name

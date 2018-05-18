@@ -10,21 +10,11 @@
 namespace Webu\Contracts\Types;
 
 use Webu\Contracts\SolidityType;
+use Webu\Formatter;
 use Webu\Utils;
-use Webu\Formatters\IntegerFormatter;
 
 class Address extends SolidityType implements IType
 {
-    /**
-     * construct
-     * 
-     * @return void
-     */
-//    public function __construct()
-//    {
-//        //
-//    }
-
     /**
      * isType
      * 
@@ -65,7 +55,7 @@ class Address extends SolidityType implements IType
                 $value = Utils::stripZero($value);
             }
         }
-        $value = IntegerFormatter::format($value);
+        $value = Formatter::Integer($value);
 
         return $value;
     }

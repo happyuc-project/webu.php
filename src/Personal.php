@@ -9,17 +9,13 @@
 
 namespace Webu;
 
-use Webu\Providers\Provider;
-use Webu\Providers\HttpProvider;
-use Webu\RequestManagers\RequestManager;
-use Webu\RequestManagers\HttpRequestManager;
 
 class Personal
 {
     /**
      * provider
      *
-     * @var \Webu\Providers\Provider
+     * @var \Webu\HttpProvider
      */
     protected $provider;
 

@@ -7,15 +7,26 @@
  * @license MIT
  */
 
-namespace Webu\RequestManagers;
+namespace Webu;
 
-use InvalidArgumentException;
-use RuntimeException as RPCException;
-use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Client;
 
-class HttpRequestManager extends RequestManager implements IRequestManager
+class HttpRequestManager
 {
+    /**
+     * host
+     *
+     * @var string
+     */
+    protected $host;
+
+    /**
+     * timeout
+     *
+     * @var float
+     */
+    protected $timeout;
+
     /**
      * client
      * 
@@ -32,8 +43,9 @@ class HttpRequestManager extends RequestManager implements IRequestManager
      */
     public function __construct($host, $timeout = 1)
     {
-        parent::__construct($host, $timeout);
-        $this->client = new Client;
+        $this->host    = $host;
+        $this->timeout = (float) $timeout;
+        $this->client  = new Client();
     }
 
     /**
@@ -48,35 +60,20 @@ class HttpRequestManager extends RequestManager implements IRequestManager
         if (!is_string($payload)) {
             throw new \InvalidArgumentException('Payload must be string.');
         }
-        // $promise = $this->client->postAsync($this->host, [
-        //     'headers' => [
-        //         'content-type' => 'application/json'
-        //     ],
-        //     'body' => $payload
-        // ]);
-        // $promise->then(
-        //     function (ResponseInterface $res) use ($callback) {
-        //         var_dump($res->body());
-        //         call_user_func($callback, null, $res);
-        //     },
-        //     function (RequestException $err) use ($callback) {
-        //         var_dump($err->getMessage());
-        //         call_user_func($callback, $err, null);
-        //     }
-        // );
+
         try {
             $res = $this->client->post($this->host, [
                 'headers' => [
                     'content-type' => 'application/json'
                 ],
-                'body' => $payload,
-                'timeout' => $this->timeout,
-                'connect_timeout' => $this->timeout
+                'body'             => $payload,
+                'timeout'          => $this->timeout,
+                'connect_timeout'  => $this->timeout
             ]);
             $json = json_decode($res->getBody());
 
             if (JSON_ERROR_NONE !== json_last_error()) {
-                call_user_func($callback, new InvalidArgumentException('json_decode error: ' . json_last_error_msg()), null);
+                call_user_func($callback, new \InvalidArgumentException('json_decode error: ' . json_last_error_msg()), null);
             }
             if (is_array($json)) {
                 // batch results
@@ -89,7 +86,7 @@ class HttpRequestManager extends RequestManager implements IRequestManager
                     } else {
                         if (isset($json->error)) {
                             $error = $json->error;
-                            $errors[] = new RPCException(mb_ereg_replace('Error: ', '', $error->message), $error->code);
+                            $errors[] = new \Exception(mb_ereg_replace('Error: ', '', $error->message), $error->code);
                         } else {
                             $results[] = null;
                         }
@@ -106,13 +103,33 @@ class HttpRequestManager extends RequestManager implements IRequestManager
                 if (isset($json->error)) {
                     $error = $json->error;
 
-                    call_user_func($callback, new RPCException(mb_ereg_replace('Error: ', '', $error->message), $error->code), null);
+                    call_user_func($callback, new \Exception(mb_ereg_replace('Error: ', '', $error->message), $error->code), null);
                 } else {
-                    call_user_func($callback, new RPCException('Something wrong happened.'), null);
+                    call_user_func($callback, new \Exception('Something wrong happened.'), null);
                 }
             }
-        } catch (RequestException $err) {
+        } catch (\Exception $err) {
             call_user_func($callback, $err, null);
         }
+    }
+
+    /**
+     * getHost
+     *
+     * @return string
+     */
+    public function getHost()
+    {
+        return $this->host;
+    }
+
+    /**
+     * getTimeout
+     *
+     * @return float
+     */
+    public function getTimeout()
+    {
+        return $this->timeout;
     }
 }
