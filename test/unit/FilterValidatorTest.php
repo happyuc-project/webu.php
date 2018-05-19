@@ -3,16 +3,9 @@
 namespace Test\Unit;
 
 use Test\TestCase;
-use Webu\Validators\FilterValidator;
 
 class FilterValidatorTest extends TestCase
 {
-    /**
-     * validator
-     * 
-     * @var \Webu\Validators\FilterValidator
-     */
-    protected $validator;
 
     /**
      * setUp
@@ -22,7 +15,6 @@ class FilterValidatorTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $this->validator = new FilterValidator;
     }
 
     /**
@@ -32,25 +24,24 @@ class FilterValidatorTest extends TestCase
      */
     public function testValidate()
     {
-        $validator = $this->validator;
 
-        $this->assertEquals(false, $validator->validate('hello webu.php'));
-        $this->assertEquals(false, $validator->validate([
+        $this->assertEquals(false, \Webu\Validator::Filter('hello webu.php'));
+        $this->assertEquals(false, \Webu\Validator::Filter([
             'fromBlock' => 'hello',
         ]));
-        $this->assertEquals(false, $validator->validate([
+        $this->assertEquals(false, \Webu\Validator::Filter([
             'toBlock' => 'hello',
         ]));
-        $this->assertEquals(false, $validator->validate([
+        $this->assertEquals(false, \Webu\Validator::Filter([
             'address' => '0xzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz',
         ]));
-        $this->assertEquals(false, $validator->validate([
+        $this->assertEquals(false, \Webu\Validator::Filter([
             'topics' => [
                 '0xzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz',
             ]
         ]));
-        $this->assertEquals(true, $validator->validate([]));
-        $this->assertEquals(true, $validator->validate([
+        $this->assertEquals(true, \Webu\Validator::Filter([]));
+        $this->assertEquals(true, \Webu\Validator::Filter([
             'fromBlock' => 'earliest',
             'toBlock' => 'latest',
             'address' => '0xd46e8dd67c5d32be8058bb8eb970870f07244567',
@@ -58,7 +49,7 @@ class FilterValidatorTest extends TestCase
                 '0xd46e8dd67c5d32be8058bb8eb970870f07244567', '0xd46e8dd67c5d32be8058bb8eb970870f07244567'
             ]
         ]));
-        $this->assertEquals(true, $validator->validate([
+        $this->assertEquals(true, \Webu\Validator::Filter([
             'fromBlock' => 'earliest',
             'toBlock' => 'latest',
             'address' => [

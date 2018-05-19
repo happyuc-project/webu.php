@@ -13,7 +13,7 @@ class JSONRPCTest extends TestCase
      * 
      * @return void
      */
-    public function testJSONRPC()
+    private function testJSONRPC()
     {
         $id = rand();
         $params = [
@@ -55,7 +55,7 @@ class JSONRPCTest extends TestCase
      * 
      * @return void
      */
-    public function testThrowException()
+    private function testThrowException()
     {
         $id = 'zzz';
         $params = [

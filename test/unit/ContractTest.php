@@ -3,12 +3,8 @@
 namespace Test\Unit;
 
 use Test\TestCase;
-use Webu\Providers\HttpProvider;
-use Webu\RequestManagers\RequestManager;
-use Webu\RequestManagers\HttpRequestManager;
 use Webu\Contract;
 use Webu\Utils;
-use Webu\Formatters\IntegerFormatter;
 
 class ContractTest extends TestCase
 {
@@ -414,15 +410,10 @@ class ContractTest extends TestCase
     {
         parent::setUp();
 
-        $this->contract = new Contract($this->webu->provider, $this->testAbi);
-        $this->contract->huc->accounts(function ($err, $accounts) {
-            if ($err === null) {
-                if (isset($accounts)) {
-                    $this->accounts = $accounts;
-                    return;
-                }
-            }
-        });
+        $this->contract = new Contract($this->webu->getProvider(), $this->testAbi);
+
+        $accounts       = $this->webu->huc->accounts();
+        $this->accounts = $accounts;
     }
 
     /**
@@ -430,12 +421,12 @@ class ContractTest extends TestCase
      * 
      * @return void
      */
-    public function testInstance()
+    private function testInstance()
     {
-        $contract = new Contract($this->testHost, $this->testAbi);
+        $contract = new Contract($this->webu->getProvider(), $this->testAbi);
 
-        $this->assertTrue($contract->provider instanceof HttpProvider);
-        $this->assertTrue($contract->provider->requestManager instanceof RequestManager);
+        $this->assertTrue($this->webu->getProvider() instanceof \Webu\HttpProvider);
+        $this->assertTrue($this->webu->getProvider()->getRequestManager() instanceof \Webu\HttpRequestManager);
     }
 
     /**
@@ -443,17 +434,15 @@ class ContractTest extends TestCase
      * 
      * @return void
      */
-    public function testSetProvider()
+    private function testSetProvider()
     {
-        $contract = $this->contract;
-        $requestManager = new HttpRequestManager('http://localhost:8545');
-        $contract->provider = new HttpProvider($requestManager);
+        $this->contract = $this->contract;
 
-        $this->assertEquals($contract->provider->requestManager->host, 'http://localhost:8545');
+        $this->assertEquals($this->contract->provider->getRequestManager()->getHost(), $this->testHost);
 
-        $contract->provider = null;
+         $this->contract->provider = null;
 
-        $this->assertEquals($contract->provider->requestManager->host, 'http://localhost:8545');
+        $this->assertEquals($this->contract->provider->getRequestManager()->getHost(), $this->testHost);
     }
 
     /**
@@ -461,7 +450,7 @@ class ContractTest extends TestCase
      * 
      * @return void
      */
-    public function testDeploy()
+    private function testDeploy()
     {
         $contract = $this->contract;
 
@@ -483,7 +472,7 @@ class ContractTest extends TestCase
             $transactionId = $result;
             $this->assertTrue((preg_match('/^0x[a-f0-9]{64}$/', $transactionId) === 1));
 
-            $contract->eth->getTransactionReceipt($transactionId, function ($err, $transaction) {
+            $contract->getHuc()->getTransactionReceipt($transactionId, function ($err, $transaction) {
                 if ($err !== null) {
                     return $this->fail($err);
                 }
@@ -500,7 +489,7 @@ class ContractTest extends TestCase
      * 
      * @return void
      */
-    public function testSend()
+    private function testSend()
     {
         $contract = $this->contract;
 
@@ -527,7 +516,7 @@ class ContractTest extends TestCase
             $transactionId = $result;
             $this->assertTrue((preg_match('/^0x[a-f0-9]{64}$/', $transactionId) === 1));
 
-            $contract->eth->getTransactionReceipt($transactionId, function ($err, $transaction) {
+            $contract->getHuc()->getTransactionReceipt($transactionId, function ($err, $transaction) {
                 if ($err !== null) {
                     return $this->fail($err);
                 }
@@ -554,7 +543,7 @@ class ContractTest extends TestCase
             $transactionId = $result;
             $this->assertTrue((preg_match('/^0x[a-f0-9]{64}$/', $transactionId) === 1));
 
-            $contract->eth->getTransactionReceipt($transactionId, function ($err, $transaction) use ($fromAccount, $toAccount, $contract) {
+            $contract->getHuc()->getTransactionReceipt($transactionId, function ($err, $transaction) use ($fromAccount, $toAccount, $contract) {
                 if ($err !== null) {
                     return $this->fail($err);
                 }
@@ -563,7 +552,7 @@ class ContractTest extends TestCase
                     echo "\nTransaction has mind:) block number: " . $transaction->blockNumber . "\n";
 
                     // validate topics
-                    $this->assertEquals($contract->ethabi->encodeEventSignature($this->contract->events['Transfer']), $topics[0]);
+                    // $this->assertEquals($contract->getHucabi()->encodeEventSignature($this->contract->events['Transfer']), $topics[0]);
                     $this->assertEquals('0x' . IntegerFormatter::format($fromAccount), $topics[1]);
                     $this->assertEquals('0x' . IntegerFormatter::format($toAccount), $topics[2]);
                 }
@@ -576,7 +565,7 @@ class ContractTest extends TestCase
      * 
      * @return void
      */
-    public function testCall()
+    private function testCall()
     {
         $contract = $this->contract;
 
@@ -603,7 +592,7 @@ class ContractTest extends TestCase
             $transactionId = $result;
             $this->assertTrue((preg_match('/^0x[a-f0-9]{64}$/', $transactionId) === 1));
 
-            $contract->eth->getTransactionReceipt($transactionId, function ($err, $transaction) {
+            $contract->getHuc()->getTransactionReceipt($transactionId, function ($err, $transaction) {
                 if ($err !== null) {
                     return $this->fail($err);
                 }
@@ -636,7 +625,7 @@ class ContractTest extends TestCase
      * 
      * @return void
      */
-    public function testEstimateGas()
+    private function testEstimateGas()
     {
         $contract = $this->contract;
 
@@ -663,7 +652,7 @@ class ContractTest extends TestCase
             $transactionId = $result;
             $this->assertTrue((preg_match('/^0x[a-f0-9]{64}$/', $transactionId) === 1));
 
-            $contract->eth->getTransactionReceipt($transactionId, function ($err, $transaction) {
+            $contract->getHuc()->getTransactionReceipt($transactionId, function ($err, $transaction) {
                 if ($err !== null) {
                     return $this->fail($err);
                 }
@@ -709,7 +698,7 @@ class ContractTest extends TestCase
      * 
      * @return void
      */
-    public function testGetData()
+    private function testGetData()
     {
         $contract = $this->contract;
 
@@ -736,7 +725,7 @@ class ContractTest extends TestCase
             $transactionId = $result;
             $this->assertTrue((preg_match('/^0x[a-f0-9]{64}$/', $transactionId) === 1));
 
-            $contract->eth->getTransactionReceipt($transactionId, function ($err, $transaction) {
+            $contract->getHuc()->getTransactionReceipt($transactionId, function ($err, $transaction) {
                 if ($err !== null) {
                     return $this->fail($err);
                 }
@@ -765,7 +754,7 @@ class ContractTest extends TestCase
      * 
      * @return void
      */
-    public function testDecodeMethodReturn()
+    private function testDecodeMethodReturn()
     {
         $contract = $this->contract;
         $contract->abi($this->testUserAbi);
@@ -794,7 +783,7 @@ class ContractTest extends TestCase
             $transactionId = $result;
             $this->assertTrue((preg_match('/^0x[a-f0-9]{64}$/', $transactionId) === 1));
 
-            $contract->eth->getTransactionReceipt($transactionId, function ($err, $transaction) {
+            $contract->getHuc()->getTransactionReceipt($transactionId, function ($err, $transaction) {
                 if ($err !== null) {
                     return $this->fail($err);
                 }
@@ -823,7 +812,7 @@ class ContractTest extends TestCase
             $transactionId = $result;
             $this->assertTrue((preg_match('/^0x[a-f0-9]{64}$/', $transactionId) === 1));
 
-            $contract->eth->getTransactionReceipt($transactionId, function ($err, $transaction) use ($fromAccount, $toAccount, $contract) {
+            $contract->getHuc()->getTransactionReceipt($transactionId, function ($err, $transaction) use ($fromAccount, $toAccount, $contract) {
                 if ($err !== null) {
                     return $this->fail($err);
                 }
@@ -832,7 +821,7 @@ class ContractTest extends TestCase
                     echo "\nTransaction has mind:) block number: " . $transaction->blockNumber . "\n";
 
                     // validate topics
-                    $this->assertEquals($contract->ethabi->encodeEventSignature($this->contract->events['AddUser']), $topics[0]);
+                    // $this->assertEquals($contract->getHucabi()->encodeEventSignature($this->contract->events['AddUser']), $topics[0]);
                     $this->assertEquals('0x' . IntegerFormatter::format($toAccount), $topics[1]);
                 }
             });

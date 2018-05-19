@@ -61,9 +61,9 @@ class Personal
     /**
      * Returns newAccount
      */
-    public function newAccount()
+    public function newAccount(string $pwd)
     {
-        $params = [];
+        $params = [$pwd];
         return $this->provider->sendReal('personal_newAccount',$params);
     }
 

@@ -35,17 +35,17 @@ class ShhBatchTest extends TestCase
     {
         $shh = $this->shh;
 
-        $shh->batch(true);
-        $shh->version();
-        $shh->version();
+        $data =  $shh->version();
 
-        $shh->provider->execute(function ($err, $data) {
-            if ($err !== null) {
-                return $this->fail('Got error!');
-            }
-            $this->assertTrue(is_string($data[0]));
-            $this->assertTrue(is_string($data[1]));
-        });
+        $this->assertTrue(is_string($data));
+
+//        $shh->provider->execute(function ($err, $data) {
+//            if ($err !== null) {
+//                return $this->fail('Got error!');
+//            }
+//            $this->assertTrue(is_string($data[0]));
+//            $this->assertTrue(is_string($data[1]));
+//        });
     }
 
     /**

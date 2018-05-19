@@ -3,16 +3,9 @@
 namespace Test\Unit;
 
 use Test\TestCase;
-use Webu\Formatters\TransactionFormatter;
 
 class TransactionFormatterTest extends TestCase
 {
-    /**
-     * formatter
-     * 
-     * @var \Webu\Formatters\TransactionFormatter
-     */
-    protected $formatter;
 
     /**
      * setUp
@@ -22,7 +15,6 @@ class TransactionFormatterTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $this->formatter = new TransactionFormatter;
     }
 
     /**
@@ -32,9 +24,8 @@ class TransactionFormatterTest extends TestCase
      */
     public function testFormat()
     {
-        $formatter = $this->formatter;
 
-        $transaction = $formatter->format([
+        $transaction = \Webu\Formatter::Transaction([
             'from' => '0xb60e8dd61c5d32be8058bb8eb970870f07233155',
             'to' => '0xd46e8dd67c5d32be8058bb8eb970870f07244567',
             'gas' => '0x76c0',
@@ -53,7 +44,7 @@ class TransactionFormatterTest extends TestCase
             'nonce' => '0x1'
         ]);
 
-        $transaction = $formatter->format([
+        $transaction = \Webu\Formatter::Transaction([
             'from' => '0xb60e8dd61c5d32be8058bb8eb970870f07233155',
             'to' => '0xd46e8dd67c5d32be8058bb8eb970870f07244567',
             'gas' => 21000,

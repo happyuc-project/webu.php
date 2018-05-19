@@ -66,6 +66,12 @@ class SolidityType
     }
 
 
+
+    public function isType($v)
+    {
+        return false;
+    }
+
     /**
      * callStatic
      * 

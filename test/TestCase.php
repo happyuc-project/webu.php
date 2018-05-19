@@ -26,7 +26,7 @@ class TestCase extends BaseTestCase
      * 
      * @var string
      */
-    protected $testHost = 'http://localhost:8545';
+    protected $testHost = 'http://193.112.32.158:8545';
 
     /**
      * coinbase
@@ -45,12 +45,7 @@ class TestCase extends BaseTestCase
         $webu       = new Webu($this->testHost);
         $this->webu = $webu;
 
-        $webu->huc->coinbase(function ($err, $coinbase) {
-            if ($err !== null) {
-                return $this->fail($err->getMessage());
-            }
-            $this->coinbase = $coinbase;
-        });
+        $webu->huc->coinbase();
     }
 
     /**

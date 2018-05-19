@@ -3,16 +3,9 @@
 namespace Test\Unit;
 
 use Test\TestCase;
-use Webu\Validators\TagValidator;
 
 class TagValidatorTest extends TestCase
 {
-    /**
-     * validator
-     * 
-     * @var \Webu\Validators\TagValidator
-     */
-    protected $validator;
 
     /**
      * setUp
@@ -22,7 +15,6 @@ class TagValidatorTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $this->validator = new TagValidator;
     }
 
     /**
@@ -32,13 +24,12 @@ class TagValidatorTest extends TestCase
      */
     public function testValidate()
     {
-        $validator = $this->validator;
 
-        $this->assertEquals(false, $validator->validate(1234));
-        $this->assertEquals(false, $validator->validate(0xCA35B7D915458EF540ADE6068DFE2F44E8FA733C));
-        $this->assertEquals(false, $validator->validate('hello'));
-        $this->assertEquals(true, $validator->validate('latest'));
-        $this->assertEquals(true, $validator->validate('earliest'));
-        $this->assertEquals(true, $validator->validate('pending'));
+        $this->assertEquals(false, \Webu\Validator::Tag(1234));
+        $this->assertEquals(false, \Webu\Validator::Tag(0xCA35B7D915458EF540ADE6068DFE2F44E8FA733C));
+        $this->assertEquals(false, \Webu\Validator::Tag('hello'));
+        $this->assertEquals(true, \Webu\Validator::Tag('latest'));
+        $this->assertEquals(true, \Webu\Validator::Tag('earliest'));
+        $this->assertEquals(true, \Webu\Validator::Tag('pending'));
     }
 }

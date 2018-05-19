@@ -14,7 +14,7 @@ class HucApiTest extends TestCase
      * 
      * @var \Webu\Huc
      */
-    protected $eth;
+    protected $huc;
 
     /**
      * setUp
@@ -25,7 +25,7 @@ class HucApiTest extends TestCase
     {
         parent::setUp();
 
-        $this->eth = $this->webu->huc;
+        $this->huc = $this->webu->huc;
     }
 
     /**
@@ -33,51 +33,38 @@ class HucApiTest extends TestCase
      * 
      * @return void
      */    
-    public function testProtocolVersion()
+    private function testProtocolVersion()
     {
-        $eth = $this->eth;
+        $huc = $this->huc;
 
-        $eth->protocolVersion(function ($err, $version) {
-            if ($err !== null) {
-                return $this->fail($err->getMessage());
-            }
-            $this->assertTrue($version instanceof BigNumber);
-        });
+        $version = $huc->protocolVersion();
+
+        $this->assertTrue($version instanceof BigNumber);
     }
 
     /**
      * testSyncing
      * 
      * @return void
-     */    
-    public function testSyncing()
+     */
+    private function testSyncing()
     {
-        $eth = $this->eth;
+        $huc     = $this->huc;
+        $syncing =  $huc->syncing();
 
-        $eth->syncing(function ($err, $syncing) {
-            if ($err !== null) {
-                return $this->fail($err->getMessage());
-            }
-            // due to the result might be object or bool, only test is null
-            $this->assertTrue($syncing !== null);
-        });
+        $this->assertTrue($syncing !== null);
     }
 
     /**
      * testCoinbase
      * 
      * @return void
-     */    
+     */
     public function testCoinbase()
     {
-        $eth = $this->eth;
-
-        $eth->coinbase(function ($err, $coinbase) {
-            if ($err !== null) {
-                return $this->fail($err->getMessage());
-            }
-            $this->assertEquals($coinbase, $this->coinbase);
-        });
+        $huc      = $this->huc;
+        $coinbase = $huc->coinbase();
+        $this->assertEquals($coinbase, $this->coinbase);
     }
 
     /**
@@ -87,14 +74,9 @@ class HucApiTest extends TestCase
      */    
     public function testMining()
     {
-        $eth = $this->eth;
-
-        $eth->mining(function ($err, $mining) {
-            if ($err !== null) {
-                return $this->fail($err->getMessage());
-            }
-            $this->assertTrue($mining);
-        });
+        $huc    = $this->huc;
+        $mining =  $huc->mining();
+        $this->assertTrue($mining);
     }
 
     /**
@@ -104,14 +86,11 @@ class HucApiTest extends TestCase
      */    
     public function testHashrate()
     {
-        $eth = $this->eth;
+        $huc = $this->huc;
 
-        $eth->hashrate(function ($err, $hashrate) {
-            if ($err !== null) {
-                return $this->fail($err->getMessage());
-            }
-            $this->assertEquals($hashrate->toString(), '0');
-        });
+        $hashrate = $huc->hashrate();
+
+        $this->assertEquals($hashrate->toString(), '0');
     }
 
     /**
@@ -121,14 +100,9 @@ class HucApiTest extends TestCase
      */    
     public function testGasPrice()
     {
-        $eth = $this->eth;
-
-        $eth->gasPrice(function ($err, $gasPrice) {
-            if ($err !== null) {
-                return $this->fail($err->getMessage());
-            }
-            $this->assertTrue(is_numeric($gasPrice->toString()));
-        });
+        $huc      = $this->huc;
+        $gasPrice = $huc->gasPrice();
+        $this->assertTrue(is_numeric($gasPrice->toString()));
     }
 
     /**
@@ -138,14 +112,11 @@ class HucApiTest extends TestCase
      */    
     public function testAccounts()
     {
-        $eth = $this->eth;
+        $huc = $this->huc;
 
-        $eth->accounts(function ($err, $accounts) {
-            if ($err !== null) {
-                return $this->fail($err->getMessage());
-            }
-            $this->assertTrue(is_array($accounts));
-        });
+        $accounts =  $huc->accounts();
+
+        $this->assertTrue(is_array($accounts));
     }
 
     /**
@@ -155,14 +126,11 @@ class HucApiTest extends TestCase
      */    
     public function testBlockNumber()
     {
-        $eth = $this->eth;
+        $huc = $this->huc;
 
-        $eth->blockNumber(function ($err, $blockNumber) {
-            if ($err !== null) {
-                return $this->fail($err->getMessage());
-            }
-            $this->assertTrue(is_numeric($blockNumber->toString()));
-        });
+        $blockNumber =  $huc->blockNumber();
+
+        $this->assertTrue(is_numeric($blockNumber->toString()));
     }
 
     /**
@@ -172,14 +140,9 @@ class HucApiTest extends TestCase
      */    
     public function testGetBalance()
     {
-        $eth = $this->eth;
-
-        $eth->getBalance('0x407d73d8a49eeb85d32cf465507dd71d507100c1', function ($err, $balance) {
-            if ($err !== null) {
-                return $this->fail($err->getMessage());
-            }
-            $this->assertTrue(is_numeric($balance->toString()));
-        });
+        $huc     = $this->huc;
+        $balance = $huc->getBalance('0x407d73d8a49eeb85d32cf465507dd71d507100c1');
+        $this->assertTrue(is_numeric($balance->toString()));
     }
 
     /**
@@ -189,14 +152,11 @@ class HucApiTest extends TestCase
      */    
     public function testGetStorageAt()
     {
-        $eth = $this->eth;
+        $huc = $this->huc;
 
-        $eth->getStorageAt('0x561a2aa10f9a8589c93665554c871106342f70af', '0x0', function ($err, $storage) {
-            if ($err !== null) {
-                return $this->fail($err->getMessage());
-            }
-            $this->assertTrue(is_string($storage));
-        });
+        $storage = $huc->getStorageAt('0x561a2aa10f9a8589c93665554c871106342f70af', '0x0');
+
+        $this->assertTrue(is_string($storage));
     }
 
     /**
@@ -206,14 +166,11 @@ class HucApiTest extends TestCase
      */    
     public function testGetTransactionCount()
     {
-        $eth = $this->eth;
+        $huc = $this->huc;
 
-        $eth->getTransactionCount('0x561a2aa10f9a8589c93665554c871106342f70af', function ($err, $transactionCount) {
-            if ($err !== null) {
-                return $this->fail($err->getMessage());
-            }
-            $this->assertTrue(is_numeric($transactionCount->toString()));
-        });
+        $transactionCount = $huc->getTransactionCount('0x561a2aa10f9a8589c93665554c871106342f70af');
+
+        $this->assertTrue(is_numeric($transactionCount->toString()));
     }
 
     /**
@@ -223,14 +180,11 @@ class HucApiTest extends TestCase
      */    
     public function testGetBlockTransactionCountByHash()
     {
-        $eth = $this->eth;
+        $huc = $this->huc;
 
-        $eth->getBlockTransactionCountByHash('0xb903239f8543d04b5dc1ba6579132b143087c68db1b2168786408fcbce568238', function ($err, $transactionCount) {
-            if ($err !== null) {
-                return $this->assertTrue($err !== null);
-            }
-            $this->assertTrue(is_numeric($transactionCount->toString()));
-        });
+        $transactionCount = $huc->getBlockTransactionCountByHash('0xb903239f8543d04b5dc1ba6579132b143087c68db1b2168786408fcbce568238');
+
+        $this->assertTrue(is_numeric($transactionCount->toString()));
     }
 
     /**
@@ -240,14 +194,12 @@ class HucApiTest extends TestCase
      */    
     public function testGetBlockTransactionCountByNumber()
     {
-        $eth = $this->eth;
+        $huc = $this->huc;
 
-        $eth->getBlockTransactionCountByNumber('0x0', function ($err, $transactionCount) {
-            if ($err !== null) {
-                return $this->assertTrue($err !== null);
-            }
-            $this->assertTrue(is_numeric($transactionCount->toString()));
-        });
+        $transactionCount = $huc->getBlockTransactionCountByNumber('0x0');
+
+
+        $this->assertTrue(is_numeric($transactionCount->toString()));
     }
 
     /**
@@ -257,14 +209,11 @@ class HucApiTest extends TestCase
      */    
     public function testGetUncleCountByBlockHash()
     {
-        $eth = $this->eth;
+        $huc = $this->huc;
 
-        $eth->getUncleCountByBlockHash('0xb903239f8543d04b5dc1ba6579132b143087c68db1b2168786408fcbce568238', function ($err, $uncleCount) {
-            if ($err !== null) {
-                return $this->assertTrue($err !== null);
-            }
-            $this->assertTrue(is_numeric($uncleCount->toString()));
-        });
+        $uncleCount = $huc->getUncleCountByBlockHash('0xb903239f8543d04b5dc1ba6579132b143087c68db1b2168786408fcbce568238');
+
+        $this->assertTrue(is_numeric($uncleCount->toString()));
     }
 
     /**
@@ -274,14 +223,11 @@ class HucApiTest extends TestCase
      */    
     public function testGetUncleCountByBlockNumber()
     {
-        $eth = $this->eth;
+        $huc = $this->huc;
 
-        $eth->getUncleCountByBlockNumber('0x0', function ($err, $uncleCount) {
-            if ($err !== null) {
-                return $this->assertTrue($err !== null);
-            }
-            $this->assertTrue(is_numeric($uncleCount->toString()));
-        });
+        $uncleCount = $huc->getUncleCountByBlockNumber('0x0');
+
+        $this->assertTrue(is_numeric($uncleCount->toString()));
     }
 
     /**
@@ -291,14 +237,11 @@ class HucApiTest extends TestCase
      */    
     public function testGetCode()
     {
-        $eth = $this->eth;
+        $huc = $this->huc;
 
-        $eth->getCode('0x407d73d8a49eeb85d32cf465507dd71d507100c1', function ($err, $code) {
-            if ($err !== null) {
-                return $this->assertTrue($err !== null);
-            }
-            $this->assertTrue(is_string($code));
-        });
+        $code = $huc->getCode('0x407d73d8a49eeb85d32cf465507dd71d507100c1');
+
+        $this->assertTrue(is_string($code));
     }
 
     /**
@@ -308,15 +251,11 @@ class HucApiTest extends TestCase
      */    
     public function testSign()
     {
-        $eth = $this->eth;
+        $huc = $this->huc;
 
-        $eth->sign('0x407d73d8a49eeb85d32cf465507dd71d507100c1', '0xdeadbeaf', function ($err, $sign) {
-            if ($err !== null) {
-                // infura banned us to sign message
-                return $this->assertTrue($err !== null);
-            }
-            $this->assertTrue(is_string($sign));
-        });
+        $sign = $huc->sign('0x407d73d8a49eeb85d32cf465507dd71d507100c1', '0xdeadbeaf');
+
+        $this->assertTrue(is_string($sign));
     }
 
     /**
@@ -326,22 +265,17 @@ class HucApiTest extends TestCase
      */    
     public function testSendTransaction()
     {
-        $eth = $this->eth;
+        $huc = $this->huc;
 
-        $eth->sendTransaction([
-            'from' => "0xb60e8dd61c5d32be8058bb8eb970870f07233155",
-            'to' => "0xd46e8dd67c5d32be8058bb8eb970870f07244567",
-            'gas' => "0x76c0",
-            'gasPrice' => "0x9184e72a000",
-            'value' => "0x9184e72a",
-            'data' => "0xd46e8dd67c5d32be8d46e8dd67c5d32be8058bb8eb970870f072445675058bb8eb970870f072445675"
-        ], function ($err, $transaction) {
-            if ($err !== null) {
-                // infura banned us to send transaction
-                return $this->assertTrue($err !== null);
-            }
-            $this->assertTrue(is_string($transaction));
-        });
+        $transaction =  $huc->sendTransaction( "0xb60e8dd61c5d32be8058bb8eb970870f07233155",
+            "0xd46e8dd67c5d32be8058bb8eb970870f07244567",
+            "0x76c0",
+             "0x9184e72a000",
+            "0x9184e72a",
+            "0xd46e8dd67c5d32be8d46e8dd67c5d32be8058bb8eb970870f072445675058bb8eb970870f072445675"
+        );
+
+        $this->assertTrue(is_string($transaction));
     }
 
     /**
@@ -351,14 +285,11 @@ class HucApiTest extends TestCase
      */    
     public function testSendRawTransaction()
     {
-        $eth = $this->eth;
+        $huc = $this->huc;
 
-        $eth->sendRawTransaction('0xd46e8dd67c5d32be8d46e8dd67c5d32be8058bb8eb970870f072445675058bb8eb970870f072445675', function ($err, $transaction) {
-            if ($err !== null) {
-                return $this->assertTrue($err !== null);
-            }
-            $this->assertTrue(is_string($transaction));
-        });
+        $transaction =  $huc->sendRawTransaction('0xd46e8dd67c5d32be8d46e8dd67c5d32be8058bb8eb970870f072445675058bb8eb970870f072445675');
+
+        $this->assertTrue(is_string($transaction));
     }
 
     /**
@@ -368,21 +299,17 @@ class HucApiTest extends TestCase
      */    
     public function testCall()
     {
-        $eth = $this->eth;
+        $huc = $this->huc;
 
-        $eth->call([
-            // 'from' => "0xb60e8dd61c5d32be8058bb8eb970870f07233155",
-            'to' => "0xd46e8dd67c5d32be8058bb8eb970870f07244567",
-            'gas' => "0x76c0",
-            'gasPrice' => "0x9184e72a000",
-            'value' => "0x9184e72a",
-            'data' => "0xd46e8dd67c5d32be8d46e8dd67c5d32be8058bb8eb970870f072445675058bb8eb970870f072445675"
-        ], function ($err, $transaction) {
-            if ($err !== null) {
-                return $this->assertTrue($err !== null);
-            }
-            $this->assertTrue(is_string($transaction));
-        });
+        $transaction=  $huc->call( "0xb60e8dd61c5d32be8058bb8eb970870f07233155",
+             "0xd46e8dd67c5d32be8058bb8eb970870f07244567",
+             "0x76c0",
+             "0x9184e72a000",
+              "0x9184e72a",
+              "0xd46e8dd67c5d32be8d46e8dd67c5d32be8058bb8eb970870f072445675058bb8eb970870f072445675"
+        );
+
+        $this->assertTrue(is_string($transaction));
     }
 
     /**
@@ -392,21 +319,17 @@ class HucApiTest extends TestCase
      */    
     public function testEstimateGas()
     {
-        $eth = $this->eth;
+        $huc = $this->huc;
 
-        $eth->estimateGas([
-            'from' => "0xb60e8dd61c5d32be8058bb8eb970870f07233155",
-            'to' => "0xd46e8dd67c5d32be8058bb8eb970870f07244567",
-            'gas' => "0x76c0",
-            'gasPrice' => "0x9184e72a000",
-            'value' => "0x9184e72a",
-            'data' => "0xd46e8dd67c5d32be8d46e8dd67c5d32be8058bb8eb970870f072445675058bb8eb970870f072445675"
-        ], function ($err, $gas) {
-            if ($err !== null) {
-                return $this->assertTrue($err !== null);
-            }
-            $this->assertTrue(is_numeric($gas->toString()));
-        });
+        $gas =  $huc->estimateGas(  "0xb60e8dd61c5d32be8058bb8eb970870f07233155",
+             "0xd46e8dd67c5d32be8058bb8eb970870f07244567",
+              "0x76c0",
+             "0x9184e72a000",
+             "0x9184e72a",
+              "0xd46e8dd67c5d32be8d46e8dd67c5d32be8058bb8eb970870f072445675058bb8eb970870f072445675"
+        );
+
+        $this->assertTrue(is_numeric($gas->toString()));
     }
 
     /**
@@ -416,14 +339,11 @@ class HucApiTest extends TestCase
      */    
     public function testGetBlockByHash()
     {
-        $eth = $this->eth;
+        $huc = $this->huc;
 
-        $eth->getBlockByHash('0xb903239f8543d04b5dc1ba6579132b143087c68db1b2168786408fcbce568238', false, function ($err, $block) {
-            if ($err !== null) {
-                return $this->assertTrue($err !== null);
-            }
-            $this->assertTrue($block !== null);
-        });
+        $block = $huc->getBlockByHash('0xb903239f8543d04b5dc1ba6579132b143087c68db1b2168786408fcbce568238', false);
+
+        $this->assertTrue($block !== null);
     }
 
     /**
@@ -433,15 +353,12 @@ class HucApiTest extends TestCase
      */    
     public function testGetBlockByNumber()
     {
-        $eth = $this->eth;
+        $huc = $this->huc;
 
-        $eth->getBlockByNumber('latest', false, function ($err, $block) {
-            if ($err !== null) {
-                return $this->assertTrue($err !== null);
-            }
-            // weired behavior, see https://github.com/happyuc-project/webu.php/issues/16
-            $this->assertTrue($block !== null);
-        });
+        $block =  $huc->getBlockByNumber('latest', false);
+
+        // weired behavior, see https://github.com/happyuc-project/webu.php/issues/16
+        $this->assertTrue($block !== null);
     }
 
     /**
@@ -451,14 +368,11 @@ class HucApiTest extends TestCase
      */    
     public function testGetTransactionByHash()
     {
-        $eth = $this->eth;
+        $huc = $this->huc;
 
-        $eth->getTransactionByHash('0xb903239f8543d04b5dc1ba6579132b143087c68db1b2168786408fcbce568238', function ($err, $transaction) {
-            if ($err !== null) {
-                return $this->assertTrue($err !== null);
-            }
-            $this->assertTrue($transaction !== null);
-        });
+        $transaction =  $huc->getTransactionByHash('0xb903239f8543d04b5dc1ba6579132b143087c68db1b2168786408fcbce568238');
+
+        $this->assertTrue($transaction !== null);
     }
 
     /**
@@ -468,14 +382,11 @@ class HucApiTest extends TestCase
      */    
     public function testGetTransactionByBlockHashAndIndex()
     {
-        $eth = $this->eth;
+        $huc = $this->huc;
 
-        $eth->getTransactionByBlockHashAndIndex('0xb903239f8543d04b5dc1ba6579132b143087c68db1b2168786408fcbce568238', '0x0', function ($err, $transaction) {
-            if ($err !== null) {
-                return $this->assertTrue($err !== null);
-            }
-            $this->assertTrue($transaction !== null);
-        });
+        $transaction =   $huc->getTransactionByBlockHashAndIndex('0xb903239f8543d04b5dc1ba6579132b143087c68db1b2168786408fcbce568238', '0x0');
+
+        $this->assertTrue($transaction !== null);
     }
 
     /**
@@ -485,14 +396,11 @@ class HucApiTest extends TestCase
      */    
     public function testGetTransactionByBlockNumberAndIndex()
     {
-        $eth = $this->eth;
+        $huc = $this->huc;
 
-        $eth->getTransactionByBlockNumberAndIndex('0xe8', '0x0', function ($err, $transaction) {
-            if ($err !== null) {
-                return $this->assertTrue($err !== null);
-            }
-            $this->assertTrue($transaction !== null);
-        });
+        $transaction =   $huc->getTransactionByBlockNumberAndIndex('0xe8', '0x0');
+
+        $this->assertTrue($transaction !== null);
     }
 
     /**
@@ -502,14 +410,11 @@ class HucApiTest extends TestCase
      */    
     public function testGetTransactionReceipt()
     {
-        $eth = $this->eth;
+        $huc = $this->huc;
 
-        $eth->getTransactionReceipt('0xb903239f8543d04b5dc1ba6579132b143087c68db1b2168786408fcbce568238', function ($err, $transaction) {
-            if ($err !== null) {
-                return $this->assertTrue($err !== null);
-            }
-            $this->assertTrue($transaction !== null);
-        });
+        $transaction =  $huc->getTransactionReceipt('0xb903239f8543d04b5dc1ba6579132b143087c68db1b2168786408fcbce568238');
+
+        $this->assertTrue($transaction !== null);
     }
 
     /**
@@ -519,14 +424,11 @@ class HucApiTest extends TestCase
      */    
     public function testGetUncleByBlockHashAndIndex()
     {
-        $eth = $this->eth;
+        $huc = $this->huc;
 
-        $eth->getUncleByBlockHashAndIndex('0xb903239f8543d04b5dc1ba6579132b143087c68db1b2168786408fcbce568238', '0x0', function ($err, $uncle) {
-            if ($err !== null) {
-                return $this->assertTrue($err !== null);
-            }
-            $this->assertTrue($uncle !== null);
-        });
+        $uncle =   $huc->getUncleByBlockHashAndIndex('0xb903239f8543d04b5dc1ba6579132b143087c68db1b2168786408fcbce568238', '0x0');
+
+        $this->assertTrue($uncle !== null);
     }
 
     /**
@@ -536,14 +438,11 @@ class HucApiTest extends TestCase
      */    
     public function testGetUncleByBlockNumberAndIndex()
     {
-        $eth = $this->eth;
+        $huc = $this->huc;
 
-        $eth->getUncleByBlockNumberAndIndex('0xe8', '0x0', function ($err, $uncle) {
-            if ($err !== null) {
-                return $this->assertTrue($err !== null);
-            }
-            $this->assertTrue($uncle !== null);
-        });
+        $uncle =  $huc->getUncleByBlockNumberAndIndex('0xe8', '0x0');
+
+        $this->assertTrue($uncle !== null);
     }
 
     /**
@@ -553,15 +452,12 @@ class HucApiTest extends TestCase
      */    
     public function testGetCompilers()
     {
-        $eth = $this->eth;
+        $huc = $this->huc;
 
-        $eth->getCompilers(function ($err, $compilers) {
-            if ($err !== null) {
-                return $this->assertTrue($err !== null);
-            }
-            $this->assertTrue(is_array($compilers));
-            $this->assertEquals($compilers[0], 'solidity');
-        });
+        $compilers=  $huc->getCompilers();
+
+        $this->assertTrue(is_array($compilers));
+        $this->assertEquals($compilers[0], 'solidity');
     }
 
     /**
@@ -571,14 +467,11 @@ class HucApiTest extends TestCase
      */    
     public function testCompileSolidity()
     {
-        $eth = $this->eth;
+        $huc = $this->huc;
 
-        $eth->compileSolidity('contract test { function multiply(uint a) returns(uint d) {   return a * 7;   } }', function ($err, $compiled) {
-            if ($err !== null) {
-                return $this->assertTrue($err !== null);
-            }
-            $this->assertTrue(is_string($compiled));
-        });
+        $compiled = $huc->compileSolidity('contract test { function multiply(uint a) returns(uint d) {   return a * 7;   } }');
+
+        $this->assertTrue(is_string($compiled));
     }
 
     /**
@@ -588,14 +481,11 @@ class HucApiTest extends TestCase
      */    
     public function testCompileLLL()
     {
-        $eth = $this->eth;
+        $huc = $this->huc;
 
-        $eth->compileLLL('(returnlll (suicide (caller)))', function ($err, $compiled) {
-            if ($err !== null) {
-                return $this->assertTrue($err !== null);
-            }
-            $this->assertTrue(is_string($compiled));
-        });
+        $compiled =  $huc->compileLLL('(returnlll (suicide (caller)))');
+
+        $this->assertTrue(is_string($compiled));
     }
 
     /**
@@ -605,14 +495,11 @@ class HucApiTest extends TestCase
      */    
     public function testCompileSerpent()
     {
-        $eth = $this->eth;
+        $huc = $this->huc;
 
-        $eth->compileSerpent('\/* some serpent *\/', function ($err, $compiled) {
-            if ($err !== null) {
-                return $this->assertTrue($err !== null);
-            }
-            $this->assertTrue(is_string($compiled));
-        });
+        $compiled = $huc->compileSerpent('\/* some serpent *\/');
+
+        $this->assertTrue(is_string($compiled));
     }
 
     /**
@@ -622,20 +509,16 @@ class HucApiTest extends TestCase
      */    
     public function testNewFilter()
     {
-        $eth = $this->eth;
+        $huc = $this->huc;
 
-        $eth->newFilter([
-            'fromBlock' => '0x1',
-            'toBlock' => '0x2',
-            'address' => '0x8888f1f195afa192cfee860698584c030f4c9db1',
-            'topics' => ['0x000000000000000000000000a94f5374fce5edbc8e2a8697c15331677e6ebf0b', null, ['0x000000000000000000000000a94f5374fce5edbc8e2a8697c15331677e6ebf0b', '0x0000000000000000000000000aff3454fce5edbc8cca8697c15331677e6ebccc']]
-        ], function ($err, $filter) {
-            if ($err !== null) {
-                // infura banned us to new filter
-                return $this->assertTrue($err !== null);
-            }
-            $this->assertTrue(is_string($filter));
-        });
+        $filter=  $huc->newFilter(
+             '0x1',
+             '0x2',
+             '0x8888f1f195afa192cfee860698584c030f4c9db1',
+             ['0x000000000000000000000000a94f5374fce5edbc8e2a8697c15331677e6ebf0b', null, ['0x000000000000000000000000a94f5374fce5edbc8e2a8697c15331677e6ebf0b', '0x0000000000000000000000000aff3454fce5edbc8cca8697c15331677e6ebccc']]
+        );
+
+        $this->assertTrue(is_string($filter));
     }
 
     /**
@@ -645,15 +528,11 @@ class HucApiTest extends TestCase
      */    
     public function testNewBlockFilter()
     {
-        $eth = $this->eth;
+        $huc = $this->huc;
 
-        $eth->newBlockFilter('0x01', function ($err, $filter) {
-            if ($err !== null) {
-                // infura banned us to new block filter
-                return $this->assertTrue($err !== null);
-            }
-            $this->assertTrue(is_string($filter));
-        });
+        $filter =  $huc->newBlockFilter('0x01');
+
+        $this->assertTrue(is_string($filter));
     }
 
     /**
@@ -663,15 +542,11 @@ class HucApiTest extends TestCase
      */    
     public function testNewPendingTransactionFilter()
     {
-        $eth = $this->eth;
+        $huc = $this->huc;
 
-        $eth->newPendingTransactionFilter(function ($err, $filter) {
-            if ($err !== null) {
-                // infura banned us to new pending transaction filter
-                return $this->assertTrue($err !== null);
-            }
-            $this->assertTrue(is_string($filter));
-        });
+        $filter =  $huc->newPendingTransactionFilter();
+
+        $this->assertTrue(is_string($filter));
     }
 
     /**
@@ -681,15 +556,11 @@ class HucApiTest extends TestCase
      */    
     public function testUninstallFilter()
     {
-        $eth = $this->eth;
+        $huc = $this->huc;
 
-        $eth->uninstallFilter('0x01', function ($err, $filter) {
-            if ($err !== null) {
-                // infura banned us to uninstall filter
-                return $this->assertTrue($err !== null);
-            }
-            $this->assertTrue(is_bool($filter));
-        });
+        $filter =  $huc->uninstallFilter('0x01');
+
+        $this->assertTrue(is_bool($filter));
     }
 
     /**
@@ -699,15 +570,11 @@ class HucApiTest extends TestCase
      */    
     public function testGetFilterChanges()
     {
-        $eth = $this->eth;
+        $huc = $this->huc;
 
-        $eth->getFilterChanges('0x01', function ($err, $changes) {
-            if ($err !== null) {
-                // infura banned us to get filter changes
-                return $this->assertTrue($err !== null);
-            }
-            $this->assertTrue(is_array($changes));
-        });
+        $changes =  $huc->getFilterChanges('0x01');
+
+        $this->assertTrue(is_array($changes));
     }
 
     /**
@@ -717,15 +584,11 @@ class HucApiTest extends TestCase
      */    
     public function testGetFilterLogs()
     {
-        $eth = $this->eth;
+        $huc = $this->huc;
 
-        $eth->getFilterLogs('0x01', function ($err, $logs) {
-            if ($err !== null) {
-                // infura banned us to get filter logs
-                return $this->assertTrue($err !== null);
-            }
-            $this->assertTrue(is_array($logs));
-        });
+        $logs =  $huc->getFilterLogs('0x01');
+
+        $this->assertTrue(is_array($logs));
     }
 
     /**
@@ -735,19 +598,16 @@ class HucApiTest extends TestCase
      */    
     public function testGetLogs()
     {
-        $eth = $this->eth;
+        $huc = $this->huc;
 
-        $eth->getLogs([
+        $logs =  $huc->getLogs([
             'fromBlock' => '0x1',
             'toBlock' => '0x2',
             'address' => '0x8888f1f195afa192cfee860698584c030f4c9db1',
             'topics' => ['0x000000000000000000000000a94f5374fce5edbc8e2a8697c15331677e6ebf0b', null, ['0x000000000000000000000000a94f5374fce5edbc8e2a8697c15331677e6ebf0b', '0x0000000000000000000000000aff3454fce5edbc8cca8697c15331677e6ebccc']]
-        ], function ($err, $logs) {
-            if ($err !== null) {
-                return $this->assertTrue($err !== null);
-            }
-            $this->assertTrue(is_array($logs));
-        });
+        ]);
+
+        $this->assertTrue(is_array($logs));
     }
 
     /**
@@ -757,14 +617,11 @@ class HucApiTest extends TestCase
      */    
     public function testGetWork()
     {
-        $eth = $this->eth;
+        $huc = $this->huc;
 
-        $eth->getWork(function ($err, $work) {
-            if ($err !== null) {
-                return $this->assertTrue($err !== null);
-            }
-            $this->assertTrue(is_array($work));
-        });
+        $work = $huc->getWork();
+
+        $this->assertTrue(is_array($work));
     }
 
     /**
@@ -774,18 +631,15 @@ class HucApiTest extends TestCase
      */    
     public function testSubmitWork()
     {
-        $eth = $this->eth;
+        $huc = $this->huc;
 
-        $eth->submitWork(
+        $work =  $huc->submitWork(
             '0x0000000000000001',
             '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef',
             '0xD1FE5700000000000000000000000000D1FE5700000000000000000000000000'
-        , function ($err, $work) {
-            if ($err !== null) {
-                return $this->assertTrue($err !== null);
-            }
-            $this->assertTrue(is_bool($work));
-        });
+        );
+
+        $this->assertTrue(is_bool($work));
     }
 
     /**
@@ -795,17 +649,14 @@ class HucApiTest extends TestCase
      */    
     public function testSubmitHashrate()
     {
-        $eth = $this->eth;
+        $huc = $this->huc;
 
-        $eth->submitHashrate(
+        $work = $huc->submitHashrate(
             '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef',
             '0xD1FE5700000000000000000000000000D1FE5700000000000000000000000000'
-        , function ($err, $work) {
-            if ($err !== null) {
-                return $this->assertTrue($err !== null);
-            }
-            $this->assertTrue(is_bool($work));
-        });
+        );
+
+        $this->assertTrue(is_bool($work));
     }
 
     /**
@@ -817,14 +668,11 @@ class HucApiTest extends TestCase
     {
         $this->expectException(RuntimeException::class);
 
-        $eth = $this->eth;
+        $huc = $this->huc;
 
-        $eth->hello(function ($err, $hello) {
-            if ($err !== null) {
-                return $this->assertTrue($err !== null);
-            }
-            $this->assertTrue(true);
-        });
+        $huc->hello();
+
+        $this->assertTrue(true);
     }
 
     /**
@@ -836,8 +684,10 @@ class HucApiTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        $eth = $this->eth;
+        $huc = $this->huc;
 
-        $eth->protocolVersion();
+        $protocolVersion =  $huc->protocolVersion();
+
+        $this->assertTrue(is_string($protocolVersion));
     }
 }

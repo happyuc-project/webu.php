@@ -43,13 +43,9 @@ class PersonalApiTest extends TestCase
     {
         $personal = $this->personal;
 
-        $personal->listAccounts(function ($err, $accounts) {
-            if ($err !== null) {
-                // infura banned us to use list accounts
-                return $this->assertTrue($err->getCode() === 405);
-            }
-            $this->assertTrue(is_array($accounts));
-        });
+        $accounts = $personal->listAccounts();
+
+        $this->assertTrue(is_array($accounts));
     }
 
     /**
@@ -61,12 +57,9 @@ class PersonalApiTest extends TestCase
     {
         $personal = $this->personal;
 
-        $personal->newAccount('123456', function ($err, $account) {
-            if ($err !== null) {
-                return $this->fail($err->getMessage());
-            }
-            $this->assertTrue(is_string($account));
-        });
+        $account   =  $personal->newAccount('123456');
+
+        $this->assertTrue(is_string($account));
     }
 
     /**

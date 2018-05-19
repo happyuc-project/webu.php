@@ -3,16 +3,10 @@
 namespace Test\Unit;
 
 use Test\TestCase;
-use Webu\Formatters\BooleanFormatter;
 
 class BooleanFormatterTest extends TestCase
 {
-    /**
-     * formatter
-     * 
-     * @var \Webu\Formatters\BooleanFormatter
-     */
-    protected $formatter;
+
 
     /**
      * setUp
@@ -22,7 +16,6 @@ class BooleanFormatterTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $this->formatter = new BooleanFormatter;
     }
 
     /**
@@ -32,18 +25,17 @@ class BooleanFormatterTest extends TestCase
      */
     public function testFormat()
     {
-        $formatter = $this->formatter;
 
-        $boolean = $formatter->format(true);
+        $boolean = \Webu\Formatter::Boolean(true);
         $this->assertEquals($boolean, true);
 
-        $boolean = $formatter->format(1);
+        $boolean = \Webu\Formatter::Boolean(1);
         $this->assertEquals($boolean, true);
 
-        $boolean = $formatter->format(false);
+        $boolean = \Webu\Formatter::Boolean(false);
         $this->assertEquals($boolean, false);
 
-        $boolean = $formatter->format(0);
+        $boolean = \Webu\Formatter::Boolean(0);
         $this->assertEquals($boolean, false);
     }
 }

@@ -3,7 +3,7 @@
 namespace Test\Unit;
 
 use Test\TestCase;
-use Webu\RequestManagers\RequestManager;
+use Webu\HttpRequestManager;
 
 class RequestManagerTest extends TestCase
 {
@@ -14,13 +14,12 @@ class RequestManagerTest extends TestCase
      */
     public function testSetHost()
     {
-        $requestManager = new RequestManager('http://localhost:8545', 0.1);
-        $this->assertEquals($requestManager->host, 'http://localhost:8545');
-        $this->assertEquals($requestManager->timeout, 0.1);
+        $requestManager = new HttpRequestManager($this->testHost, 0.1);
+        $this->assertEquals($requestManager->getHost(), $this->testHost);
+        $this->assertEquals($requestManager->getTimeout(), 0.1);
 
-        $requestManager->host = $this->testRinkebyHost;
-        $requestManager->timeout = 1;
-        $this->assertEquals($requestManager->host, 'http://localhost:8545');
-        $this->assertEquals($requestManager->timeout, 0.1);
+
+        $this->assertEquals($requestManager->getHost(), $this->testHost);
+        $this->assertEquals($requestManager->getTimeout(), 0.1);
     }
 }

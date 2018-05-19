@@ -4,15 +4,14 @@ namespace Test\Unit;
 
 use RuntimeException;
 use Test\TestCase;
+use Webu\HttpProvider;
+use Webu\HttpRequestManager;
 use Webu\Webu;
 use Webu\Huc;
 use Webu\Net;
 use Webu\Personal;
 use Webu\Shh;
 use Webu\Utils;
-use Webu\Providers\HttpProvider;
-use Webu\RequestManagers\RequestManager;
-use Webu\RequestManagers\HttpRequestManager;
 
 class WebuTest extends TestCase
 {
@@ -49,16 +48,14 @@ class WebuTest extends TestCase
      */
     public function testInstance()
     {
-        $requestManager = new HttpRequestManager('http://localhost:8545');
-        $webu = new Webu(new HttpProvider($requestManager));
+        $webu = new Webu($this->testHost);
 
-        $this->assertTrue($webu->provider instanceof HttpProvider);
-        $this->assertTrue($webu->provider->requestManager instanceof RequestManager);
+        $this->assertTrue($webu->getProvider() instanceof HttpProvider);
+        $this->assertTrue($webu->getProvider()->getRequestManager() instanceof HttpRequestManager);
         $this->assertTrue($webu->huc instanceof Huc);
         $this->assertTrue($webu->net instanceof Net);
         $this->assertTrue($webu->personal instanceof Personal);
         $this->assertTrue($webu->shh instanceof Shh);
-        $this->assertTrue($webu->utils instanceof Utils);
     }
 
     /**
@@ -69,13 +66,9 @@ class WebuTest extends TestCase
     public function testSetProvider()
     {
         $webu = $this->webu;
-        $requestManager = new HttpRequestManager('http://localhost:8545');
-        $webu->provider = new HttpProvider($requestManager);
 
-        $this->assertEquals($webu->provider->requestManager->host, 'http://localhost:8545');
+        $this->assertEquals($webu->getProvider()->getRequestManager()->getHost(), $this->testHost);
 
-        $webu->provider = null;
-        $this->assertEquals($webu->provider->requestManager->host, 'http://localhost:8545');
     }
 
     /**
@@ -87,7 +80,7 @@ class WebuTest extends TestCase
     {
         $this->expectException(RuntimeException::class);
 
-        $webu = new Webu(null);
+        $webu = new Webu($this->testHost);
         $webu->sha3('hello world');
     }
 }

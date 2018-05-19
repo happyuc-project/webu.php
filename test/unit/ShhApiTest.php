@@ -12,7 +12,7 @@ class ShhApiTest extends TestCase
     /**
      * shh
      * 
-     * @var Webu\Shh
+     * @var \Webu\Shh
      */
     protected $shh;
 
@@ -37,12 +37,9 @@ class ShhApiTest extends TestCase
     {
         $shh = $this->shh;
 
-        $shh->version(function ($err, $version) {
-            if ($err !== null) {
-                return $this->fail($err->getMessage());
-            }
-            $this->assertTrue(is_string($version));
-        });
+        $version = $shh->version();
+
+        $this->assertTrue(is_string($version));
     }
 
     /**

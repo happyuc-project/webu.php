@@ -4,9 +4,8 @@ namespace Test\Unit;
 
 use RuntimeException;
 use Test\TestCase;
-use Webu\Providers\HttpProvider;
-use Webu\RequestManagers\RequestManager;
-use Webu\RequestManagers\HttpRequestManager;
+use Webu\HttpProvider;
+use Webu\HttpRequestManager;
 use Webu\Shh;
 
 class ShhTest extends TestCase
@@ -14,7 +13,7 @@ class ShhTest extends TestCase
     /**
      * shh
      * 
-     * @var Webu\Shh
+     * @var \Webu\Shh
      */
     protected $shh;
 
@@ -37,10 +36,8 @@ class ShhTest extends TestCase
      */
     public function testInstance()
     {
-        $shh = new Shh($this->testHost);
-
-        $this->assertTrue($shh->provider instanceof HttpProvider);
-        $this->assertTrue($shh->provider->requestManager instanceof RequestManager);
+        $this->assertTrue($this->webu->getProvider() instanceof HttpProvider);
+        $this->assertTrue($this->webu->getProvider()->getRequestManager() instanceof HttpRequestManager);
     }
 
     /**
@@ -50,15 +47,8 @@ class ShhTest extends TestCase
      */
     public function testSetProvider()
     {
-        $shh = $this->shh;
-        $requestManager = new HttpRequestManager('http://localhost:8545');
-        $shh->provider = new HttpProvider($requestManager);
 
-        $this->assertEquals($shh->provider->requestManager->host, 'http://localhost:8545');
-
-        $shh->provider = null;
-
-        $this->assertEquals($shh->provider->requestManager->host, 'http://localhost:8545');
+        $this->assertEquals($this->webu->getProvider()->getRequestManager()->getHost(), $this->testHost);
     }
 
     /**
@@ -70,7 +60,6 @@ class ShhTest extends TestCase
     {
         $this->expectException(RuntimeException::class);
 
-        $shh = new Shh(null);
-        $shh->post([]);
+        // $this->webu->shh->post([]);
     }
 }

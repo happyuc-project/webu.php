@@ -4,16 +4,10 @@ namespace Test\Unit;
 
 use Test\TestCase;
 use phpseclib\Math\BigInteger as BigNumber;
-use Webu\Formatters\BigNumberFormatter;
 
 class BigNumberFormatterTest extends TestCase
 {
-    /**
-     * formatter
-     * 
-     * @var \Webu\Formatters\BigNumberFormatter
-     */
-    protected $formatter;
+
 
     /**
      * setUp
@@ -23,7 +17,6 @@ class BigNumberFormatterTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $this->formatter = new BigNumberFormatter;
     }
 
     /**
@@ -33,9 +26,8 @@ class BigNumberFormatterTest extends TestCase
      */
     public function testFormat()
     {
-        $formatter = $this->formatter;
 
-        $bigNumber = $formatter->format(1);
+        $bigNumber = \Webu\Formatter::BigNumber(1);
         $this->assertEquals($bigNumber->toString(), '1');
         $this->assertTrue($bigNumber instanceof BigNumber);
     }

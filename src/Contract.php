@@ -24,7 +24,7 @@ class Contract
      *
      * @var \Webu\HttpProvider
      */
-    protected $provider;
+    public $provider;
 
     /**
      * abi
@@ -86,10 +86,10 @@ class Contract
      * construct
      *
      * @param \Webu\HttpProvider $provider
-     * @param array $abi
+     * @param string $abi
      * @return void
      */
-    public function __construct(\Webu\HttpProvider $provider, array $abi)
+    public function __construct(\Webu\HttpProvider $provider, string $abi)
     {
         $this->provider = $provider;
         $abi            = Utils::jsonToArray($abi, 5);

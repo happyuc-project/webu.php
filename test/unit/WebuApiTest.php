@@ -43,12 +43,11 @@ class WebuApiTest extends TestCase
     {
         $webu = $this->webu;
 
-        $webu->clientVersion(function ($err, $version) {
-            if ($err !== null) {
-                return $this->fail($err->getMessage());
-            }
-            $this->assertTrue(is_string($version));
-        });
+        $version = $webu->clientVersion();
+
+        // print_r($version);
+
+        $this->assertTrue(is_string($version));
     }
 
     /**
@@ -60,19 +59,11 @@ class WebuApiTest extends TestCase
     {
         $webu = $this->webu;
 
-        $webu->sha3($this->testHex, function ($err, $hash) {
-            if ($err !== null) {
-                return $this->fail($err->getMessage());
-            }
-            $this->assertEquals($hash, $this->testHash);
-        });
+        $hash = $webu->sha3($this->testHex);
+        $this->assertEquals($hash, $this->testHash);
 
-        $webu->sha3('hello world', function ($err, $hash) {
-            if ($err !== null) {
-                return $this->fail($err->getMessage());
-            }
-            $this->assertEquals($hash, $this->testHash);
-        });
+        $hash = $webu->sha3('hello world');
+        $this->assertEquals($hash, $this->testHash);
     }
 
     /**
@@ -86,12 +77,9 @@ class WebuApiTest extends TestCase
 
         $webu = $this->webu;
 
-        $webu->hello(function ($err, $hello) {
-            if ($err !== null) {
-                return $this->fail($err->getMessage());
-            }
-            $this->assertTrue(true);
-        });
+        $webu->hello();
+
+        $this->assertTrue(true);
     }
 
     /**
@@ -107,12 +95,8 @@ class WebuApiTest extends TestCase
 
         $webu = $this->webu;
 
-        $webu->sha3($webu, function ($err, $hash) {
-            if ($err !== null) {
-                return $this->fail($err->getMessage());
-            }
-            $this->assertTrue(true);
-        });
+        $webu->sha3($webu);
+        $this->assertTrue(true);
     }
 
     /**

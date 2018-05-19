@@ -72,9 +72,22 @@ class HttpProvider
             'params'  => $params,
             'id'      => ++$this->id
         ]);
-        return $this->requestManager->payloadReal($payload);
+        $data =  $this->requestManager->payloadReal($payload);
+        return $this->_sendReal($data);
     }
 
+
+    protected function _sendReal($data)
+    {
+        if($data && $data['jsonrpc'] && $data['id'] && $data['result'])
+        {
+            return $data['result'];
+        }else
+        {
+            throw new \Exception($data['error']);
+        }
+        return null;
+    }
     /**
      * send
      * 

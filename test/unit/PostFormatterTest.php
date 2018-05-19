@@ -3,16 +3,9 @@
 namespace Test\Unit;
 
 use Test\TestCase;
-use Webu\Formatters\PostFormatter;
 
 class PostFormatterTest extends TestCase
 {
-    /**
-     * formatter
-     * 
-     * @var \Webu\Formatters\PostFormatter
-     */
-    protected $formatter;
 
     /**
      * setUp
@@ -22,7 +15,6 @@ class PostFormatterTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $this->formatter = new PostFormatter;
     }
 
     /**
@@ -32,9 +24,8 @@ class PostFormatterTest extends TestCase
      */
     public function testFormat()
     {
-        $formatter = $this->formatter;
 
-        $post= $formatter->format([
+        $post= \Webu\Formatter::Post([
             'from' => "0x776869737065722d636861742d636c69656e74",
             'to' => "0x4d5a695276454c39425154466b61693532",
             'topics' => ["0x776869737065722d636861742d636c69656e74", "0x4d5a695276454c39425154466b61693532"],
@@ -51,7 +42,7 @@ class PostFormatterTest extends TestCase
             'ttl' => '0x32',
         ]);
 
-        $post= $formatter->format([
+        $post= \Webu\Formatter::Post([
             'from' => "0x776869737065722d636861742d636c69656e74",
             'to' => "0x4d5a695276454c39425154466b61693532",
             'topics' => ["0x776869737065722d636861742d636c69656e74", "0x4d5a695276454c39425154466b61693532"],

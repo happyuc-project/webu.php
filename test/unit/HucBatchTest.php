@@ -12,7 +12,7 @@ class HucBatchTest extends TestCase
      * 
      * @var \Webu\Huc
      */
-    protected $eth;
+    protected $huc;
 
     /**
      * setUp
@@ -23,7 +23,7 @@ class HucBatchTest extends TestCase
     {
         parent::setUp();
 
-        $this->eth = $this->webu->huc;
+        $this->huc = $this->webu->huc;
     }
 
     /**
@@ -33,18 +33,12 @@ class HucBatchTest extends TestCase
      */
     public function testBatch()
     {
-        $eth = $this->eth;
+        $huc= $this->huc;
 
-        $eth->batch(true);
-        $eth->protocolVersion();
-        $eth->syncing();
+        $data_0 = $huc->protocolVersion();
+        $data_1 = $huc->syncing();
 
-        $eth->provider->execute(function ($err, $data) {
-            if ($err !== null) {
-                return $this->fail('Got error!');
-            }
-            $this->assertTrue($data[0] instanceof BigNumber);
-            $this->assertTrue($data[1] !== null);
-        });
+        $this->assertTrue($data_0 instanceof BigNumber);
+        $this->assertTrue($data_1 !== null);
     }
 }

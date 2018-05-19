@@ -3,16 +3,10 @@
 namespace Test\Unit;
 
 use Test\TestCase;
-use Webu\Validators\ShhFilterValidator;
 
 class ShhFilterValidatorTest extends TestCase
 {
-    /**
-     * validator
-     * 
-     * @var \Webu\Validators\ShhFilterValidator
-     */
-    protected $validator;
+
 
     /**
      * setUp
@@ -22,7 +16,6 @@ class ShhFilterValidatorTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $this->validator = new ShhFilterValidator;
     }
 
     /**
@@ -32,17 +25,16 @@ class ShhFilterValidatorTest extends TestCase
      */
     public function testValidate()
     {
-        $validator = $this->validator;
 
-        $this->assertEquals(false, $validator->validate('hello webu.php'));
-        $this->assertEquals(false, $validator->validate([]));
-        $this->assertEquals(false, $validator->validate([
+        $this->assertEquals(false, \Webu\Validator::ShhFilter('hello webu.php'));
+        $this->assertEquals(false, \Webu\Validator::ShhFilter([]));
+        $this->assertEquals(false, \Webu\Validator::ShhFilter([
             'to' => 'hello',
         ]));
-        $this->assertEquals(false, $validator->validate([
+        $this->assertEquals(false, \Webu\Validator::ShhFilter([
             'to' => '0xeb0b54D62ec3f561C2eebdaebd92432126F0817579c102b062d1a6c1f2ed83e8121233',
         ]));
-        $this->assertEquals(false, $validator->validate([
+        $this->assertEquals(false, \Webu\Validator::ShhFilter([
             'to' => '0xeb0b54D62ec3f561C2eebdaebd92432126F0817579c102b062d1a6c1f2ed83e8121233',
             'topics' => [
                 '0xeb0b54D62ec3f561C2eebdaebd9243212', [
@@ -50,7 +42,7 @@ class ShhFilterValidatorTest extends TestCase
                 ]
             ]
         ]));
-        $this->assertEquals(true, $validator->validate([
+        $this->assertEquals(true, \Webu\Validator::ShhFilter([
             'to' => '0xeb0b54D62ec3f561C2eebdaebd92432126F0817579c102b062d1a6c1f2ed83e8121233',
             'topics' => [
                 '0xeb0b54D62ec3f561C2eebdaebd9243212', [
@@ -58,7 +50,7 @@ class ShhFilterValidatorTest extends TestCase
                 ]
             ]
         ]));
-        $this->assertEquals(true, $validator->validate([
+        $this->assertEquals(true, \Webu\Validator::ShhFilter([
             'topics' => [
                 '0xeb0b54D62ec3f561C2eebdaebd9243212', [
                     '0xeb0b54D62ec3f561C2eebdaebd9243212', '0xeb0b54D62ec3f561C2eebdaebd9243212'
