@@ -24,16 +24,16 @@ class Personal
      * 
      * @var array
      */
-    private $methods = [];
+//    private $methods = [];
 
     /**
      * allowedMethods
      * 
      * @var array
      */
-    private $allowedMethods = [
-        'personal_listAccounts', 'personal_newAccount', 'personal_unlockAccount', 'personal_sendTransaction'
-    ];
+//    private $allowedMethods = [
+//        'personal_listAccounts', 'personal_newAccount', 'personal_unlockAccount', 'personal_sendTransaction'
+//    ];
 
 
     /**

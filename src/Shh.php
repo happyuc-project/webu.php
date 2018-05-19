@@ -24,24 +24,24 @@ class Shh
      * 
      * @var array
      */
-    private $methods = [];
+//    private $methods = [];
 
     /**
      * allowedMethods
      * 
      * @var array
      */
-    private $allowedMethods = [
-        'shh_version',
-        'shh_newIdentity',
-        'shh_hasIdentity',
-        'shh_post',
-        'shh_newFilter',
-        'shh_uninstallFilter',
-        'shh_getFilterChanges',
-        'shh_getMessages'
-        // doesn't exist: 'shh_newGroup', 'shh_addToGroup'
-    ];
+//    private $allowedMethods = [
+//        'shh_version',
+//        'shh_newIdentity',
+//        'shh_hasIdentity',
+//        'shh_post',
+//        'shh_newFilter',
+//        'shh_uninstallFilter',
+//        'shh_getFilterChanges',
+//        'shh_getMessages'
+//        // doesn't exist: 'shh_newGroup', 'shh_addToGroup'
+//    ];
 
     /**
      * construct
