@@ -134,7 +134,7 @@ class Huc
     /**
      * Returns the number of hashes per second that the node is mining with.
      *
-     * @return array QUANTITY - number of hashes per second.
+     * @return string QUANTITY - number of hashes per second.
      */
     public function hashrate()
     {
@@ -170,12 +170,13 @@ class Huc
     /**
      * Returns the number of most recent block.
      *
-     * @return array QUANTITY - integer of the current block number the client is on.
+     * @return int QUANTITY - integer of the current block number the client is on.
      */
     public function blockNumber()
     {
-        $params = [];
-        return $this->provider->sendReal('huc_blockNumber',$params);
+        $params      = [];
+        $blockNumber = $this->provider->sendReal('huc_blockNumber',$params);
+        return Formatter::Number($blockNumber);
     }
 
 
@@ -408,13 +409,13 @@ class Huc
     /**
      * Returns information about a block by block number.
      *
-     * @param string $block_number QUANTITY|TAG - integer of a block number, or the string "earliest", "latest" or "pending", as in the default block parameter.
-     * @param bool $is_full        Boolean - If true it returns the full transaction objects, if false only the hashes of the transactions.
+     * @param string $block_number   QUANTITY|TAG - integer of a block number, or the string "earliest", "latest" or "pending", as in the default block parameter.
+     * @param bool   $is_full        Boolean - If true it returns the full transaction objects, if false only the hashes of the transactions.
      * @return array  See huc_getBlockByHash
      */
-    public function getBlockByNumber(string $block_number,bool $is_full)
+    public function getBlockByNumber(string $block_number,bool $is_full=false)
     {
-        $params = [$block_number,$is_full];
+        $params        = [$block_number,$is_full];
         return $this->provider->sendReal('huc_getBlockByNumber',$params);
     }
 

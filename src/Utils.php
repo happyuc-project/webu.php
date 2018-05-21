@@ -81,8 +81,10 @@ class Utils
         } else {
             throw new \InvalidArgumentException('The value to toHex function is not support.');
         }
-        if ($isPrefix) {
+        if ($isPrefix && $hex) {
             return '0x' . $hex;
+        }elseif($isPrefix){
+            return '0x0';
         }
         return $hex;
     }
