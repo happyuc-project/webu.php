@@ -113,8 +113,8 @@ class Formatter
     public static function Number($value)
     {
         $value = Utils::toString($value);
-        $bn = Utils::toBn($value);
-        $int = (int) $bn->toString();
+        $bn    = Utils::toBn($value);
+        $int   = (float) $bn->toString();
 
         return $int;
     }
