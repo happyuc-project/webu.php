@@ -20,25 +20,10 @@ class Net
     protected $provider;
 
     /**
-     * methods
-     * 
-     * @var array
-     */
-//    private $methods = [];
-
-    /**
-     * allowedMethods
-     * 
-     * @var array
-     */
-//    private $allowedMethods = [
-//        'net_version', 'net_peerCount', 'net_listening'
-//    ];
-
-    /**
      * construct
      *
      * @param \Webu\HttpProvider $provider
+     *
      * @return void
      */
     public function __construct($provider)
@@ -48,76 +33,37 @@ class Net
 
     /**
      * Returns the current network id.
+     *
+     * @throws \Exception
+     * @return int
      */
-    public function version()
+    public function version($callback = null)
     {
         $params = [];
-        return $this->provider->sendReal('net_version',$params);
+        return $this->provider->sendReal('net_version',$params,$callback);
     }
 
     /**
      * Returns number of peers currently connected to the client.
+     *
+     * @throws \Exception
+     * @return int
      */
-    public function peerCount()
+    public function peerCount($callback = null)
     {
         $params = [];
-        return $this->provider->sendReal('net_peerCount',$params);
+        return $this->provider->sendReal('net_peerCount',$params,$callback);
     }
 
     /**
      * Returns true if client is actively listening for network connections.
+     *
+     * @throws \Exception
+     * @return bool
      */
-    public function listening()
+    public function listening($callback = null)
     {
         $params = [];
-        return $this->provider->sendReal('net_listening',$params);
+        return $this->provider->sendReal('net_listening',$params,$callback);
     }
-
-
-    /**
-     * call
-     * 
-     * @param string $name
-     * @param array $arguments
-     * @return void
-     */
-//    public function __call($name, $arguments)
-//    {
-//        if (empty($this->provider)) {
-//            throw new \RuntimeException('Please set provider first.');
-//        }
-//
-//        $class = explode('\\', get_class());
-//
-//        if (preg_match('/^[a-zA-Z0-9]+$/', $name) === 1) {
-//            $method = strtolower($class[1]) . '_' . $name;
-//
-//            if (!in_array($method, $this->allowedMethods)) {
-//                throw new \RuntimeException('Unallowed rpc method: ' . $method);
-//            }
-//            if ($this->provider->isBatch) {
-//                $callback = null;
-//            } else {
-//                $callback = array_pop($arguments);
-//
-//                if (is_callable($callback) !== true) {
-//                    throw new \InvalidArgumentException('The last param must be callback function.');
-//                }
-//            }
-//            if (!array_key_exists($method, $this->methods)) {
-//                // new the method
-//                $methodClass = sprintf("\Webu\Methods\%s\%s", ucfirst($class[1]), ucfirst($name));
-//                $methodObject = new $methodClass($method, $arguments);
-//                $this->methods[$method] = $methodObject;
-//            } else {
-//                $methodObject = $this->methods[$method];
-//            }
-//            if ($methodObject->validate($arguments)) {
-//                $inputs = $methodObject->transform($arguments, $methodObject->inputFormatters);
-//                $methodObject->arguments = $inputs;
-//                $this->provider->send($methodObject, $callback);
-//            }
-//        }
-//    }
-//
 }

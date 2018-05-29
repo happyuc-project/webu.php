@@ -26,12 +26,6 @@ class Contract
      */
     public $provider;
 
-    /**
-     * abi
-     * 
-     * @var array
-     */
-    protected $abi;
 
     /**
      * constructor
@@ -69,6 +63,13 @@ class Contract
     protected $bytecode;
 
     /**
+     * abi
+     *
+     * @var array
+     */
+    protected $abi;
+
+    /**
      * huc
      * 
      * @var \Webu\Huc
@@ -91,30 +92,11 @@ class Contract
      */
     public function __construct(\Webu\HttpProvider $provider, string $abi)
     {
-        $this->provider = $provider;
-        $abi            = Utils::jsonToArray($abi, 5);
+        $this->setAbi($abi);
 
-        foreach ($abi as $item) {
-            if (isset($item['type'])) {
-                if ($item['type'] === 'function') {
-                    $this->functions[$item['name']] = $item;
-                } elseif ($item['type'] === 'constructor') {
-                    $this->constructor = $item;
-                } elseif ($item['type'] === 'event') {
-                    $this->events[$item['name']] = $item;
-                }
-            }
-        }
-        $this->abi = $abi;
-        $this->huc = $this->provider->webu->huc;
-        $this->hucabi = new Hucabi([
-            'address' => new Address,
-            'bool' => new Boolean,
-            'bytes' => new Bytes,
-            'int' => new Integer,
-            'string' => new Str,
-            'uint' => new Uinteger,
-        ]);
+        $this->provider = $provider;
+        $this->huc      = $this->provider->webu->huc;
+        $this->hucabi   = new Hucabi(['address' => new Address, 'bool' => new Boolean, 'bytes' => new Bytes, 'int' => new Integer, 'string' => new Str,'uint' => new Uinteger,]);
     }
 
     /**
@@ -147,26 +129,6 @@ class Contract
         return $this->constructor;
     }
 
-    /**
-     * getAbi
-     * 
-     * @return array
-     */
-    public function getAbi()
-    {
-        return $this->abi;
-    }
-
-    /**
-     * setAbi
-     * 
-     * @param string $abi
-     * @return $this
-     */
-    public function setAbi($abi)
-    {
-        return $this->abi($abi);
-    }
 
     /**
      * getHucabi
@@ -176,6 +138,14 @@ class Contract
     public function getHucabi()
     {
         return $this->hucabi;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAbi()
+    {
+        return $this->abi;
     }
 
     /**
@@ -211,49 +181,17 @@ class Contract
     }
 
     /**
-     * at
-     * 
-     * @param string $address
-     * @return $this
-     */
-    public function at($address)
-    {
-        if (Validator::Address($address) === false) {
-            throw new \InvalidArgumentException('Please make sure address is valid.');
-        }
-        $this->toAddress = Formatter::Address($address);
-
-        return $this;
-    }
-
-    /**
-     * bytecode
-     * 
-     * @param string $bytecode
-     * @return $this
-     */
-    public function bytecode($bytecode)
-    {
-        if (Validator::Hex($bytecode) === false) {
-            throw new \InvalidArgumentException('Please make sure bytecode is valid.');
-        }
-        $this->bytecode = Utils::stripZero($bytecode);
-
-        return $this;
-    }
-
-    /**
      * abi
-     * 
+     *
      * @param string $abi
      * @return $this
      */
-    public function abi($abi)
+    public function setAbi(string $abi_str)
     {
-        if (Validator::String($abi) === false) {
+        if (Validator::String($abi_str) === false) {
             throw new \InvalidArgumentException('Please make sure abi is valid.');
         }
-        $abi = Utils::jsonToArray($abi, 5);
+        $abi            = Utils::jsonToArray($abi_str, 5);
 
         foreach ($abi as $item) {
             if (isset($item['type'])) {
@@ -266,215 +204,11 @@ class Contract
                 }
             }
         }
-        $this->abi = $abi;
+        $this->abi    = $abi;
 
         return $this;
     }
 
-    /**
-     * new
-     * Deploy a contruct with params.
-     * 
-     * @param mixed
-     * @return void
-     */
-    public function new()
-    {
-        if (isset($this->constructor)) {
-            $constructor = $this->constructor;
-            $arguments   = func_get_args();
-            $callback    = array_pop($arguments);
-
-            if (count($arguments) < count($constructor['inputs'])) {
-                throw new \InvalidArgumentException('Please make sure you have put all constructor params and callback.');
-            }
-            if (is_callable($callback) !== true) {
-                throw new \InvalidArgumentException('The last param must be callback function.');
-            }
-            if (!isset($this->bytecode)) {
-                throw new \InvalidArgumentException('Please call bytecode($bytecode) before new().');
-            }
-            $params = array_splice($arguments, 0, count($constructor['inputs']));
-            $data = $this->hucabi->encodeParameters($constructor, $params);
-            $transaction = [];
-
-            if (count($arguments) > 0) {
-                $transaction = $arguments[0];
-            }
-            $transaction['data'] = '0x' . $this->bytecode . Utils::stripZero($data);
-
-            $this->huc->sendTransaction($transaction, function ($err, $transaction) use ($callback){
-                if ($err !== null) {
-                    return call_user_func($callback, $err, null);
-                }
-                return call_user_func($callback, null, $transaction);
-            });
-        }
-    }
-
-    /**
-     * send
-     * Send function method.
-     * 
-     * @param mixed
-     * @return void
-     */
-    public function send()
-    {
-        if (isset($this->functions)) {
-            $arguments = func_get_args();
-            $method = array_splice($arguments, 0, 1)[0];
-            $callback = array_pop($arguments);
-
-            if (!is_string($method) && !isset($this->functions[$method])) {
-                throw new \InvalidArgumentException('Please make sure the method is existed.');
-            }
-            $function = $this->functions[$method];
-
-            if (count($arguments) < count($function['inputs'])) {
-                throw new \InvalidArgumentException('Please make sure you have put all function params and callback.');
-            }
-            if (is_callable($callback) !== true) {
-                throw new \InvalidArgumentException('The last param must be callback function.');
-            }
-            $params = array_splice($arguments, 0, count($function['inputs']));
-            $data = $this->hucabi->encodeParameters($function, $params);
-            $functionName = Utils::jsonMethodToString($function);
-            $functionSignature = $this->hucabi->encodeFunctionSignature($functionName);
-            $transaction = [];
-
-            if (count($arguments) > 0) {
-                $transaction = $arguments[0];
-            }
-            $transaction['to'] = $this->toAddress;
-            $transaction['data'] = $functionSignature . Utils::stripZero($data);
-
-            $this->huc->sendTransaction($transaction, function ($err, $transaction) use ($callback){
-                if ($err !== null) {
-                    return call_user_func($callback, $err, null);
-                }
-                return call_user_func($callback, null, $transaction);
-            });
-        }
-    }
-
-    /**
-     * call
-     * Call function method.
-     * 
-     * @param mixed
-     * @return void
-     */
-    public function call()
-    {
-        if (isset($this->functions)) {
-            $arguments = func_get_args();
-            $method = array_splice($arguments, 0, 1)[0];
-            $callback = array_pop($arguments);
-
-            if (!is_string($method) && !isset($this->functions[$method])) {
-                throw new \InvalidArgumentException('Please make sure the method is existed.');
-            }
-            $function = $this->functions[$method];
-
-            if (count($arguments) < count($function['inputs'])) {
-                throw new \InvalidArgumentException('Please make sure you have put all function params and callback.');
-            }
-            if (is_callable($callback) !== true) {
-                throw new \InvalidArgumentException('The last param must be callback function.');
-            }
-            $params = array_splice($arguments, 0, count($function['inputs']));
-            $data = $this->hucabi->encodeParameters($function, $params);
-            $functionName = Utils::jsonMethodToString($function);
-            $functionSignature = $this->hucabi->encodeFunctionSignature($functionName);
-            $transaction = [];
-
-            if (count($arguments) > 0) {
-                $transaction = $arguments[0];
-            }
-            $transaction['to'] = $this->toAddress;
-            $transaction['data'] = $functionSignature . Utils::stripZero($data);
-
-            $this->huc->call($transaction, function ($err, $transaction) use ($callback, $function){
-                if ($err !== null) {
-                    return call_user_func($callback, $err, null);
-                }
-                $decodedTransaction = $this->hucabi->decodeParameters($function, $transaction);
-
-                return call_user_func($callback, null, $decodedTransaction);
-            });
-        }
-    }
-
-    /**
-     * estimateGas
-     * Estimate function gas.
-     * 
-     * @param mixed
-     * @return void
-     */
-    public function estimateGas()
-    {
-        if (isset($this->functions) || isset($this->constructor)) {
-            $arguments = func_get_args();
-            $callback = array_pop($arguments);
-
-            if (empty($this->toAddress) && !empty($this->bytecode)) {
-                $constructor = $this->constructor;
-
-                if (count($arguments) < count($constructor['inputs'])) {
-                    throw new \InvalidArgumentException('Please make sure you have put all constructor params and callback.');
-                }
-                if (is_callable($callback) !== true) {
-                    throw new \InvalidArgumentException('The last param must be callback function.');
-                }
-                if (!isset($this->bytecode)) {
-                    throw new \InvalidArgumentException('Please call bytecode($bytecode) before estimateGas().');
-                }
-                $params = array_splice($arguments, 0, count($constructor['inputs']));
-                $data = $this->hucabi->encodeParameters($constructor, $params);
-                $transaction = [];
-
-                if (count($arguments) > 0) {
-                    $transaction = $arguments[0];
-                }
-                $transaction['to'] = '';
-                $transaction['data'] = '0x' . $this->bytecode . Utils::stripZero($data);
-            } else {
-                $mhucod = array_splice($arguments, 0, 1)[0];
-
-                if (!is_string($method) && !isset($this->functions[$method])) {
-                    throw new \InvalidArgumentException('Please make sure the method is existed.');
-                }
-                $function = $this->functions[$method];
-
-                if (count($arguments) < count($function['inputs'])) {
-                    throw new \InvalidArgumentException('Please make sure you have put all function params and callback.');
-                }
-                if (is_callable($callback) !== true) {
-                    throw new \InvalidArgumentException('The last param must be callback function.');
-                }
-                $params = array_splice($arguments, 0, count($function['inputs']));
-                $data = $this->hucabi->encodeParameters($function, $params);
-                $functionName = Utils::jsonMethodToString($function);
-                $functionSignature = $this->hucabi->encodeFunctionSignature($functionName);
-                $transaction = [];
-
-                if (count($arguments) > 0) {
-                    $transaction = $arguments[0];
-                }
-                $transaction['to'] = $this->toAddress;
-                $transaction['data'] = $functionSignature . Utils::stripZero($data);
-            }
-
-            $this->huc->estimateGas($transaction, function ($err, $gas) use ($callback){
-                if ($err !== null) {
-                    return call_user_func($callback, $err, null);
-                }
-                return call_user_func($callback, null, $gas);
-            });
-        }
-    }
 
     /**
      * getData
@@ -483,17 +217,15 @@ class Contract
      * 1. Get the funtion data with params.
      * 2. Sign the data with user private key.
      * 3. Call sendRawTransaction.
-     * 
+     *
      * @param mixed
-     * @return void
      */
-    public function getData()
+    public function data()
     {
-        if (isset($this->functions) || isset($this->constructor)) {
-            $arguments = func_get_args();
-            $functionData = '';
-
-            if (empty($this->toAddress) && !empty($this->bytecode)) {
+        $functionData  = '';
+        if ($this->functions || $this->constructor){
+            // $arguments    = func_get_args();
+            if (!$this->toAddress && !empty($this->bytecode)) {
                 $constructor = $this->constructor;
 
                 if (count($arguments) < count($constructor['inputs'])) {
@@ -502,8 +234,8 @@ class Contract
                 if (!isset($this->bytecode)) {
                     throw new \InvalidArgumentException('Please call bytecode($bytecode) before getData().');
                 }
-                $params = array_splice($arguments, 0, count($constructor['inputs']));
-                $data = $this->hucabi->encodeParameters($constructor, $params);
+                $params       = array_splice($arguments, 0, count($constructor['inputs']));
+                $data         = $this->hucabi->encodeParameters($constructor, $params);
                 $functionData = $this->bytecode . Utils::stripZero($data);
             } else {
                 $method = array_splice($arguments, 0, 1)[0];
@@ -516,13 +248,270 @@ class Contract
                 if (count($arguments) < count($function['inputs'])) {
                     throw new \InvalidArgumentException('Please make sure you have put all function params and callback.');
                 }
-                $params = array_splice($arguments, 0, count($function['inputs']));
-                $data = $this->hucabi->encodeParameters($function, $params);
-                $functionName = Utils::jsonMethodToString($function);
+                $params            = array_splice($arguments, 0, count($function['inputs']));
+                $data              = $this->hucabi->encodeParameters($function, $params);
+                $functionName      = Utils::jsonMethodToString($function);
                 $functionSignature = $this->hucabi->encodeFunctionSignature($functionName);
-                $functionData = Utils::stripZero($functionSignature) . Utils::stripZero($data);
+                $functionData      = Utils::stripZero($functionSignature) . Utils::stripZero($data);
             }
-            return $functionData;
         }
+        return $functionData;
     }
+
+    /**
+     * at
+     * 
+     * @param string $address
+     *
+     * @throws \Exception
+     * @return Contract
+     */
+    public function at($address)
+    {
+        $rs      = Validator::Address($address,__METHOD__.':');
+        if ($rs[0] === false) {
+            throw new \Exception("Please make sure address is valid.\n".$rs[0]);
+        }
+        $this->toAddress = Formatter::Address($address);
+
+        return $this;
+    }
+
+    /**
+     * bytecode
+     * 
+     * @param string $bytecode
+     *
+     * @throws \Exception
+     * @return Contract
+     */
+    public function bytecode($bytecode)
+    {
+        // echo "\$bytecode:1\n";
+        $rs      = Validator::Hex($bytecode,__METHOD__.':');
+        if ($rs[0] === false) {
+            //  echo "\$bytecode:2\n";
+            throw new \Exception("Please make sure bytecode is valid.\n".$rs[0]);
+        }
+        // echo "\$bytecode:3\n";
+        $this->bytecode = Utils::stripZero($bytecode);
+        // echo "\$bytecode:4\n";
+        return $this;
+    }
+
+
+
+    /**
+     * new
+     * Deploy a contruct with params.
+     *
+     * $initialSupply,$tokenName,$decimalUnits,$tokenSymbol,$callback=null
+     * 
+     * @param mixed
+     *
+     * @throws \Exception
+     * @return Contract
+     */
+    public function new()
+    {
+        if (isset($this->constructor)) {
+            $arguments   = func_get_args();
+            $callback    = array_pop($arguments);
+
+            // print_r(['$arguments'=>$arguments,]);
+            if ( count($arguments) < count($this->constructor['inputs']) ) {
+                throw new \Exception('Please make sure you have put all constructor params and callback.');
+            }
+            if (is_callable($callback) !== true) {
+                throw new \Exception('The last param must be callback function.');
+            }
+            if (!isset($this->bytecode)) {
+                throw new \Exception('Please call bytecode($bytecode) before new().');
+            }
+
+            // print_r(['$callback'=>$callback,]);
+            // print_r(['$arguments'=>$arguments,'$this->constructor[\'inputs\']'=>$this->constructor['inputs']  ]);
+            $inputs         = array_splice($arguments, 0, count($this->constructor['inputs']));
+            // print_r(['$arguments'=>$arguments]);
+            $data           = $this->hucabi->encodeParameters($this->constructor, $inputs);
+            // print_r(['Utils::stripZero($data)'=>Utils::stripZero($data)]);
+            $data           = '0x' . $this->bytecode . Utils::stripZero($data);
+            $params         = $arguments[0];
+            $params['data'] = $data;
+            // print_r(['$params'=>$params]);
+            $this->huc->sendTransaction($params, $callback);
+        }
+
+        return $this;
+    }
+
+    /**
+     * send
+     * Send function method.
+     * 
+     * @param mixed
+     *
+     * @throws \Exception
+     * @return Contract
+     */
+    public function send()
+    {
+        if ($this->functions)
+        {
+            $arguments = func_get_args();
+            $method    = array_splice($arguments, 0, 1)[0];
+            $callback  = array_pop($arguments);
+
+            if (!is_string($method) && !isset($this->functions[$method])) {
+                throw new \Exception('Please make sure the method is existed.');
+            }
+            $function  = $this->functions[$method];
+
+            // print_r(['$function'=>$function,'$arguments'=>$arguments]);
+            if (count($arguments) < count($function['inputs'])) {
+                throw new \Exception('Please make sure you have put all function params and callback.');
+            }
+            if (is_callable($callback) !== true) {
+                throw new \Exception('The last param must be callback function.');
+            }
+            $arguments2         = array_splice($arguments, 0, count($function['inputs']));
+
+            // print_r($arguments);
+            $data              = $this->hucabi->encodeParameters($function, $arguments2);
+            $functionName      = Utils::jsonMethodToString($function);
+            $functionSignature = $this->hucabi->encodeFunctionSignature($functionName);
+            $params            = [];
+
+            if (count($arguments) > 0) {
+                $params     = $arguments[0];
+            }
+            // print_r(['to2'=>$this->toAddress,'$params'=>$params]);
+            $params['to']   = $this->toAddress;
+            // print_r($params);
+            // print_r(['to'=>$this->toAddress,'$data'=>$data]);
+            $params['data'] = $functionSignature . Utils::stripZero($data);
+            // print_r($params);
+            $this->huc->sendTransaction($params, $callback);
+        }
+        return $this;
+    }
+
+    /**
+     * call
+     * Call function method.
+     * 
+     * @param mixed
+     *
+     * @throws \Exception
+     * @return Contract
+     */
+    public function call()
+    {
+        if ($this->functions)
+        {
+            $arguments = func_get_args();
+            $method    = array_splice($arguments, 0, 1)[0];
+            $callback  = array_pop($arguments);
+
+            if (!is_string($method) && !isset($this->functions[$method])) {
+                throw new \InvalidArgumentException('Please make sure the method is existed.');
+            }
+            $function = $this->functions[$method];
+
+            if (count($arguments) < count($function['inputs'])) {
+                throw new \InvalidArgumentException('Please make sure you have put all function params and callback.');
+            }
+            if (is_callable($callback) !== true) {
+                throw new \InvalidArgumentException('The last param must be callback function.');
+            }
+            $params2           = array_splice($arguments, 0, count($function['inputs']));
+            $data              = $this->hucabi->encodeParameters($function, $params2);
+            $functionName      = Utils::jsonMethodToString($function);
+            $functionSignature = $this->hucabi->encodeFunctionSignature($functionName);
+            $params            = [];
+
+            if (count($arguments) > 0) {
+                $params     = $arguments[0];
+            }
+            $params['to']   = $this->toAddress;
+            $params['data'] = $functionSignature . Utils::stripZero($data);
+
+            $this->huc->call($params, "latest", function ($err, $data) use ($callback, $function){
+                if ($err !== null) {
+                    return call_user_func($callback, $err, null);
+                }
+                $decodedTransaction = $this->hucabi->decodeParameters($function, $data);
+                return call_user_func($callback, null, $decodedTransaction);
+            });
+        }
+        return $this;
+    }
+
+    /**
+     * estimateGas
+     * Estimate function gas.
+     * 
+     * @param mixed
+     *
+     * @throws \Exception
+     * @return mixed
+     */
+    public function estimateGas()
+    {
+        if ($this->functions || $this->constructor) {
+            $arguments = func_get_args();
+            $callback  = array_pop($arguments);
+
+            if (!$this->toAddress && $this->bytecode) {
+                $constructor = $this->constructor;
+
+                if (count($arguments) < count($constructor['inputs'])) {
+                    throw new \InvalidArgumentException('Please make sure you have put all constructor params and callback.');
+                }
+                if (is_callable($callback) !== true) {
+                    throw new \InvalidArgumentException('The last param must be callback function.');
+                }
+                if (!isset($this->bytecode)) {
+                    throw new \InvalidArgumentException('Please call bytecode($bytecode) before estimateGas().');
+                }
+                $params2 = array_splice($arguments, 0, count($constructor['inputs']));
+                $data    = $this->hucabi->encodeParameters($constructor, $params2);
+                $params  = [];
+
+                if (count($arguments) > 0) {
+                    $params = $arguments[0];
+                }
+                $params['to']   = '';
+                $params['data'] = '0x' . $this->bytecode . Utils::stripZero($data);
+            } else {
+                $method = array_splice($arguments, 0, 1)[0];
+
+                if (!is_string($method) && !isset($this->functions[$method])) {
+                    throw new \InvalidArgumentException('Please make sure the method is existed.');
+                }
+                $function = $this->functions[$method];
+
+                if (count($arguments) < count($function['inputs'])) {
+                    throw new \InvalidArgumentException('Please make sure you have put all function params and callback.');
+                }
+                if (is_callable($callback) !== true) {
+                    throw new \InvalidArgumentException('The last param must be callback function.');
+                }
+                $params2           = array_splice($arguments, 0, count($function['inputs']));
+                $data              = $this->hucabi->encodeParameters($function, $params2);
+                $functionName      = Utils::jsonMethodToString($function);
+                $functionSignature = $this->hucabi->encodeFunctionSignature($functionName);
+                $params            = [];
+
+                if (count($arguments) > 0) {
+                    $params = $arguments[0];
+                }
+                $params['to']   = $this->toAddress;
+                $params['data'] = $functionSignature . Utils::stripZero($data);
+            }
+            return $this->huc->estimateGas( $params, "latest", $callback);
+        }
+        return $this;
+    }
+
 }

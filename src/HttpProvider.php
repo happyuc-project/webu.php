@@ -64,7 +64,14 @@ class HttpProvider
     }
 
 
-    public function sendReal($method,$params)
+    /**
+     * @param string $method
+     * @param array $params
+     * @param null $callback
+     * @return mixed
+     * @throws \Exception
+     */
+    public function sendReal(string $method,array $params,$callback = null)
     {
         $payload = json_encode([
             'jsonrpc' => $this->rpcVersion,
@@ -73,35 +80,51 @@ class HttpProvider
             'id'      => ++$this->id
         ]);
         $data =  $this->requestManager->payloadReal($payload);
-        return $this->_sendReal($data);
-    }
 
 
-    protected function _sendReal($data)
-    {
         if($data && $data['jsonrpc'] && $data['id'] && $data['result'])
         {
+            if($callback)
+            {
+                return call_user_func($callback, null, $data['result']);
+            }
             return $data['result'];
-        }else
-        {
-            throw new \Exception($data['error']);
         }
-        return null;
+
+        $error = "{$data['error']['message']}[code:{$data['error']['code']}]";
+        // print_r(['$data'=>$data]);
+        return $this->sendError($error,$callback);
     }
+
+
+    /**
+     * @param string $error
+     * @param $callback
+     * @return mixed
+     * @throws \Exception
+     */
+    public function sendError(string $error,$callback)
+    {
+        if($callback)
+        {
+            return call_user_func($callback, $error, null);
+        }
+        throw new \Exception($error);
+    }
+
     /**
      * send
      * 
      * @param \Webu\Methods\HucMethod $method
      * @return void
      */
-    public function sendAsyn($method)
-    {
-        $payload          = $method->toPayloadString();
-
-        $this->methods[]  = $method;
-        $this->payloads[] = $payload;
-    }
-
+//    public function sendAsyn($method)
+//    {
+//        $payload          = $method->toPayloadString();
+//
+//        $this->methods[]  = $method;
+//        $this->payloads[] = $payload;
+//    }
 
     /**
      * execute
@@ -109,30 +132,30 @@ class HttpProvider
      * @param callable $callback
      * @return void
      */
-    public function execute($callback)
-    {
-        $methods = $this->methods;
-        $proxy   = function ($err, $res) use ($methods, $callback) {
-            if ($err !== null) {
-                return call_user_func($callback, $err, null);
-            }
-            foreach ($methods as $key => $method) {
-                if (isset($res[$key])) {
-                    if (!is_array($res[$key])) {
-                        $transformed = $method->transform([$res[$key]], $method->outputFormatters);
-                        $res[$key] = $transformed[0];
-                    } else {
-                        $transformed = $method->transform($res[$key], $method->outputFormatters);
-                        $res[$key] = $transformed;
-                    }
-                }
-            }
-            return call_user_func($callback, null, $res);
-        };
-        $this->requestManager->payloadAsyn('[' . implode(',', $this->payloads) . ']', $proxy);
-        $this->methods   = [];
-        $this->payloads  = [];
-    }
+//    public function execute($callback)
+//    {
+//        $methods = $this->methods;
+//        $proxy   = function ($err, $res) use ($methods, $callback) {
+//            if ($err !== null) {
+//                return call_user_func($callback, $err, null);
+//            }
+//            foreach ($methods as $key => $method) {
+//                if (isset($res[$key])) {
+//                    if (!is_array($res[$key])) {
+//                        $transformed = $method->transform([$res[$key]], $method->outputFormatters);
+//                        $res[$key] = $transformed[0];
+//                    } else {
+//                        $transformed = $method->transform($res[$key], $method->outputFormatters);
+//                        $res[$key] = $transformed;
+//                    }
+//                }
+//            }
+//            return call_user_func($callback, null, $res);
+//        };
+//        $this->requestManager->payloadAsyn('[' . implode(',', $this->payloads) . ']', $proxy);
+//        $this->methods   = [];
+//        $this->payloads  = [];
+//    }
 
 
     /**

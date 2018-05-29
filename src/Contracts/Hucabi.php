@@ -112,7 +112,6 @@ class Hucabi
 
         foreach ($types as $key => $type) {
             $match = [];
-
             if (preg_match('/^([a-zA-Z]+)/', $type, $match) === 1) {
                 if (isset($this->types[$match[0]])) {
                     $className = $this->types[$match[0]];
@@ -164,9 +163,9 @@ class Hucabi
      * 
      * @param array  $type
      * @param string $param
-     * @return array
+     * @return mixed
      */
-    public function decodeParameters($types, $param):array
+    public function decodeParameters($types, $param)
     {
         if (!is_string($param)) {
             throw new InvalidArgumentException('The type or param to decodeParameters must be string.');
@@ -208,6 +207,10 @@ class Hucabi
             } else {
                 $result[$i] = $solidityTypes[$i]->decode($param, $offsets[$i], $types[$i]);
             }
+        }
+        if(is_array($result) && $result && count($result) == 1)
+        {
+            return array_values($result)[0];
         }
 
         return $result;

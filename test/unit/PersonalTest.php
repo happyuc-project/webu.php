@@ -2,11 +2,7 @@
 
 namespace Test\Unit;
 
-use RuntimeException;
 use Test\TestCase;
-use Webu\Providers\HttpProvider;
-use Webu\RequestManagers\RequestManager;
-use Webu\RequestManagers\HttpRequestManager;
 use Webu\Personal;
 
 class PersonalTest extends TestCase
@@ -14,7 +10,7 @@ class PersonalTest extends TestCase
     /**
      * personal
      * 
-     * @var Webu\Personal
+     * @var \Webu\Personal
      */
     protected $personal;
 
@@ -32,15 +28,16 @@ class PersonalTest extends TestCase
 
     /**
      * testInstance
+     *
+     * 0x7a8e09366299314443fd824151006ca5b889e023
      * 
      * @return void
      */
     public function testInstance()
     {
-        $personal = new Personal($this->testHost);
 
-        $this->assertTrue($personal->provider instanceof HttpProvider);
-        $this->assertTrue($personal->provider->requestManager instanceof RequestManager);
+        $this->assertTrue($this->webu->getProvider() instanceof \Webu\HttpProvider);
+        $this->assertTrue($this->webu->getProvider()->getRequestManager() instanceof \Webu\HttpRequestManager);
     }
 
     /**
@@ -50,15 +47,7 @@ class PersonalTest extends TestCase
      */
     public function testSetProvider()
     {
-        $personal = $this->personal;
-        $requestManager = new HttpRequestManager('http://localhost:8545');
-        $personal->provider = new HttpProvider($requestManager);
-
-        $this->assertEquals($personal->provider->requestManager->host, 'http://localhost:8545');
-
-        $personal->provider = null;
-
-        $this->assertEquals($personal->provider->requestManager->host, 'http://localhost:8545');
+         $this->assertEquals($this->webu->getProvider()->getRequestManager()->getHost(), $this->testHost);
     }
 
     /**
@@ -68,9 +57,14 @@ class PersonalTest extends TestCase
      */
     public function testCallThrowRuntimeException()
     {
-        $this->expectException(RuntimeException::class);
+        try{
+            $account = $this->personal->newAccount('qq123456');
+            // echo $account."\n";
+            $this->assertTrue((preg_match('/^0x[a-f0-9]{40}$/', $account) === 1));
 
-        $personal = new Personal(null);
-        $personal->newAccount('');
+        }catch (\Exception $exception)
+        {
+            echo  "\n".$exception->getMessage()."\n";
+        }
     }
 }

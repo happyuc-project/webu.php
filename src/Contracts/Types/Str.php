@@ -13,7 +13,7 @@ use Webu\Formatter;
 use Webu\Utils;
 use Webu\Contracts\SolidityType;
 
-class Str extends SolidityType implements IType
+class Str extends SolidityType
 {
     /**
      * isType

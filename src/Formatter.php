@@ -87,13 +87,20 @@ class Formatter
      */
     public static function Integer($value)
     {
-        $value = (string) $value;
+        if(is_numeric($value))
+        {
+            $value = (int) $value;
+        }else
+        {
+            $value = (string) $value;
+        }
         $arguments = func_get_args();
-        $digit = 64;
+        $digit     = 64;
 
         if (isset($arguments[1]) && is_numeric($arguments[1])) {
             $digit = intval($arguments[1]);
         }
+
         $bn = Utils::toBn($value);
         $bnHex = $bn->toHex(true);
         $padded = mb_substr($bnHex, 0, 1);

@@ -12,7 +12,7 @@ use Webu\Huc;
 class HucTest extends TestCase
 {
     /**
-     * eth
+     * huc
      * 
      * @var \Webu\Huc
      */
@@ -37,10 +37,8 @@ class HucTest extends TestCase
      */
     public function testInstance()
     {
-        $huc = new Huc($this->testHost);
-
-        $this->assertTrue($huc->provider instanceof HttpProvider);
-        $this->assertTrue($huc->provider->requestManager instanceof RequestManager);
+        $this->assertTrue($this->webu->getProvider() instanceof \Webu\HttpProvider);
+        $this->assertTrue($this->webu->getProvider()->getRequestManager() instanceof \Webu\HttpRequestManager);
     }
 
     /**
@@ -50,15 +48,7 @@ class HucTest extends TestCase
      */
     public function testSetProvider()
     {
-        $huc = $this->huc;
-        $requestManager = new HttpRequestManager('http://localhost:8545');
-        $huc->provider = new HttpProvider($requestManager);
-
-        $this->assertEquals($huc->provider->requestManager->host, 'http://localhost:8545');
-
-        $huc->provider = null;
-
-        $this->assertEquals($huc->provider->requestManager->host, 'http://localhost:8545');
+        $this->assertEquals($this->webu->getProvider()->getRequestManager()->getHost(), $this->testHost);
     }
 
     /**
@@ -70,7 +60,10 @@ class HucTest extends TestCase
     {
         $this->expectException(RuntimeException::class);
 
-        $eth = new Huc(null);
-        $eth->protocolVersion();
+        try{
+            $this->webu->huc->protocolVersion();
+        }catch (\Exception $err) {
+            echo $err->getMessage();
+        }
     }
 }

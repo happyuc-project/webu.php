@@ -13,20 +13,13 @@ class TestCase extends BaseTestCase
      * @var \Webu\Webu
      */
     protected $webu;
-
-    /**
-     * testRinkebyHost
-     * 
-     * @var string
-     */
-    protected $testRinkebyHost = 'https://rinkeby.infura.io/vuethexplore';
-
     /**
      * testHost
      * 
      * @var string
      */
-    protected $testHost = 'http://193.112.32.158:8545';
+    // protected $testHost = 'http://193.112.32.158:8545';
+    protected $testHost = 'http://127.0.0.1:8545';
 
     /**
      * coinbase
@@ -45,7 +38,11 @@ class TestCase extends BaseTestCase
         $webu       = new Webu($this->testHost);
         $this->webu = $webu;
 
-        $webu->huc->coinbase();
+        try{
+            $webu->huc->coinbase();
+        }catch (\Exception $exception){
+            $this->ShowException($exception);
+        }
     }
 
     /**
@@ -54,4 +51,19 @@ class TestCase extends BaseTestCase
      * @return void
      */
     public function tearDown() {}
+
+
+    public function ShowException(\Exception $e) {
+        $trace   = $e->getTrace();
+        $result  = 'Exception: "';
+        $result .= $e->getMessage();
+        $result .= '" @ ';
+        if($trace[0]['class'] != '') {
+            $result .= $trace[0]['class'];
+            $result .= '->';
+        }
+        $result .= $trace[0]['function'];
+        $result .= '();'."\n";
+        return $result;
+    }
 }

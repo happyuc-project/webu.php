@@ -73,8 +73,9 @@ class HttpRequestManager
      *
      * @param string $payload
      * @return array
+     * @throws \Exception
      */
-    public function payloadReal($payload):array
+    public function payloadReal($payload)
     {
         try {
             $res  = $this->client->post($this->host, [

@@ -12,48 +12,8 @@ namespace Webu\Contracts;
 use Webu\Formatter;
 use Webu\Utils;
 
-class SolidityType
+class SolidityType implements IType
 {
-    /**
-     * construct
-     * 
-     * @return void
-     */
-    // public function  __construct() {}
-
-    /**
-     * get
-     * 
-     * @param string $name
-     * @return mixed
-     */
-//    public function __get($name)
-//    {
-//        $method = 'get' . ucfirst($name);
-//
-//        if (method_exists($this, $method)) {
-//            return call_user_func_array([$this, $method], []);
-//        }
-//        return false;
-//    }
-
-    /**
-     * set
-     * 
-     * @param string $name
-     * @param mixed $value
-     * @return mixed;
-     */
-//    public function __set($name, $value)
-//    {
-//        $method = 'set' . ucfirst($name);
-//
-//        if (method_exists($this, $method)) {
-//            return call_user_func_array([$this, $method], [$value]);
-//        }
-//        return false;
-//    }
-
 
     /**
      * isDynamicType
@@ -71,15 +31,6 @@ class SolidityType
     {
         return false;
     }
-
-    /**
-     * callStatic
-     * 
-     * @param string $name
-     * @param array $arguments
-     * @return void
-     */
-    // public static function __callStatic($name, $arguments) {}
 
     /**
      * nestedTypes
@@ -201,7 +152,7 @@ class SolidityType
      * 
      * @param mixed $value
      * @param string $name
-     * @return string
+     * @return string | array
      */
     public function encode($value, $name)
     {
@@ -234,7 +185,7 @@ class SolidityType
      * @param mixed $value
      * @param string $offset
      * @param string $name
-     * @return array
+     * @return mixed
      */
     public function decode($value, $offset, $name)
     {
@@ -276,5 +227,30 @@ class SolidityType
         $param = mb_substr($value, $offset * 2, $length * 2);
 
         return $this->outputFormat($param, $name);
+    }
+
+
+    /**
+     * inputFormat
+     *
+     * @param mixed $value
+     * @param string $name
+     * @return string
+     */
+    public function inputFormat($value, $name)
+    {
+        return $value;
+    }
+
+    /**
+     * outputFormat
+     *
+     * @param mixed $value
+     * @param string $name
+     * @return string
+     */
+    public function outputFormat($value, $name)
+    {
+        return $value;
     }
 }

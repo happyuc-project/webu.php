@@ -13,7 +13,7 @@ use Webu\Contracts\SolidityType;
 use Webu\Formatter;
 use Webu\Utils;
 
-class Address extends SolidityType implements IType
+class Address extends SolidityType
 {
     /**
      * isType

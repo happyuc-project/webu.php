@@ -12,7 +12,7 @@ namespace Webu\Contracts\Types;
 use Webu\Contracts\SolidityType;
 use Webu\Formatter;
 
-class Uinteger extends SolidityType implements IType
+class Uinteger extends SolidityType
 {
 
     /**

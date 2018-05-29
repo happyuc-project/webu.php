@@ -15,77 +15,114 @@ class Validator
      * Address
      *
      * @param string $value
-     * @return bool
+     * @return array
      */
-    public static function Address($value)
+    public static function Address($value , $tag = '')
     {
-        if (!is_string($value)) {
-            return false;
+        if (!is_string($value))
+        {
+            return [false, $tag.'Address not a string'];
+        } elseif (!(preg_match('/^0x[a-fA-F0-9]{40}$/', $value) >= 1)){
+            return [false, $tag.'Not a valid address string, it should be 0x plus 40 hexadecimal characters'];
         }
-        return (preg_match('/^0x[a-fA-F0-9]{40}$/', $value) >= 1);
+        return [true];
     }
 
     /**
      * BlockHash
      *
      * @param string $value
-     * @return bool
+     * @return array
      */
-    public static function BlockHash($value)
+    public static function BlockHash($value , $tag = '')
     {
-        if (!is_string($value)) {
-            return false;
+        if (!is_string($value))
+        {
+            return [false, $tag.'BlockHash not a string'];
+        } elseif (!(preg_match('/^0x[a-fA-F0-9]{40}$/', $value) >= 1)){
+            return [false, $tag.'Not a valid BlockHash string, it should be 0x plus 64 hexadecimal characters'];
         }
-        return (preg_match('/^0x[a-fA-F0-9]{64}$/', $value) >= 1);
+        return [true];
     }
 
     /**
      * Boolean
      *
      * @param mixed $value
-     * @return bool
+     * @return array
      */
-    public static function Boolean($value)
+    public static function Boolean($value , $tag = '')
     {
-        return is_bool($value);
+        if(is_bool($value))
+        {
+            return [true];
+        }
+        return [false, $tag.'Not a Boolean'];
     }
 
     /**
      * Call
      *
      * @param array $value
-     * @return bool
+     * @return array
      */
-    public static function Call($value)
+    public static function Call($value , $tag = '')
     {
         if (!is_array($value)) {
-            return false;
+            return [false,$tag.'Not a Array'];
         }
-        if (isset($value['from']) && self::Address($value['from']) === false) {
-            return false;
+        // from
+        if(isset($value['from'])) {
+            $rs = self::Address($value['from'],'from:');
+            if($rs[0] === false) {
+                return [false,$tag.$rs[1]];
+            }
         }
+        // to
         if (!isset($value['to'])) {
-            return false;
+            return [false,'to -> Can\'t be empty'];
         }
-        if (self::Address($value['to']) === false) {
-            return false;
+        $rs = self::Address($value['to'],'to:');
+        if($rs[0] === false) {
+            return [false,$tag.$rs[1]];
         }
-        if (isset($value['gas']) && self::Quantity($value['gas']) === false) {
-            return false;
+        // gas
+        if (isset($value['gas'])) {
+            $rs = self::Quantity($value['gas'],'gas:');
+            if($rs[0] === false) {
+                return [false,$tag.$rs[1]];
+            }
         }
-        if (isset($value['gasPrice']) && self::Quantity($value['gasPrice']) === false) {
-            return false;
+        // gasPrice
+        if (isset($value['gasPrice'])) {
+            $rs = self::Quantity($value['gasPrice'],'gasPrice:');
+            if($rs[0] === false) {
+                return [false,$tag.$rs[1]];
+            }
         }
-        if (isset($value['value']) && self::Quantity($value['value']) === false) {
-            return false;
+        // value
+        if (isset($value['value'])) {
+            $rs = self::Quantity($value['value'],'value:');
+            if($rs[0] === false) {
+                return [false,$tag.$rs[1]];
+            }
         }
-        if (isset($value['data']) && self::Hex($value['data']) === false) {
-            return false;
+        // data
+        if (isset($value['data'])) {
+            $rs = self::Hex($value['data'],'data:');
+            if($rs[0] === false) {
+                return [false,$tag.$rs[1]];
+            }
         }
-        if (isset($value['nonce']) && self::Quantity($value['nonce']) === false) {
-            return false;
+        // nonce
+        if (isset($value['nonce'])) {
+            $rs = self::Quantity($value['nonce'],'nonce:');
+            if($rs[0] === false) {
+                return [false,$tag.$rs[1]];
+            }
         }
-        return true;
+
+        return [true];
     }
 
 
@@ -93,54 +130,67 @@ class Validator
      * Filter
      *
      * @param array $value
-     * @return bool
+     * @return array
      */
-    public static function Filter($value)
+    public static function Filter($value , $tag = '')
     {
         if (!is_array($value)) {
-            return false;
+            return [false,$tag.'Not a Array'];
         }
-        if (
-            isset($value['fromBlock']) &&
-            self::Quantity($value['fromBlock']) === false &&
-            self::Tag($value['fromBlock']) === false
-        ) {
-            return false;
-        }
-        if (
-            isset($value['toBlock']) &&
-            self::Quantity($value['toBlock']) === false &&
-            self::Tag($value['toBlock']) === false
-        ) {
-            return false;
-        }
-        if (isset($value['address'])) {
-            if (is_array($value['address'])) {
-                foreach ($value['address'] as $address) {
-                    if (self::Address($address) === false) {
-                        return false;
-                    }
-                }
-            } elseif (self::Address($value['address']) === false) {
-                return false;
+        // fromBlock
+        if (isset($value['fromBlock'])) {
+            $rs = self::Quantity($value['fromBlock'],'fromBlock:');
+            if($rs[0] === false) {
+                return [false,$tag.$rs[1]];
             }
         }
+        // toBlock
+        if (isset($value['toBlock'])) {
+            $rs = self::Quantity($value['toBlock'],'toBlock:');
+            if($rs[0] === false) {
+                return [false,$tag.$rs[1]];
+            }
+        }
+        // address
+        if (isset($value['address'])) {
+            if (is_array($value['address'])) {
+                foreach ($value['address'] as $idx=>$address) {
+                    $rs = self::Address($address,"address[{$idx}]:");
+                    if($rs[0] === false) {
+                        return [false,$tag.$rs[1]];
+                    }
+                }
+            } else {
+                $rs = self::Address($value['address'],'address:');
+                if($rs[0] === false) {
+                    return [false,$tag.$rs[1]];
+                }
+            }
+        }
+        // topics
         if (isset($value['topics']) && is_array($value['topics'])) {
-            foreach ($value['topics'] as $topic) {
+            foreach ($value['topics'] as $idx=>$topic) {
                 if (is_array($topic)) {
-                    foreach ($topic as $v) {
-                        if (isset($v) && self::Hex($v) === false) {
-                            return false;
+                    foreach ($topic as $idx2=>$v) {
+                        if (isset($v)) {
+                            $rs = self::Hex($v,"topic[{$idx}][{$idx2}]:");
+                            if($rs[0] === false) {
+                                return [false,$tag.$rs[1]];
+                            }
                         }
                     }
                 } else {
-                    if (isset($topic) && self::Hex($topic) === false) {
-                        return false;
+                    if (isset($topic) ) {
+                        $rs = self::Hex($topic,"topic[{$idx}]:");
+                        if($rs[0] === false) {
+                            return [false,$tag.$rs[1]];
+                        }
                     }
                 }
             }
         }
-        return true;
+
+        return [true];
     }
 
 
@@ -148,14 +198,19 @@ class Validator
      * Hex
      *
      * @param string $value
-     * @return bool
+     * @return array
      */
-    public static function Hex($value)
+    public static function Hex($value , $tag = '')
     {
         if (!is_string($value)) {
-            return false;
+            return [false,$tag.'Not a String'];
         }
-        return (preg_match('/^0x[a-fA-F0-9]*$/', $value) >= 1);
+
+        if( preg_match('/^0x[a-fA-F0-9]*$/', $value) >= 1 )
+        {
+            return [true];
+        }
+        return [false, $tag.'Not a Hex'];
     }
 
 
@@ -166,14 +221,18 @@ class Validator
      * But returned value is 64 bytes.
      *
      * @param string $value
-     * @return bool
+     * @return array
      */
-    public static function Identity($value)
+    public static function Identity($value , $tag = '')
     {
         if (!is_string($value)) {
-            return false;
+            return [false,$tag.'Not a String'];
         }
-        return (preg_match('/^0x[a-fA-F0-9]*$/', $value) >= 1);
+        if( preg_match('/^0x[a-fA-F0-9]*$/', $value) >= 1 )
+        {
+            return [true];
+        }
+        return [false, $tag.'Not a Identity Hex'];
     }
 
 
@@ -181,14 +240,18 @@ class Validator
      * Nonce
      *
      * @param string $value
-     * @return bool
+     * @return array
      */
-    public static function Nonce($value)
+    public static function Nonce($value , $tag = '')
     {
         if (!is_string($value)) {
-            return false;
+            return [false,$tag.'Not a String'];
         }
-        return (preg_match('/^0x[a-fA-F0-9]{16}$/', $value) >= 1);
+        if( preg_match('/^0x[a-fA-F0-9]{16}$/', $value) >= 1 )
+        {
+            return [true];
+        }
+        return [false, $tag.'Not a Nonce Hex'];
     }
 
 
@@ -197,46 +260,63 @@ class Validator
      * Post
      *
      * @param array $value
-     * @return bool
+     * @return array
      */
-    public static function Post($value)
+    public static function Post($value , $tag = '')
     {
         if (!is_array($value)) {
-            return false;
+            return [false,$tag.'Not a Array'];
         }
-        if (isset($value['from']) && self::Identity($value['from']) === false) {
-            return false;
-        }
-        if (isset($value['to']) && self::Identity($value['to']) === false) {
-            return false;
-        }
-        if (!isset($value['topics']) || !is_array($value['topics'])) {
-            return false;
-        }
-        foreach ($value['topics'] as $topic) {
-            if (self::Identity($topic) === false) {
-                return false;
+        // from
+        if(isset($value['from'])) {
+            $rs = self::Identity($value['from'],'from:');
+            if($rs[0] === false) {
+                return [false,$tag.$rs[1]];
             }
         }
+        // to
+        if(isset($value['to'])) {
+            $rs = self::Identity($value['to'],'to:');
+            if($rs[0] === false) {
+                return [false,$tag.$rs[1]];
+            }
+        }
+        // topics
+        if (!isset($value['topics']) || !is_array($value['topics'])) {
+            return [false,'topics -> It can\'t be empty and it\'s an array'];
+        }
+        foreach ($value['topics'] as $topic) {
+            $rs = self::Identity($topic,'topics:');
+            if($rs[0] === false) {
+                return [false,$tag.$rs[1]];
+            }
+        }
+        // payload
         if (!isset($value['payload'])) {
-            return false;
+            return [false,'payload -> Can\'t be empty'];
         }
-        if (self::Hex($value['payload']) === false) {
-            return false;
+        $rs = self::Hex($value['payload'],'payload:');
+        if($rs[0] === false) {
+            return [false,$tag.$rs[1]];
         }
+        // priority
         if (!isset($value['priority'])) {
-            return false;
+            return [false,'priority -> Can\'t be empty'];
         }
-        if (self::Quantity($value['priority']) === false) {
-            return false;
+        $rs = self::Quantity($value['priority'],'priority:');
+        if($rs[0] === false) {
+            return [false,$tag.$rs[1]];
         }
+        // ttl
         if (!isset($value['ttl'])) {
-            return false;
+            return [false,'ttl -> Can\'t be empty'];
         }
-        if (isset($value['ttl']) && self::Quantity($value['ttl']) === false) {
-            return false;
+        $rs = self::Quantity($value['ttl'],'ttl:');
+        if($rs[0] === false) {
+            return [false,$tag.$rs[1]];
         }
-        return true;
+
+        return [true];
     }
 
 
@@ -244,12 +324,15 @@ class Validator
      * Quantity
      *
      * @param string $value
-     * @return bool
+     * @return array
      */
-    public static function Quantity($value)
+    public static function Quantity($value , $tag = '')
     {
-        // maybe change is_int and is_float and preg_match future
-        return (is_int($value) || is_float($value) || preg_match('/^0x[a-fA-F0-9]*$/', $value) >= 1);
+        if( is_int($value) || is_float($value) || preg_match('/^0x[a-fA-F0-9]*$/', $value) >= 1 )
+        {
+            return [true];
+        }
+        return [false, $tag.'Not a Int , Float , Hex'];
     }
 
 
@@ -257,35 +340,42 @@ class Validator
      * ShhFilter
      *
      * @param array $value
-     * @return bool
+     * @return array
      */
-    public static function ShhFilter($value)
+    public static function ShhFilter($value , $tag = '')
     {
         if (!is_array($value)) {
-            return false;
+            return [false,$tag.'Not a Array'];
         }
-        if (isset($value['to']) && self::Identity($value['to']) === false) {
-            return false;
+        // to
+        if(isset($value['to'])) {
+            $rs = self::Address($value['to'],'to:');
+            if($rs[0] === false) {
+                return [false,$tag.$rs[1]];
+            }
         }
+        // topics
         if (!isset($value['topics']) || !is_array($value['topics'])) {
-            return false;
+            return [false,'topics -> It can\'t be empty and it\'s an array'];
         }
-        foreach ($value['topics'] as $topic) {
+        foreach ($value['topics'] as $idx => $topic) {
             if (is_array($topic)) {
-                foreach ($topic as $subTopic) {
-                    if (self::Hex($subTopic) === false) {
-                        return false;
+                foreach ($topic as $idx2 => $subTopic) {
+                    $rs = self::Hex($subTopic,"topics[{$idx}][{$idx2}]:");
+                    if($rs[0] === false) {
+                        return [false, $tag . $rs[1]];
                     }
                 }
-                continue;
-            }
-            if (self::Hex($topic) === false) {
-                if (!is_null($topic)) {
-                    return false;
+            }else
+            {
+                $rs = self::Hex($topic,"topics[{$idx}]:");
+                if($rs[0] === false) {
+                    return [false,$tag.$rs[1]];
                 }
             }
         }
-        return true;
+
+        return [true];
     }
 
 
@@ -293,27 +383,41 @@ class Validator
      * String
      *
      * @param string $value
-     * @return bool
+     * @return array
      */
-    public static function String($value)
+    public static function String($value, $tag = '')
     {
-        return is_string($value);
+        if(is_string($value))
+        {
+            return [true];
+        }
+        return [false,$tag.'Not a String'];
     }
 
     /**
      * Tag
      *
      * @param string $value
-     * @return bool
+     * @return array
      */
-    public static function Tag($value)
+    public static function Tag($value, $tag = '')
     {
-        $value = Utils::toString($value);
-        $tags = [
-            'latest', 'earliest', 'pending'
-        ];
+        if( is_int($value) || preg_match('/^0x[a-fA-F0-9]*$/', $value) >= 1 )
+        {
+            return [true];
+        }else
+        {
+            $value = Utils::toString($value);
+            $tags  = [ 'latest', 'earliest', 'pending' ];
 
-        return in_array($value, $tags);
+            if(in_array($value, $tags))
+            {
+                return [true];
+            }
+
+            return [false,$tag.'It\'s not int, latest, earliest, pending.'];
+        }
+
     }
 
     /**
@@ -322,45 +426,88 @@ class Validator
      * Data is not optional on spec, see https://github.com/happyuc-project/wiki/wiki/JSON-RPC#eth_sendtransaction
      *
      * @param array $value
-     * @return bool
+     * @return array
      */
-    public static function Transaction($value)
+    public static function Transaction($value, $tag = '')
     {
         if (!is_array($value)) {
-            return false;
+            return [false,$tag.'Not a Array'];
         }
+
+        // from
         if (!isset($value['from'])) {
-            return false;
+            return [false,'from -> Can\'t be empty'];
         }
-        if (self::Address($value['from']) === false) {
-            return false;
+        $rs = self::Address($value['from'],'from:');
+        if($rs[0] === false) {
+            return [false,$tag.$rs[1]];
         }
-        if (isset($value['to']) && self::Address($value['to']) === false && $value['to'] !== '') {
-            return false;
+        // to
+        if(isset($value['to'])) {
+            $rs = self::Address($value['to'],'to:');
+            if($rs[0] === false) {
+                return [false,$tag.$rs[1]];
+            }
         }
-        if (isset($value['gas']) && self::Quantity($value['gas']) === false) {
-            return false;
+        // gas
+        if (isset($value['gas'])) {
+            $rs = self::Quantity($value['gas'],'gas:');
+            if($rs[0] === false) {
+                return [false,$tag.$rs[1]];
+            }
         }
-        if (isset($value['gasPrice']) && self::Quantity($value['gasPrice']) === false) {
-            return false;
+        // gasPrice
+        if (isset($value['gasPrice'])) {
+            $rs = self::Quantity($value['gasPrice'],'gasPrice:');
+            if($rs[0] === false) {
+                return [false,$tag.$rs[1]];
+            }
         }
-        if (isset($value['value']) && self::Quantity($value['value']) === false) {
-            return false;
+        // value
+        if (isset($value['value'])) {
+            $rs = self::Quantity($value['value'],'value:');
+            if($rs[0] === false) {
+                return [false,$tag.$rs[1]];
+            }
         }
-        // if (!isset($value['data'])) {
-        //     return false;
-        // }
-        // if (HexValidator::validate($value['data']) === false) {
-        //     return false;
-        // }
-        if (isset($value['data']) && self::Hex($value['data']) === false) {
-            return false;
+        // data
+        if (isset($value['data'])) {
+            $rs = self::Hex($value['data'],'data:');
+            if($rs[0] === false) {
+                return [false,$tag.$rs[1]];
+            }
         }
-        if (isset($value['nonce']) && self::Quantity($value['nonce']) === false) {
-            return false;
+        // nonce
+        if (isset($value['nonce'])) {
+            $rs = self::Quantity($value['nonce'],'nonce:');
+            if($rs[0] === false) {
+                return [false,$tag.$rs[1]];
+            }
         }
-        return true;
+
+        return [true];
     }
 
-
+    /**
+     * @param $inputs
+     * @param string $tag
+     * @return array
+     */
+    public static function batch($inputs,$tag = '')
+    {
+        if(is_array($inputs))
+        {
+            foreach ($inputs as $v)
+            {
+                list($methods,$value) = $v;
+                $rs                   = self::$methods($value,$tag."{$methods}:");
+                if ($rs[0] === false)
+                {
+                    return $rs;
+                }
+            }
+            return [true];
+        }
+        return [false,$tag.'Not a Array'];
+    }
 }

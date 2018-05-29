@@ -9,13 +9,9 @@
 
 namespace Webu\Contracts\Types;
 
-use Webu\Utils;
-use Webu\Contracts\SolidityType;
-use Webu\Contracts\Types\IType;
-use Webu\Formatters\IntegerFormatter;
-use Webu\Formatters\BigNumberFormatter;
+use Webu\Formatter;
 
-class Integer extends SolidityType implements IType
+class Integer extends \Webu\Contracts\SolidityType
 {
     /**
      * isType
@@ -47,7 +43,7 @@ class Integer extends SolidityType implements IType
      */
     public function inputFormat($value, $name)
     {
-        return IntegerFormatter::format($value);
+        return Formatter::Integer($value);
     }
 
     /**
@@ -65,6 +61,6 @@ class Integer extends SolidityType implements IType
             // due to value without 0x prefix, we will parse as decimal
             $value = '0x' . $match[1];
         }
-        return BigNumberFormatter::format($value);
+        return Formatter::BigNumber($value);
     }
 }

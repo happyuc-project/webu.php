@@ -11,7 +11,8 @@
          syntaxCheck="false">
 
     <testsuite name="Webu.php unit test">
-        <directory suffix="Test.php">./test/unit</directory>
+
+        <directory suffix="ContractTest.php">./test/unit</directory>
     </testsuite>
 
     <filter>

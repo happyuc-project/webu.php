@@ -7,7 +7,7 @@
  * @license MIT
  */
 
-namespace Webu\Contracts\Types;
+namespace Webu\Contracts;
 
 interface IType
 {
@@ -34,4 +34,13 @@ interface IType
      * @return string
      */
     public function inputFormat($value, $name);
+
+    /**
+     * inputFormat
+     *
+     * @param mixed $value
+     * @param string $name
+     * @return string
+     */
+    public function outputFormat($value, $name);
 }

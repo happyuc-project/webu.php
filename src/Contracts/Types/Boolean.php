@@ -12,7 +12,7 @@ namespace Webu\Contracts\Types;
 use InvalidArgumentException;
 use Webu\Contracts\SolidityType;
 
-class Boolean extends SolidityType implements IType
+class Boolean extends SolidityType
 {
     /**
      * isType

@@ -13,7 +13,7 @@ use InvalidArgumentException;
 use Webu\Utils;
 use Webu\Contracts\SolidityType;
 
-class DynamicBytes extends SolidityType implements IType
+class DynamicBytes extends SolidityType
 {
     /**
      * isType

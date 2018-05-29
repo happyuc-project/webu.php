@@ -81,84 +81,40 @@ class Webu
         $this->personal = new Personal($this->provider);
     }
 
-//    private $allowedMethods = [
-//        'webu_clientVersion',
-//        'webu_sha3'
-//    ];
-
-    /**
-     * Returns the current client version.
-     */
-    public function clientVersion()
-    {
-        $params = [];
-        return $this->provider->sendReal('webu_clientVersion',$params);
-    }
-
-    /**
-     * Returns Keccak-256 (not the standardized SHA3-256) of the given data.
-     *
-     * @param string $data the data to convert into a SHA3 hash
-     */
-    public function sha3(string $data)
-    {
-        $params = [$data];
-        return $this->provider->sendReal('webu_sha3',$params);
-    }
-
-    /**
-     * call
-     * 
-     * @param string $name
-     * @param array $arguments
-     * @return void
-     */
-//    public function __call($name, $arguments)
-//    {
-//        if (empty($this->provider)) {
-//            throw new \RuntimeException('Please set provider first.');
-//        }
-//
-//        $class = explode('\\', get_class());
-//
-//        if (preg_match('/^[a-zA-Z0-9]+$/', $name) === 1) {
-//            $method = strtolower($class[1]) . '_' . $name;
-//
-//            if (!in_array($method, $this->allowedMethods)) {
-//                throw new \RuntimeException('Unallowed rpc method: ' . $method);
-//            }
-//            if ($this->provider->getIsBatch() ) {
-//                $callback = null;
-//            } else {
-//                $callback = array_pop($arguments);
-//
-//                if (is_callable($callback) !== true) {
-//                    throw new \InvalidArgumentException('The last param must be callback function.');
-//                }
-//            }
-//            if (!array_key_exists($method, $this->methods)) {
-//                // new the method
-//                $methodClass = sprintf("\Webu\Methods\%s\%s", ucfirst($class[1]), ucfirst($name));
-//                $methodObject = new $methodClass($method, $arguments);
-//                $this->methods[$method] = $methodObject;
-//            } else {
-//                $methodObject = $this->methods[$method];
-//            }
-//            if ($methodObject->validate($arguments)) {
-//                $inputs = $methodObject->transform($arguments, $methodObject->inputFormatters);
-//                $methodObject->arguments = $inputs;
-//                $this->provider->send($methodObject, $callback);
-//            }
-//        }
-//    }
-
     /**
      * getProvider
-     * 
+     *
      * @return \Webu\HttpProvider
      */
     public function getProvider()
     {
         return $this->provider;
     }
+
+    /**
+     * Returns the current client version.
+     * @return string
+     * @throws \Exception
+     */
+    public function clientVersion($callback = null)
+    {
+        $params = [];
+        return $this->provider->sendReal('webu_clientVersion',$params,$callback);
+    }
+
+    /**
+     * Returns Keccak-256 (not the standardized SHA3-256) of the given data.
+     * @param string $data
+     *
+     * @return string  $data the data to convert into a SHA3 hash
+     *
+     * @throws \Exception
+     */
+    public function sha3(string $data,$callback = null)
+    {
+        $params = [$data];
+        return $this->provider->sendReal('webu_sha3',$params,$callback);
+    }
+
+
 }
