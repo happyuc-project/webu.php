@@ -422,7 +422,8 @@ class ContractTest extends TestCase
         try {
             $this->accounts = $this->webu->huc->accounts();
         }catch (\Exception $err) {
-            exit($err);
+            echo __METHOD__.":".__LINE__." {$err->getMessage()}\n";
+            return;
         }
     }
 
@@ -583,7 +584,8 @@ class ContractTest extends TestCase
 
             $contract->at($this->contractAddress)->call('balanceOf', $fromAccount, [ 'from' => $fromAccount ], function ($err, $result) use ($contract) {
                 if ($err !== null) {
-                    exit($err);
+                    echo __METHOD__.":".__LINE__." {$err}\n";
+                    return;
                 }
                 if (isset($result)) {
                     // $bn = Utils::toBn($result);
@@ -595,7 +597,8 @@ class ContractTest extends TestCase
 
             $contract->at($this->contractAddress)->call('name', [ 'from' => $fromAccount ], function ($err, $result) use ($contract) {
                 if ($err !== null) {
-                    exit($err);
+                    echo __METHOD__.":".__LINE__." {$err}\n";
+                    return;
                 }
                 if (isset($result)) {
                     // $bn = Utils::toBn($result);
@@ -617,7 +620,8 @@ class ContractTest extends TestCase
 //            });
             $contract->at($this->contractAddress)->call('decimals', [ 'from' => $fromAccount ], function ($err, $result) use ($contract) {
                 if ($err !== null) {
-                    exit($err);
+                    echo __METHOD__.":".__LINE__." {$err}\n";
+                    return;
                 }
                 if (isset($result)) {
                     // $bn = Utils::toBn($result);
@@ -628,7 +632,8 @@ class ContractTest extends TestCase
             });
             $contract->at($this->contractAddress)->call('symbol', [ 'from' => $fromAccount ], function ($err, $result) use ($contract) {
                 if ($err !== null) {
-                    exit($err);
+                    echo __METHOD__.":".__LINE__." {$err}\n";
+                    return;
                 }
                 if (isset($result)) {
                     // $bn = Utils::toBn($result);
@@ -639,7 +644,8 @@ class ContractTest extends TestCase
             });
             $contract->at($this->contractAddress)->call('totalSupply', [ 'from' => $fromAccount ], function ($err, $result) use ($contract) {
                 if ($err !== null) {
-                    exit($err);
+                    echo __METHOD__.":".__LINE__." {$err}\n";
+                    return;
                 }
                 if (isset($result)) {
                     // $bn = Utils::toBn($result);
@@ -709,7 +715,8 @@ class ContractTest extends TestCase
         try{
             $contract->bytecode($this->testBytecode)->new($this->initialSupply,$this->tokenName,$this->decimalUnits,$this->tokenSymbol,$params, function ($err, $result) use ($contract) {
                 if ($err !== null) {
-                    return $this->fail($err->getMessage());
+                    echo __METHOD__.":".__LINE__." {$err}\n";
+                    return;
                 }
                 if ($result) {
                     echo "\nTransaction has made:) id: " . $result . "\n";
@@ -720,7 +727,8 @@ class ContractTest extends TestCase
 
                 $contract->getHuc()->getTransactionReceipt($transactionId, function ($err, $transaction) {
                     if ($err !== null) {
-                        return $this->fail($err);
+                        echo __METHOD__.":".__LINE__." {$err}\n";
+                        return;
                     }
                     if ($transaction) {
                         $this->contractAddress = $transaction->contractAddress;
@@ -735,7 +743,8 @@ class ContractTest extends TestCase
 
             $contract->at($this->contractAddress)->call('balanceOf', $fromAccount, [ 'from' => $fromAccount ], function ($err, $result) use ($contract) {
                 if ($err !== null) {
-                    exit($err);
+                    echo __METHOD__.":".__LINE__." {$err}\n";
+                    return;
                 }
                 if (isset($result)) {
                     // $bn = Utils::toBn($result);
@@ -744,7 +753,8 @@ class ContractTest extends TestCase
                 }
             });
         }catch (\Exception $err){
-            exit($err);
+            echo __METHOD__.":".__LINE__." {$err}\n";
+            return;
         }
 
     }
@@ -932,7 +942,8 @@ class ContractTest extends TestCase
         try{
             $contract->bytecode($this->testUserBytecode)->new($this->initialSupply,$this->tokenName,$this->decimalUnits,$this->tokenSymbol,function ($err, $result) use ($contract) {
                 if ($err !== null) {
-                    exit($err);
+                    echo __METHOD__.":".__LINE__." {$err}\n";
+                    return;
                 }
                 if ($result) {
                     echo "\nTransaction has made:) id: " . $result . "\n";
@@ -942,7 +953,8 @@ class ContractTest extends TestCase
 
                 $contract->getHuc()->getTransactionReceipt($transactionId, function ($err, $transaction) {
                     if ($err !== null) {
-                        exit($err);
+                        echo __METHOD__.":".__LINE__." {$err}\n";
+                        return;
                     }
                     if ($transaction) {
                         $this->contractAddress = $transaction->contractAddress;
@@ -963,7 +975,8 @@ class ContractTest extends TestCase
         try{
             $contract->at($this->contractAddress)->send('addUser', $toAccount, 'Peter', 'Lai', $this->decimalUnits, $params, function ($err, $result) use ($contract, $fromAccount, $toAccount) {
                 if ($err !== null) {
-                    exit($err);
+                    echo __METHOD__.":".__LINE__." {$err}\n";
+                    return;
                 }
                 if ($result) {
                     echo "\nTransaction has made:) id: " . $result . "\n";
@@ -973,7 +986,8 @@ class ContractTest extends TestCase
 
                 $contract->getHuc()->getTransactionReceipt($transactionId, function ($err, $transaction) use ($fromAccount, $toAccount, $contract) {
                     if ($err !== null) {
-                        exit($err);
+                        echo __METHOD__.":".__LINE__." {$err}\n";
+                        return;
                     }
                     if ($transaction) {
                         $topics = $transaction->logs[0]->topics;
