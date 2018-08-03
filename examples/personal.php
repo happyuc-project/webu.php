@@ -31,7 +31,7 @@ $personal->unlockAccount($newAccount, '123456', function ($err, $unlocked) {
 
 
 // get balance
-$webu->huc->getBalance($newAccount, function ($err, $balance) {
+$webu->irc->getBalance($newAccount, function ($err, $balance) {
 	if ($err !== null) {
 		echo 'Error: ' . $err->getMessage();
 		return;

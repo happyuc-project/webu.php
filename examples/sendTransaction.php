@@ -2,11 +2,11 @@
 
 require('./exampleBase.php');
 
-$huc = $webu->huc;
+$irc = $webu->irc;
 
-echo 'Huc Send Transaction' . PHP_EOL;
+echo 'Irc Send Transaction' . PHP_EOL;
 
-$huc->accounts(function ($err, $accounts) use ($huc) {
+$irc->accounts(function ($err, $accounts) use ($irc) {
     if ($err !== null) {
         echo 'Error: ' . $err->getMessage();
         return;
@@ -15,14 +15,14 @@ $huc->accounts(function ($err, $accounts) use ($huc) {
     $toAccount   = $accounts[1];
 
     // get balance
-    $huc->getBalance($fromAccount, function ($err, $balance) use($fromAccount) {
+    $irc->getBalance($fromAccount, function ($err, $balance) use($fromAccount) {
         if ($err !== null) {
             echo 'Error: ' . $err->getMessage();
             return;
         }
         echo $fromAccount . ' Balance: ' . $balance . PHP_EOL;
     });
-    $huc->getBalance($toAccount, function ($err, $balance) use($toAccount) {
+    $irc->getBalance($toAccount, function ($err, $balance) use($toAccount) {
         if ($err !== null) {
             echo 'Error: ' . $err->getMessage();
             return;
@@ -31,11 +31,11 @@ $huc->accounts(function ($err, $accounts) use ($huc) {
     });
 
     // send transaction
-    $huc->sendTransaction([
+    $irc->sendTransaction([
         'from' => $fromAccount,
         'to' => $toAccount,
         'value' => '0x11'
-    ], function ($err, $transaction) use ($huc, $fromAccount, $toAccount) {
+    ], function ($err, $transaction) use ($irc, $fromAccount, $toAccount) {
         if ($err !== null) {
             echo 'Error: ' . $err->getMessage();
             return;
@@ -43,14 +43,14 @@ $huc->accounts(function ($err, $accounts) use ($huc) {
         echo 'Tx hash: ' . $transaction . PHP_EOL;
 
         // get balance
-        $huc->getBalance($fromAccount, function ($err, $balance) use($fromAccount) {
+        $irc->getBalance($fromAccount, function ($err, $balance) use($fromAccount) {
             if ($err !== null) {
                 echo 'Error: ' . $err->getMessage();
                 return;
             }
             echo $fromAccount . ' Balance: ' . $balance . PHP_EOL;
         });
-        $huc->getBalance($toAccount, function ($err, $balance) use($toAccount) {
+        $irc->getBalance($toAccount, function ($err, $balance) use($toAccount) {
             if ($err !== null) {
                 echo 'Error: ' . $err->getMessage();
                 return;

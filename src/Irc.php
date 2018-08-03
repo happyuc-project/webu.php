@@ -10,7 +10,7 @@
 namespace Webu;
 
 
-class Huc
+class Irc
 {
     /**
      * provider
@@ -32,49 +32,49 @@ class Huc
      * @var array
      */
     private $allowedMethods = [
-        'huc_protocolVersion',
-        'huc_syncing',
-        'huc_coinbase',
-        'huc_mining',
-        'huc_hashrate',
-        'huc_gasPrice',
-        'huc_accounts',
-        'huc_blockNumber',
-        'huc_getBalance',
-        'huc_getStorageAt',
-        'huc_getTransactionCount',
-        'huc_getBlockTransactionCountByHash',
-        'huc_getBlockTransactionCountByNumber',
-        'huc_getUncleCountByBlockHash',
-        'huc_getUncleCountByBlockNumber',
-        'huc_getUncleByBlockHashAndIndex',
-        'huc_getUncleByBlockNumberAndIndex',
-        'huc_getCode',
-        'huc_sign',
-        'huc_sendTransaction',
-        'huc_sendRawTransaction',
-        'huc_call',
-        'huc_estimateGas',
-        'huc_getBlockByHash',
-        'huc_getBlockByNumber',
-        'huc_getTransactionByHash',
-        'huc_getTransactionByBlockHashAndIndex',
-        'huc_getTransactionByBlockNumberAndIndex',
-        'huc_getTransactionReceipt',
-        'huc_getCompilers',
-        'huc_compileSolidity',
-        'huc_compileLLL',
-        'huc_compileSerpent',
-        'huc_getWork',
-        'huc_newFilter',
-        'huc_newBlockFilter',
-        'huc_newPendingTransactionFilter',
-        'huc_uninstallFilter',
-        'huc_getFilterChanges',
-        'huc_getFilterLogs',
-        'huc_getLogs',
-        'huc_submitWork',
-        'huc_submitHashrate'
+        'irc_protocolVersion',
+        'irc_syncing',
+        'irc_coinbase',
+        'irc_mining',
+        'irc_hashrate',
+        'irc_gasPrice',
+        'irc_accounts',
+        'irc_blockNumber',
+        'irc_getBalance',
+        'irc_getStorageAt',
+        'irc_getTransactionCount',
+        'irc_getBlockTransactionCountByHash',
+        'irc_getBlockTransactionCountByNumber',
+        'irc_getUncleCountByBlockHash',
+        'irc_getUncleCountByBlockNumber',
+        'irc_getUncleByBlockHashAndIndex',
+        'irc_getUncleByBlockNumberAndIndex',
+        'irc_getCode',
+        'irc_sign',
+        'irc_sendTransaction',
+        'irc_sendRawTransaction',
+        'irc_call',
+        'irc_estimateGas',
+        'irc_getBlockByHash',
+        'irc_getBlockByNumber',
+        'irc_getTransactionByHash',
+        'irc_getTransactionByBlockHashAndIndex',
+        'irc_getTransactionByBlockNumberAndIndex',
+        'irc_getTransactionReceipt',
+        'irc_getCompilers',
+        'irc_compileSolidity',
+        'irc_compileLLL',
+        'irc_compileSerpent',
+        'irc_getWork',
+        'irc_newFilter',
+        'irc_newBlockFilter',
+        'irc_newPendingTransactionFilter',
+        'irc_uninstallFilter',
+        'irc_getFilterChanges',
+        'irc_getFilterLogs',
+        'irc_getLogs',
+        'irc_submitWork',
+        'irc_submitHashrate'
     ];
 
     /**
@@ -98,7 +98,7 @@ class Huc
     public function protocolVersion($callback = null)
     {
         $params = [];
-        return $this->provider->sendReal('huc_protocolVersion',$params,$callback);
+        return $this->provider->sendReal('irc_protocolVersion',$params,$callback);
     }
 
     /**
@@ -107,13 +107,13 @@ class Huc
      * @throws \Exception
      * @return array Object|Boolean, An object with sync status data or FALSE, when not syncing:
      *           startingBlock: QUANTITY - The block at which the import started (will only be reset, after the sync reached his head)
-     *           currentBlock: QUANTITY - The current block, same as huc_blockNumber
+     *           currentBlock: QUANTITY - The current block, same as irc_blockNumber
      *           highestBlock: QUANTITY - The estimated highest block
      */
     public function syncing($callback = null)
     {
         $params = [];
-        return $this->provider->sendReal('huc_syncing',$params,$callback);
+        return $this->provider->sendReal('irc_syncing',$params,$callback);
     }
 
     /**
@@ -123,7 +123,7 @@ class Huc
     public function coinbase($callback = null)
     {
         $params = [];
-        return $this->provider->sendReal('huc_coinbase',$params,$callback);
+        return $this->provider->sendReal('irc_coinbase',$params,$callback);
     }
 
     /**
@@ -133,7 +133,7 @@ class Huc
     public function mining($callback = null)
     {
         $params = [];
-        return $this->provider->sendReal('huc_mining',$params,$callback);
+        return $this->provider->sendReal('irc_mining',$params,$callback);
     }
 
     /**
@@ -145,7 +145,7 @@ class Huc
     public function hashrate($callback = null)
     {
         $params = [];
-        return $this->provider->sendReal('huc_hashrate',$params,$callback);
+        return $this->provider->sendReal('irc_hashrate',$params,$callback);
     }
 
     /**
@@ -157,7 +157,7 @@ class Huc
     public function gasPrice($callback = null)
     {
         $params = [];
-        return $this->provider->sendReal('huc_gasPrice',$params,$callback);
+        return $this->provider->sendReal('irc_gasPrice',$params,$callback);
     }
 
 
@@ -170,7 +170,7 @@ class Huc
     public function accounts($callback = null)
     {
         $params = [];
-        return $this->provider->sendReal('huc_accounts',$params,$callback);
+        return $this->provider->sendReal('irc_accounts',$params,$callback);
     }
 
 
@@ -185,7 +185,7 @@ class Huc
         $params      = [];
         if($callback)
         {
-            $this->provider->sendReal('huc_blockNumber',$params,function ($err, $blockNumber) use ($callback) {
+            $this->provider->sendReal('irc_blockNumber',$params,function ($err, $blockNumber) use ($callback) {
                 if(!$err){
                     $blockNumber  = Formatter::Number($blockNumber);
                 }
@@ -193,7 +193,7 @@ class Huc
             });
         }else
         {
-            $blockNumber = $this->provider->sendReal('huc_blockNumber',$params,$callback);
+            $blockNumber = $this->provider->sendReal('irc_blockNumber',$params,$callback);
             return Formatter::Number($blockNumber);
         }
     }
@@ -217,7 +217,7 @@ class Huc
         }
 
         $params = [$address,$block_number];
-        return $this->provider->sendReal('huc_getBalance',$params,$callback);
+        return $this->provider->sendReal('irc_getBalance',$params,$callback);
     }
 
 
@@ -241,7 +241,7 @@ class Huc
         }
 
         $params = [$address,$position,$block_number];
-        return $this->provider->sendReal('huc_getStorageAt',$params,$callback);
+        return $this->provider->sendReal('irc_getStorageAt',$params,$callback);
     }
 
     /**
@@ -263,7 +263,7 @@ class Huc
         }
 
         $params = [$address,$block_number];
-        return $this->provider->sendReal('huc_getTransactionCount',$params,$callback);
+        return $this->provider->sendReal('irc_getTransactionCount',$params,$callback);
     }
 
     /**
@@ -284,7 +284,7 @@ class Huc
         }
 
         $params = [$hash];
-        return $this->provider->sendReal('huc_getBlockTransactionCountByHash',$params,$callback);
+        return $this->provider->sendReal('irc_getBlockTransactionCountByHash',$params,$callback);
     }
 
     /**
@@ -305,7 +305,7 @@ class Huc
         }
 
         $params = [$block_number];
-        return $this->provider->sendReal('huc_getBlockTransactionCountByNumber',$params,$callback);
+        return $this->provider->sendReal('irc_getBlockTransactionCountByNumber',$params,$callback);
     }
 
 
@@ -327,7 +327,7 @@ class Huc
         }
 
         $params = [$hash];
-        return $this->provider->sendReal('huc_getUncleCountByBlockHash',$params,$callback);
+        return $this->provider->sendReal('irc_getUncleCountByBlockHash',$params,$callback);
     }
 
     /**
@@ -348,7 +348,7 @@ class Huc
         }
 
         $params = [$block_number];
-        return $this->provider->sendReal('huc_getUncleCountByBlockNumber',$params,$callback);
+        return $this->provider->sendReal('irc_getUncleCountByBlockNumber',$params,$callback);
     }
 
     /**
@@ -370,7 +370,7 @@ class Huc
         }
 
         $params = [$address,$block_number];
-        return $this->provider->sendReal('huc_getCode',$params,$callback);
+        return $this->provider->sendReal('irc_getCode',$params,$callback);
     }
 
     /**
@@ -394,7 +394,7 @@ class Huc
         }
 
         $params = [$address,$message];
-        return $this->provider->sendReal('huc_sign',$params,$callback);
+        return $this->provider->sendReal('irc_sign',$params,$callback);
     }
 
     /**
@@ -413,7 +413,7 @@ class Huc
      *
      * @throws \Exception
      * @return array DATA, 32 Bytes - the transaction hash, or the zero hash if the transaction is not yet available.
-     * Use huc_getTransactionReceipt to get the contract address, after the transaction was mined, when you created a contract.
+     * Use irc_getTransactionReceipt to get the contract address, after the transaction was mined, when you created a contract.
      */
     public function sendTransaction(array $params,$callback=null)
     {
@@ -426,7 +426,7 @@ class Huc
 
         // print_r($params);
        // exit();
-        return $this->provider->sendReal('huc_sendTransaction',[$params],$callback);
+        return $this->provider->sendReal('irc_sendTransaction',[$params],$callback);
     }
 
     /**
@@ -436,12 +436,12 @@ class Huc
      *
      * @throws \Exception
      * @return array   DATA, 32 Bytes - the transaction hash, or the zero hash if the transaction is not yet available.
-     *             Use huc_getTransactionReceipt to get the contract address, after the transaction was mined, when you created a contract.
+     *             Use irc_getTransactionReceipt to get the contract address, after the transaction was mined, when you created a contract.
      */
     public function sendRawTransaction($transaction_data,$callback = null)
     {
         $params = [$transaction_data];
-        return $this->provider->sendReal('huc_sendRawTransaction',$params,$callback);
+        return $this->provider->sendReal('irc_sendRawTransaction',$params,$callback);
     }
 
     /**
@@ -450,7 +450,7 @@ class Huc
      * @param string $from        DATA, 20 Bytes - (optional) The address the transaction is sent from.
      * @param string $to          DATA, 20 Bytes - The address the transaction is directed to.
      * @param string $gas         QUANTITY - (optional) Integer of the gas provided for the transaction execution.
-     *                               huc_call consumes zero gas, but this parameter may be needed by some executions.
+     *                               irc_call consumes zero gas, but this parameter may be needed by some executions.
      * @param string $gasPrice    QUANTITY - (optional) Integer of the gasPrice used for each paid gas
      * @param string $value       QUANTITY - (optional) Integer of the value sent with this transaction
      * @param string $data        DATA - (optional) Hash of the method signature and encoded parameters. For details see HappyUC Contract ABI
@@ -470,7 +470,7 @@ class Huc
          }
 
          // print_r([$params]);
-         return $this->provider->sendReal('huc_call',[$params,$block_number],$callback);
+         return $this->provider->sendReal('irc_call',[$params,$block_number],$callback);
     }
 
     /**
@@ -479,7 +479,7 @@ class Huc
      * Note that the estimate may be significantly more than the amount of gas actually used by the transaction,
      * for a variety of reasons including EVM mechanics and node performance.
      *
-     * See huc_call parameters, expect that all properties are optional.
+     * See irc_call parameters, expect that all properties are optional.
      * If no gas limit is specified geth uses the block gas limit from the pending block as an upper bound.
      * As a result the returned estimate might not be enough to executed the call/transaction when the amount of gas is higher than the pending block gas limit.
      *
@@ -497,7 +497,7 @@ class Huc
         }
         //  $params1 = ['from'=>$from,'to'=>$to,'gas'=>$gas,'gasPrice'=>$gasPrice,'value'=>$value,'data'=>$data];
         $params  = [$params,$block_number];
-        return $this->provider->sendReal('huc_estimateGas',$params,$callback);
+        return $this->provider->sendReal('irc_estimateGas',$params,$callback);
     }
 
     /**
@@ -538,7 +538,7 @@ class Huc
         }
 
         $params = [$hash,$is_full];
-        return $this->provider->sendReal('huc_getBlockByHash',$params,$callback);
+        return $this->provider->sendReal('irc_getBlockByHash',$params,$callback);
     }
 
     /**
@@ -548,7 +548,7 @@ class Huc
      * @param bool   $is_full        Boolean - If true it returns the full transaction objects, if false only the hashes of the transactions.
      *
      * @throws \Exception
-     * @return array  See huc_getBlockByHash
+     * @return array  See irc_getBlockByHash
      */
     public function getBlockByNumber(string $block_number,bool $is_full=false,$callback = null)
     {
@@ -560,7 +560,7 @@ class Huc
         }
 
         $params        = [$block_number,$is_full];
-        return $this->provider->sendReal('huc_getBlockByNumber',$params,$callback);
+        return $this->provider->sendReal('irc_getBlockByNumber',$params,$callback);
     }
 
     /**
@@ -592,7 +592,7 @@ class Huc
         }
 
         $params = [$transaction_hash];
-        return $this->provider->sendReal('huc_getTransactionByHash',$params,$callback);
+        return $this->provider->sendReal('irc_getTransactionByHash',$params,$callback);
     }
 
     /**
@@ -602,7 +602,7 @@ class Huc
      * @param string $position    QUANTITY - the transaction index position.
      *
      * @throws \Exception
-     * @return array  See huc_getTransactionByHash
+     * @return array  See irc_getTransactionByHash
      */
     public function getTransactionByBlockHashAndIndex(string $block_hash,string $position,$callback = null)
     {
@@ -614,7 +614,7 @@ class Huc
         }
 
         $params = [$block_hash,$position];
-        return $this->provider->sendReal('huc_getTransactionByBlockHashAndIndex',$params,$callback);
+        return $this->provider->sendReal('irc_getTransactionByBlockHashAndIndex',$params,$callback);
     }
 
 
@@ -625,7 +625,7 @@ class Huc
      * @param string $position      QUANTITY - the transaction index position.
      *
      * @throws \Exception
-     * @return array  See huc_getTransactionByHash
+     * @return array  See irc_getTransactionByHash
      */
     public function getTransactionByBlockNumberAndIndex(string $block_number,string $position,$callback = null)
     {
@@ -637,7 +637,7 @@ class Huc
         }
 
         $params = [$block_number,$position];
-        return $this->provider->sendReal('huc_getTransactionByBlockNumberAndIndex',$params,$callback);
+        return $this->provider->sendReal('irc_getTransactionByBlockNumberAndIndex',$params,$callback);
     }
 
     /**
@@ -671,7 +671,7 @@ class Huc
         }
 
         $params = [$transaction_hash];
-        return $this->provider->sendReal('huc_getTransactionReceipt',$params,$callback);
+        return $this->provider->sendReal('irc_getTransactionReceipt',$params,$callback);
     }
 
     /**
@@ -681,7 +681,7 @@ class Huc
      * @param string $position     QUANTITY - the uncle's index position.
      *
      * @throws \Exception
-     * @return array  See huc_getBlockByHash
+     * @return array  See irc_getBlockByHash
      */
     public function getUncleByBlockHashAndIndex(string $block_hash,string $position,$callback = null)
     {
@@ -693,7 +693,7 @@ class Huc
         }
 
         $params = [$block_hash,$position];
-        return $this->provider->sendReal('huc_getUncleByBlockHashAndIndex',$params,$callback);
+        return $this->provider->sendReal('irc_getUncleByBlockHashAndIndex',$params,$callback);
     }
 
     /**
@@ -703,7 +703,7 @@ class Huc
      * @param string $position       QUANTITY - the uncle's index position.
      *
      * @throws \Exception
-     * @return array  See huc_getBlockByHash
+     * @return array  See irc_getBlockByHash
      * ** Note **: An uncle doesn't contain individual transactions.
      */
     public function getUncleByBlockNumberAndIndex(string $block_number,string $position,$callback = null)
@@ -716,7 +716,7 @@ class Huc
         }
 
         $params = [$block_number,$position];
-        return $this->provider->sendReal('huc_getUncleByBlockNumberAndIndex',$params,$callback);
+        return $this->provider->sendReal('irc_getUncleByBlockNumberAndIndex',$params,$callback);
     }
 
     /**
@@ -728,7 +728,7 @@ class Huc
     public function getCompilers($callback = null)
     {
         $params = [];
-        return $this->provider->sendReal('huc_getCompilers',$params,$callback);
+        return $this->provider->sendReal('irc_getCompilers',$params,$callback);
     }
 
     /**
@@ -749,7 +749,7 @@ class Huc
         }
 
         $params = [$code];
-        return $this->provider->sendReal('huc_compileSolidity',$params,$callback);
+        return $this->provider->sendReal('irc_compileSolidity',$params,$callback);
     }
 
     /**
@@ -770,7 +770,7 @@ class Huc
         }
 
         $params = [$code];
-        return $this->provider->sendReal('huc_compileLLL',$params,$callback);
+        return $this->provider->sendReal('irc_compileLLL',$params,$callback);
     }
 
 
@@ -792,12 +792,12 @@ class Huc
         }
 
         $params = [$code];
-        return $this->provider->sendReal('huc_compileSerpent',$params,$callback);
+        return $this->provider->sendReal('irc_compileSerpent',$params,$callback);
     }
 
     /**
      * Creates a filter object, based on filter options, to notify when the state changes (logs).
-     * To check if the state has changed, call huc_getFilterChanges.
+     * To check if the state has changed, call irc_getFilterChanges.
      *
      *  A note on specifying topic filters:
      *  Topics are order-dependent. A transaction with a log with topics [A, B] will be matched by the following topic filters:
@@ -827,12 +827,12 @@ class Huc
         }
 
         $params = [$params];
-        return $this->provider->sendReal('huc_newFilter',$params,$callback);
+        return $this->provider->sendReal('irc_newFilter',$params,$callback);
     }
 
     /**
      * Creates a filter in the node, to notify when a new block arrives.
-     * To check if the state has changed, call huc_getFilterChanges.
+     * To check if the state has changed, call irc_getFilterChanges.
      *
      * @throws \Exception
      * @return array  QUANTITY - A filter id.
@@ -840,12 +840,12 @@ class Huc
     public function newBlockFilter($callback = null)
     {
         $params = [];
-        return $this->provider->sendReal('huc_newBlockFilter',$params,$callback);
+        return $this->provider->sendReal('irc_newBlockFilter',$params,$callback);
     }
 
     /**
      * Creates a filter in the node, to notify when new pending transactions arrive.
-     * To check if the state has changed, call huc_getFilterChanges.
+     * To check if the state has changed, call irc_getFilterChanges.
      *
      * @throws \Exception
      * @return array QUANTITY - A filter id.
@@ -853,13 +853,13 @@ class Huc
     public function newPendingTransactionFilter($callback = null)
     {
         $params = [];
-        return $this->provider->sendReal('huc_newPendingTransactionFilter',$params,$callback);
+        return $this->provider->sendReal('irc_newPendingTransactionFilter',$params,$callback);
     }
 
     /**
      * Uninstalls a filter with given id.
      * Should always be called when watch is no longer needed.
-     * Additonally Filters timeout when they aren't requested with huc_getFilterChanges for a period of time.
+     * Additonally Filters timeout when they aren't requested with irc_getFilterChanges for a period of time.
      *
      * @param string $filter_id   QUANTITY - The filter id.
      *
@@ -876,7 +876,7 @@ class Huc
         }
 
         $params = [$filter_id];
-        return $this->provider->sendReal('huc_uninstallFilter',$params,$callback);
+        return $this->provider->sendReal('irc_uninstallFilter',$params,$callback);
     }
 
     /**
@@ -911,7 +911,7 @@ class Huc
         }
 
         $params = [$filter_id];
-        return $this->provider->sendReal('huc_getFilterChanges',$params,$callback);
+        return $this->provider->sendReal('irc_getFilterChanges',$params,$callback);
     }
 
     /**
@@ -920,7 +920,7 @@ class Huc
      * @param string $filter_id  QUANTITY - the filter id.
      *
      * @throws \Exception
-     * @return array See huc_getFilterChanges
+     * @return array See irc_getFilterChanges
      */
     public function getFilterLogs(string $filter_id,$callback = null)
     {
@@ -932,16 +932,16 @@ class Huc
         }
 
         $params = [$filter_id];
-        return $this->provider->sendReal('huc_getFilterLogs',$params,$callback);
+        return $this->provider->sendReal('irc_getFilterLogs',$params,$callback);
     }
 
     /**
      * Returns an array of all logs matching a given filter object.
      *
-     * @param array $topics Object - the filter object, see huc_newFilter parameters.
+     * @param array $topics Object - the filter object, see irc_newFilter parameters.
      *
      * @throws \Exception
-     * @return array  See huc_getFilterChanges
+     * @return array  See irc_getFilterChanges
      */
     public function getLogs(array $topics,$callback = null)
     {
@@ -955,7 +955,7 @@ class Huc
         }
 
         // $params = [['topics'=>$topics]];
-        return $this->provider->sendReal('huc_getLogs',[$params],$callback);
+        return $this->provider->sendReal('irc_getLogs',[$params],$callback);
     }
 
     /**
@@ -971,7 +971,7 @@ class Huc
     public function getWork($callback = null)
     {
         $params = [];
-        return $this->provider->sendReal('huc_getWork',$params,$callback);
+        return $this->provider->sendReal('irc_getWork',$params,$callback);
     }
 
     /**
@@ -994,7 +994,7 @@ class Huc
         }
 
         $params = [$nonce,$pow_hash,$mix_digest];
-        return $this->provider->sendReal('huc_submitWork',$params,$callback);
+        return $this->provider->sendReal('irc_submitWork',$params,$callback);
     }
 
     /**
@@ -1016,7 +1016,7 @@ class Huc
         }
 
         $params = [$hashrate,$id];
-        return $this->provider->sendReal('huc_submitHashrate',$params,$callback);
+        return $this->provider->sendReal('irc_submitHashrate',$params,$callback);
     }
 
 }

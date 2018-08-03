@@ -39,7 +39,7 @@ class TestCase extends BaseTestCase
         $this->webu = $webu;
 
         try{
-            $webu->huc->coinbase();
+            $webu->irc->coinbase();
         }catch (\Exception $exception){
             $this->ShowException($exception);
         }

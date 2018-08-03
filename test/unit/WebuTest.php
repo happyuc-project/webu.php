@@ -7,7 +7,7 @@ use Test\TestCase;
 use Webu\HttpProvider;
 use Webu\HttpRequestManager;
 use Webu\Webu;
-use Webu\Huc;
+use Webu\Irc;
 use Webu\Net;
 use Webu\Personal;
 use Webu\Shh;
@@ -52,7 +52,7 @@ class WebuTest extends TestCase
 
         $this->assertTrue($webu->getProvider() instanceof HttpProvider);
         $this->assertTrue($webu->getProvider()->getRequestManager() instanceof HttpRequestManager);
-        $this->assertTrue($webu->huc instanceof Huc);
+        $this->assertTrue($webu->irc instanceof Irc);
         $this->assertTrue($webu->net instanceof Net);
         $this->assertTrue($webu->personal instanceof Personal);
         $this->assertTrue($webu->shh instanceof Shh);

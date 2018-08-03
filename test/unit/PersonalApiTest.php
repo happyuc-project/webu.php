@@ -150,7 +150,7 @@ class PersonalApiTest extends TestCase
                 $this->assertTrue(is_string($account));
             });
 
-            $this->webu->huc->sendTransaction([
+            $this->webu->irc->sendTransaction([
                 'from' => $this->coinbase,
                 'to' => $this->newAccount,
                 'value' => '0x0ffffffff',

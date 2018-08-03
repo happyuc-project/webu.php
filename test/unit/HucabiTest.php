@@ -5,7 +5,7 @@ namespace Test\Unit;
 
 use Test\TestCase;
 use Webu\Utils;
-use Webu\Contracts\Hucabi;
+use Webu\Contracts\Ircabi;
 use Webu\Contracts\Types\Address;
 use Webu\Contracts\Types\Boolean;
 use Webu\Contracts\Types\Bytes;
@@ -13,12 +13,12 @@ use Webu\Contracts\Types\Integer;
 use Webu\Contracts\Types\Str;
 use Webu\Contracts\Types\Uinteger;
 
-class HucabiTest extends TestCase
+class IrcabiTest extends TestCase
 {
     /**
      * abi
      * 
-     * @var \Webu\Contracts\Hucabi
+     * @var \Webu\Contracts\Ircabi
      */
     protected $abi;
 
@@ -166,7 +166,7 @@ class HucabiTest extends TestCase
     {
         parent::setUp();
         // Error: Using $this when not in object context
-        // $this->abi = new Hucabi([
+        // $this->abi = new Ircabi([
         //     'address' => Address::class,
         //     'bool' => Boolean::class,
         //     'bytes' => Bytes::class,
@@ -175,7 +175,7 @@ class HucabiTest extends TestCase
         //     'uint' => Uinteger::class,
         // ]);
 
-        $this->abi = new Hucabi([
+        $this->abi = new Ircabi([
             'address' => new Address,
             'bool' => new Boolean,
             'bytes' => new Bytes,

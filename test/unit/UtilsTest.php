@@ -253,37 +253,37 @@ class UtilsTest extends TestCase
         $bn = Utils::toWei(0x11, 'wei');
         $this->assertEquals($bn->toString(), '17');
 
-        $bn = Utils::toWei('1', 'huc');
+        $bn = Utils::toWei('1', 'irc');
         $this->assertEquals($bn->toString(), '1000000000000000000');
 
         $bn = Utils::toWei('0x5218', 'wei');
         $this->assertEquals($bn->toString(), '21016');
 
-        $bn = Utils::toWei('0.1', 'huc');
+        $bn = Utils::toWei('0.1', 'irc');
         $this->assertEquals($bn->toString(), '100000000000000000');
 
-        $bn = Utils::toWei('1.69', 'huc');
+        $bn = Utils::toWei('1.69', 'irc');
         $this->assertEquals($bn->toString(), '1690000000000000000');
 
-        $bn = Utils::toWei(0.1, 'huc');
+        $bn = Utils::toWei(0.1, 'irc');
         $this->assertEquals($bn->toString(), '100000000000000000');
 
-        $bn = Utils::toWei(1.69, 'huc');
+        $bn = Utils::toWei(1.69, 'irc');
         $this->assertEquals($bn->toString(), '1690000000000000000');
 
-        $bn = Utils::toWei('-0.1', 'huc');
+        $bn = Utils::toWei('-0.1', 'irc');
         $this->assertEquals($bn->toString(), '-100000000000000000');
 
-        $bn = Utils::toWei('-1.69', 'huc');
+        $bn = Utils::toWei('-1.69', 'irc');
         $this->assertEquals($bn->toString(), '-1690000000000000000');
 
-        $bn = Utils::toWei(-0.1, 'huc');
+        $bn = Utils::toWei(-0.1, 'irc');
         $this->assertEquals($bn->toString(), '-100000000000000000');
 
-        $bn = Utils::toWei(-1.69, 'huc');
+        $bn = Utils::toWei(-1.69, 'irc');
         $this->assertEquals($bn->toString(), '-1690000000000000000');
 
-        $bn = Utils::toWei('', 'huc');
+        $bn = Utils::toWei('', 'irc');
         $this->assertEquals($bn->toString(), '0');
 
         $bn = Utils::toWei(-1.697, 'kwei');
@@ -310,43 +310,43 @@ class UtilsTest extends TestCase
     }
 
     /**
-     * testToHuc
+     * testToIrc
      * 
      * @return void
      */
-    public function testToHuc()
+    public function testToIrc()
     {
-        list($bnq, $bnr) = Utils::toHuc('0x1', 'wei');
+        list($bnq, $bnr) = Utils::toIrc('0x1', 'wei');
 
         $this->assertEquals($bnq->toString(), '0');
         $this->assertEquals($bnr->toString(), '1');
 
-        list($bnq, $bnr) = Utils::toHuc('18', 'wei');
+        list($bnq, $bnr) = Utils::toIrc('18', 'wei');
 
         $this->assertEquals($bnq->toString(), '0');
         $this->assertEquals($bnr->toString(), '18');
 
-        list($bnq, $bnr) = Utils::toHuc(1, 'wei');
+        list($bnq, $bnr) = Utils::toIrc(1, 'wei');
 
         $this->assertEquals($bnq->toString(), '0');
         $this->assertEquals($bnr->toString(), '1');
 
-        list($bnq, $bnr) = Utils::toHuc(0x11, 'wei');
+        list($bnq, $bnr) = Utils::toIrc(0x11, 'wei');
 
         $this->assertEquals($bnq->toString(), '0');
         $this->assertEquals($bnr->toString(), '17');
 
-        list($bnq, $bnr) = Utils::toHuc('1', 'khuc');
+        list($bnq, $bnr) = Utils::toIrc('1', 'kirc');
 
         $this->assertEquals($bnq->toString(), '1000');
         $this->assertEquals($bnr->toString(), '0');
 
-        list($bnq, $bnr) = Utils::toHuc('0x5218', 'wei');
+        list($bnq, $bnr) = Utils::toIrc('0x5218', 'wei');
 
         $this->assertEquals($bnq->toString(), '0');
         $this->assertEquals($bnr->toString(), '21016');
 
-        list($bnq, $bnr) = Utils::toHuc('0x5218', 'huc');
+        list($bnq, $bnr) = Utils::toIrc('0x5218', 'irc');
 
         $this->assertEquals($bnq->toString(), '21016');
         $this->assertEquals($bnr->toString(), '0');
@@ -359,7 +359,7 @@ class UtilsTest extends TestCase
      */
     public function testFromWei()
     {
-        list($bnq, $bnr) = Utils::fromWei('1000000000000000000', 'huc');
+        list($bnq, $bnr) = Utils::fromWei('1000000000000000000', 'irc');
 
         $this->assertEquals($bnq->toString(), '1');
         $this->assertEquals($bnr->toString(), '0');
@@ -369,7 +369,7 @@ class UtilsTest extends TestCase
         $this->assertEquals($bnq->toString(), '18');
         $this->assertEquals($bnr->toString(), '0');
 
-        list($bnq, $bnr) = Utils::fromWei(1, 'huc');
+        list($bnq, $bnr) = Utils::fromWei(1, 'irc');
 
         $this->assertEquals($bnq->toString(), '0');
         $this->assertEquals($bnr->toString(), '1');

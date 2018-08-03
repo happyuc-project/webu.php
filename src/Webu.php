@@ -8,7 +8,7 @@
  */
 namespace Webu;
 
-use Webu\Methods\HucMethod;
+use Webu\Methods\IrcMethod;
 
 class Webu
 {
@@ -20,11 +20,11 @@ class Webu
     protected $provider;
 
     /**
-     * huc
+     * irc
      * 
-     * @var \Webu\Huc
+     * @var \Webu\Irc
      */
-    public $huc;
+    public $irc;
 
     /**
      * net
@@ -75,7 +75,7 @@ class Webu
         $requestManager = new \Webu\HttpRequestManager($host,$timeout);
         $this->provider = new \Webu\HttpProvider($requestManager,$this);
 
-        $this->huc = new Huc($this->provider);
+        $this->irc = new Irc($this->provider);
         $this->net = new Net($this->provider);
         $this->shh = new Shh($this->provider);
         $this->personal = new Personal($this->provider);

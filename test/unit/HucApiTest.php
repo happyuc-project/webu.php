@@ -7,14 +7,14 @@ use InvalidArgumentException;
 use Test\TestCase;
 use phpseclib\Math\BigInteger as BigNumber;
 
-class HucApiTest extends TestCase
+class IrcApiTest extends TestCase
 {
     /**
      * eth
      * 
-     * @var \Webu\Huc
+     * @var \Webu\Irc
      */
-    protected $huc;
+    protected $irc;
 
     /**
      * setUp
@@ -25,7 +25,7 @@ class HucApiTest extends TestCase
     {
         parent::setUp();
 
-        $this->huc = $this->webu->huc;
+        $this->irc = $this->webu->irc;
     }
 
     /**
@@ -35,9 +35,9 @@ class HucApiTest extends TestCase
      */    
     private function testProtocolVersion()
     {
-        $huc = $this->huc;
+        $irc = $this->irc;
 
-        $version = $huc->protocolVersion();
+        $version = $irc->protocolVersion();
 
         $this->assertTrue($version instanceof BigNumber);
     }
@@ -49,8 +49,8 @@ class HucApiTest extends TestCase
      */
     private function testSyncing()
     {
-        $huc     = $this->huc;
-        $syncing =  $huc->syncing();
+        $irc     = $this->irc;
+        $syncing = $irc->syncing();
 
         $this->assertTrue($syncing !== null);
     }
@@ -62,8 +62,8 @@ class HucApiTest extends TestCase
      */
     public function testCoinbase()
     {
-        $huc      = $this->huc;
-        $coinbase = $huc->coinbase();
+        $irc      = $this->irc;
+        $coinbase = $irc->coinbase();
         $this->assertEquals($coinbase, $this->coinbase);
     }
 
@@ -74,8 +74,8 @@ class HucApiTest extends TestCase
      */    
     public function testMining()
     {
-        $huc    = $this->huc;
-        $mining =  $huc->mining();
+        $irc    = $this->irc;
+        $mining = $irc->mining();
         $this->assertTrue($mining);
     }
 
@@ -86,9 +86,8 @@ class HucApiTest extends TestCase
      */    
     public function testHashrate()
     {
-        $huc = $this->huc;
-
-        $hashrate = $huc->hashrate();
+        $irc      = $this->irc;
+        $hashrate = $irc->hashrate();
 
         $this->assertEquals($hashrate->toString(), '0');
     }
@@ -100,8 +99,8 @@ class HucApiTest extends TestCase
      */    
     public function testGasPrice()
     {
-        $huc      = $this->huc;
-        $gasPrice = $huc->gasPrice();
+        $irc      = $this->irc;
+        $gasPrice = $irc->gasPrice();
         $this->assertTrue(is_numeric($gasPrice->toString()));
     }
 
@@ -112,10 +111,8 @@ class HucApiTest extends TestCase
      */    
     public function testAccounts()
     {
-        $huc = $this->huc;
-
-        $accounts =  $huc->accounts();
-
+        $irc      = $this->irc;
+        $accounts = $irc->accounts();
         $this->assertTrue(is_array($accounts));
     }
 
@@ -126,9 +123,8 @@ class HucApiTest extends TestCase
      */    
     public function testBlockNumber()
     {
-        $huc = $this->huc;
-
-        $blockNumber =  $huc->blockNumber();
+        $irc         = $this->irc;
+        $blockNumber = $irc->blockNumber();
 
         $this->assertTrue(is_numeric($blockNumber->toString()));
     }
@@ -140,8 +136,8 @@ class HucApiTest extends TestCase
      */    
     public function testGetBalance()
     {
-        $huc     = $this->huc;
-        $balance = $huc->getBalance('0x407d73d8a49eeb85d32cf465507dd71d507100c1');
+        $irc     = $this->irc;
+        $balance = $irc->getBalance('0x407d73d8a49eeb85d32cf465507dd71d507100c1');
         $this->assertTrue(is_numeric($balance->toString()));
     }
 
@@ -152,9 +148,8 @@ class HucApiTest extends TestCase
      */    
     public function testGetStorageAt()
     {
-        $huc = $this->huc;
-
-        $storage = $huc->getStorageAt('0x561a2aa10f9a8589c93665554c871106342f70af', '0x0');
+        $irc     = $this->irc;
+        $storage = $irc->getStorageAt('0x561a2aa10f9a8589c93665554c871106342f70af', '0x0');
 
         $this->assertTrue(is_string($storage));
     }
@@ -166,9 +161,8 @@ class HucApiTest extends TestCase
      */    
     public function testGetTransactionCount()
     {
-        $huc = $this->huc;
-
-        $transactionCount = $huc->getTransactionCount('0x561a2aa10f9a8589c93665554c871106342f70af');
+        $irc              = $this->irc;
+        $transactionCount = $irc->getTransactionCount('0x561a2aa10f9a8589c93665554c871106342f70af');
 
         $this->assertTrue(is_numeric($transactionCount->toString()));
     }
@@ -180,9 +174,9 @@ class HucApiTest extends TestCase
      */    
     public function testGetBlockTransactionCountByHash()
     {
-        $huc = $this->huc;
+        $irc = $this->irc;
 
-        $transactionCount = $huc->getBlockTransactionCountByHash('0xb903239f8543d04b5dc1ba6579132b143087c68db1b2168786408fcbce568238');
+        $transactionCount = $irc->getBlockTransactionCountByHash('0xb903239f8543d04b5dc1ba6579132b143087c68db1b2168786408fcbce568238');
 
         $this->assertTrue(is_numeric($transactionCount->toString()));
     }
@@ -194,9 +188,9 @@ class HucApiTest extends TestCase
      */    
     public function testGetBlockTransactionCountByNumber()
     {
-        $huc = $this->huc;
+        $irc = $this->irc;
 
-        $transactionCount = $huc->getBlockTransactionCountByNumber('0x0');
+        $transactionCount = $irc->getBlockTransactionCountByNumber('0x0');
 
 
         $this->assertTrue(is_numeric($transactionCount->toString()));
@@ -209,9 +203,9 @@ class HucApiTest extends TestCase
      */    
     public function testGetUncleCountByBlockHash()
     {
-        $huc = $this->huc;
+        $irc = $this->irc;
 
-        $uncleCount = $huc->getUncleCountByBlockHash('0xb903239f8543d04b5dc1ba6579132b143087c68db1b2168786408fcbce568238');
+        $uncleCount = $irc->getUncleCountByBlockHash('0xb903239f8543d04b5dc1ba6579132b143087c68db1b2168786408fcbce568238');
 
         $this->assertTrue(is_numeric($uncleCount->toString()));
     }
@@ -223,9 +217,8 @@ class HucApiTest extends TestCase
      */    
     public function testGetUncleCountByBlockNumber()
     {
-        $huc = $this->huc;
-
-        $uncleCount = $huc->getUncleCountByBlockNumber('0x0');
+        $irc        = $this->irc;
+        $uncleCount = $irc->getUncleCountByBlockNumber('0x0');
 
         $this->assertTrue(is_numeric($uncleCount->toString()));
     }
@@ -237,9 +230,8 @@ class HucApiTest extends TestCase
      */    
     public function testGetCode()
     {
-        $huc = $this->huc;
-
-        $code = $huc->getCode('0x407d73d8a49eeb85d32cf465507dd71d507100c1');
+        $irc  = $this->irc;
+        $code = $irc->getCode('0x407d73d8a49eeb85d32cf465507dd71d507100c1');
 
         $this->assertTrue(is_string($code));
     }
@@ -251,9 +243,8 @@ class HucApiTest extends TestCase
      */    
     public function testSign()
     {
-        $huc = $this->huc;
-
-        $sign = $huc->sign('0x407d73d8a49eeb85d32cf465507dd71d507100c1', '0xdeadbeaf');
+        $irc  = $this->irc;
+        $sign = $irc->sign('0x407d73d8a49eeb85d32cf465507dd71d507100c1', '0xdeadbeaf');
 
         $this->assertTrue(is_string($sign));
     }
@@ -265,9 +256,8 @@ class HucApiTest extends TestCase
      */    
     public function testSendTransaction()
     {
-        $huc = $this->huc;
-
-        $transaction =  $huc->sendTransaction( "0xb60e8dd61c5d32be8058bb8eb970870f07233155",
+        $irc         = $this->irc;
+        $transaction = $irc->sendTransaction( "0xb60e8dd61c5d32be8058bb8eb970870f07233155",
             "0xd46e8dd67c5d32be8058bb8eb970870f07244567",
             "0x76c0",
              "0x9184e72a000",
@@ -285,9 +275,8 @@ class HucApiTest extends TestCase
      */    
     public function testSendRawTransaction()
     {
-        $huc = $this->huc;
-
-        $transaction =  $huc->sendRawTransaction('0xd46e8dd67c5d32be8d46e8dd67c5d32be8058bb8eb970870f072445675058bb8eb970870f072445675');
+        $irc         = $this->irc;
+        $transaction = $irc->sendRawTransaction('0xd46e8dd67c5d32be8d46e8dd67c5d32be8058bb8eb970870f072445675058bb8eb970870f072445675');
 
         $this->assertTrue(is_string($transaction));
     }
@@ -299,9 +288,8 @@ class HucApiTest extends TestCase
      */    
     public function testCall()
     {
-        $huc = $this->huc;
-
-        $transaction=  $huc->call( "0xb60e8dd61c5d32be8058bb8eb970870f07233155",
+        $irc         = $this->irc;
+        $transaction = $irc->call( "0xb60e8dd61c5d32be8058bb8eb970870f07233155",
              "0xd46e8dd67c5d32be8058bb8eb970870f07244567",
              "0x76c0",
              "0x9184e72a000",
@@ -319,9 +307,8 @@ class HucApiTest extends TestCase
      */    
     public function testEstimateGas()
     {
-        $huc = $this->huc;
-
-        $gas =  $huc->estimateGas(  "0xb60e8dd61c5d32be8058bb8eb970870f07233155",
+        $irc = $this->irc;
+        $gas =  $irc->estimateGas(  "0xb60e8dd61c5d32be8058bb8eb970870f07233155",
              "0xd46e8dd67c5d32be8058bb8eb970870f07244567",
               "0x76c0",
              "0x9184e72a000",
@@ -339,9 +326,8 @@ class HucApiTest extends TestCase
      */    
     public function testGetBlockByHash()
     {
-        $huc = $this->huc;
-
-        $block = $huc->getBlockByHash('0xb903239f8543d04b5dc1ba6579132b143087c68db1b2168786408fcbce568238', false);
+        $irc   = $this->irc;
+        $block = $irc->getBlockByHash('0xb903239f8543d04b5dc1ba6579132b143087c68db1b2168786408fcbce568238', false);
 
         $this->assertTrue($block !== null);
     }
@@ -353,9 +339,8 @@ class HucApiTest extends TestCase
      */    
     public function testGetBlockByNumber()
     {
-        $huc = $this->huc;
-
-        $block =  $huc->getBlockByNumber('latest', false);
+        $irc   = $this->irc;
+        $block = $irc->getBlockByNumber('latest', false);
 
         // weired behavior, see https://github.com/happyuc-project/webu.php/issues/16
         $this->assertTrue($block !== null);
@@ -368,9 +353,8 @@ class HucApiTest extends TestCase
      */    
     public function testGetTransactionByHash()
     {
-        $huc = $this->huc;
-
-        $transaction =  $huc->getTransactionByHash('0xb903239f8543d04b5dc1ba6579132b143087c68db1b2168786408fcbce568238');
+        $irc         = $this->irc;
+        $transaction = $irc->getTransactionByHash('0xb903239f8543d04b5dc1ba6579132b143087c68db1b2168786408fcbce568238');
 
         $this->assertTrue($transaction !== null);
     }
@@ -382,9 +366,8 @@ class HucApiTest extends TestCase
      */    
     public function testGetTransactionByBlockHashAndIndex()
     {
-        $huc = $this->huc;
-
-        $transaction =   $huc->getTransactionByBlockHashAndIndex('0xb903239f8543d04b5dc1ba6579132b143087c68db1b2168786408fcbce568238', '0x0');
+        $irc         = $this->irc;
+        $transaction = $irc->getTransactionByBlockHashAndIndex('0xb903239f8543d04b5dc1ba6579132b143087c68db1b2168786408fcbce568238', '0x0');
 
         $this->assertTrue($transaction !== null);
     }
@@ -396,9 +379,8 @@ class HucApiTest extends TestCase
      */    
     public function testGetTransactionByBlockNumberAndIndex()
     {
-        $huc = $this->huc;
-
-        $transaction =   $huc->getTransactionByBlockNumberAndIndex('0xe8', '0x0');
+        $irc         = $this->irc;
+        $transaction = $irc->getTransactionByBlockNumberAndIndex('0xe8', '0x0');
 
         $this->assertTrue($transaction !== null);
     }
@@ -410,9 +392,8 @@ class HucApiTest extends TestCase
      */    
     public function testGetTransactionReceipt()
     {
-        $huc = $this->huc;
-
-        $transaction =  $huc->getTransactionReceipt('0xb903239f8543d04b5dc1ba6579132b143087c68db1b2168786408fcbce568238');
+        $irc         = $this->irc;
+        $transaction = $irc->getTransactionReceipt('0xb903239f8543d04b5dc1ba6579132b143087c68db1b2168786408fcbce568238');
 
         $this->assertTrue($transaction !== null);
     }
@@ -424,9 +405,8 @@ class HucApiTest extends TestCase
      */    
     public function testGetUncleByBlockHashAndIndex()
     {
-        $huc = $this->huc;
-
-        $uncle =   $huc->getUncleByBlockHashAndIndex('0xb903239f8543d04b5dc1ba6579132b143087c68db1b2168786408fcbce568238', '0x0');
+        $irc   = $this->irc;
+        $uncle = $irc->getUncleByBlockHashAndIndex('0xb903239f8543d04b5dc1ba6579132b143087c68db1b2168786408fcbce568238', '0x0');
 
         $this->assertTrue($uncle !== null);
     }
@@ -438,9 +418,8 @@ class HucApiTest extends TestCase
      */    
     public function testGetUncleByBlockNumberAndIndex()
     {
-        $huc = $this->huc;
-
-        $uncle =  $huc->getUncleByBlockNumberAndIndex('0xe8', '0x0');
+        $irc   = $this->irc;
+        $uncle = $irc->getUncleByBlockNumberAndIndex('0xe8', '0x0');
 
         $this->assertTrue($uncle !== null);
     }
@@ -452,9 +431,8 @@ class HucApiTest extends TestCase
      */    
     public function testGetCompilers()
     {
-        $huc = $this->huc;
-
-        $compilers=  $huc->getCompilers();
+        $irc      = $this->irc;
+        $compilers= $irc->getCompilers();
 
         $this->assertTrue(is_array($compilers));
         $this->assertEquals($compilers[0], 'solidity');
@@ -467,9 +445,8 @@ class HucApiTest extends TestCase
      */    
     public function testCompileSolidity()
     {
-        $huc = $this->huc;
-
-        $compiled = $huc->compileSolidity('contract test { function multiply(uint a) returns(uint d) {   return a * 7;   } }');
+        $irc      = $this->irc;
+        $compiled = $irc->compileSolidity('contract test { function multiply(uint a) returns(uint d) {   return a * 7;   } }');
 
         $this->assertTrue(is_string($compiled));
     }
@@ -481,9 +458,8 @@ class HucApiTest extends TestCase
      */    
     public function testCompileLLL()
     {
-        $huc = $this->huc;
-
-        $compiled =  $huc->compileLLL('(returnlll (suicide (caller)))');
+        $irc      = $this->irc;
+        $compiled = $irc->compileLLL('(returnlll (suicide (caller)))');
 
         $this->assertTrue(is_string($compiled));
     }
@@ -495,9 +471,8 @@ class HucApiTest extends TestCase
      */    
     public function testCompileSerpent()
     {
-        $huc = $this->huc;
-
-        $compiled = $huc->compileSerpent('\/* some serpent *\/');
+        $irc      = $this->irc;
+        $compiled = $irc->compileSerpent('\/* some serpent *\/');
 
         $this->assertTrue(is_string($compiled));
     }
@@ -509,9 +484,8 @@ class HucApiTest extends TestCase
      */    
     public function testNewFilter()
     {
-        $huc = $this->huc;
-
-        $filter=  $huc->newFilter(
+        $irc   = $this->irc;
+        $filter=  $irc->newFilter(
              '0x1',
              '0x2',
              '0x8888f1f195afa192cfee860698584c030f4c9db1',
@@ -528,9 +502,8 @@ class HucApiTest extends TestCase
      */    
     public function testNewBlockFilter()
     {
-        $huc = $this->huc;
-
-        $filter =  $huc->newBlockFilter('0x01');
+        $irc    = $this->irc;
+        $filter = $irc->newBlockFilter('0x01');
 
         $this->assertTrue(is_string($filter));
     }
@@ -542,9 +515,8 @@ class HucApiTest extends TestCase
      */    
     public function testNewPendingTransactionFilter()
     {
-        $huc = $this->huc;
-
-        $filter =  $huc->newPendingTransactionFilter();
+        $irc    = $this->irc;
+        $filter = $irc->newPendingTransactionFilter();
 
         $this->assertTrue(is_string($filter));
     }
@@ -556,9 +528,8 @@ class HucApiTest extends TestCase
      */    
     public function testUninstallFilter()
     {
-        $huc = $this->huc;
-
-        $filter =  $huc->uninstallFilter('0x01');
+        $irc    = $this->irc;
+        $filter = $irc->uninstallFilter('0x01');
 
         $this->assertTrue(is_bool($filter));
     }
@@ -570,9 +541,8 @@ class HucApiTest extends TestCase
      */    
     public function testGetFilterChanges()
     {
-        $huc = $this->huc;
-
-        $changes =  $huc->getFilterChanges('0x01');
+        $irc     = $this->irc;
+        $changes = $irc->getFilterChanges('0x01');
 
         $this->assertTrue(is_array($changes));
     }
@@ -584,9 +554,8 @@ class HucApiTest extends TestCase
      */    
     public function testGetFilterLogs()
     {
-        $huc = $this->huc;
-
-        $logs =  $huc->getFilterLogs('0x01');
+        $irc  = $this->irc;
+        $logs = $irc->getFilterLogs('0x01');
 
         $this->assertTrue(is_array($logs));
     }
@@ -598,9 +567,8 @@ class HucApiTest extends TestCase
      */    
     public function testGetLogs()
     {
-        $huc = $this->huc;
-
-        $logs =  $huc->getLogs([
+        $irc  = $this->irc;
+        $logs = $irc->getLogs([
             'fromBlock' => '0x1',
             'toBlock' => '0x2',
             'address' => '0x8888f1f195afa192cfee860698584c030f4c9db1',
@@ -617,9 +585,8 @@ class HucApiTest extends TestCase
      */    
     public function testGetWork()
     {
-        $huc = $this->huc;
-
-        $work = $huc->getWork();
+        $irc  = $this->irc;
+        $work = $irc->getWork();
 
         $this->assertTrue(is_array($work));
     }
@@ -631,9 +598,8 @@ class HucApiTest extends TestCase
      */    
     public function testSubmitWork()
     {
-        $huc = $this->huc;
-
-        $work =  $huc->submitWork(
+        $irc  = $this->irc;
+        $work = $irc->submitWork(
             '0x0000000000000001',
             '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef',
             '0xD1FE5700000000000000000000000000D1FE5700000000000000000000000000'
@@ -649,9 +615,9 @@ class HucApiTest extends TestCase
      */    
     public function testSubmitHashrate()
     {
-        $huc = $this->huc;
+        $irc = $this->irc;
 
-        $work = $huc->submitHashrate(
+        $work = $irc->submitHashrate(
             '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef',
             '0xD1FE5700000000000000000000000000D1FE5700000000000000000000000000'
         );
@@ -668,9 +634,9 @@ class HucApiTest extends TestCase
     {
         $this->expectException(RuntimeException::class);
 
-        $huc = $this->huc;
+        $irc = $this->irc;
 
-        $huc->hello();
+        $irc->hello();
 
         $this->assertTrue(true);
     }
@@ -684,9 +650,8 @@ class HucApiTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        $huc = $this->huc;
-
-        $protocolVersion =  $huc->protocolVersion();
+        $irc             = $this->irc;
+        $protocolVersion = $irc->protocolVersion();
 
         $this->assertTrue(is_string($protocolVersion));
     }

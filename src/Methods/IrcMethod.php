@@ -12,7 +12,7 @@ namespace Webu\Methods;
 use InvalidArgumentException;
 use RuntimeException;
 
-class HucMethod extends JSONRPC implements IMethod
+class IrcMethod extends JSONRPC implements IMethod
 {
     /**
      * validators

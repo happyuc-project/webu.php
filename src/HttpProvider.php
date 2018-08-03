@@ -115,7 +115,7 @@ class HttpProvider
     /**
      * send
      * 
-     * @param \Webu\Methods\HucMethod $method
+     * @param \Webu\Methods\IrcMethod $method
      * @return void
      */
 //    public function sendAsyn($method)

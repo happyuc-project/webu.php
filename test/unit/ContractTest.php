@@ -291,7 +291,7 @@ class ContractTest extends TestCase
         "constant": false,
         "inputs": [
           {
-            "name": "hucAddress",
+            "name": "ircAddress",
             "type": "address"
           }
         ],
@@ -318,7 +318,7 @@ class ContractTest extends TestCase
         "constant": false,
         "inputs": [
           {
-            "name": "hucAddress",
+            "name": "ircAddress",
             "type": "address"
           },
           {
@@ -356,7 +356,7 @@ class ContractTest extends TestCase
         "inputs": [
           {
             "indexed": true,
-            "name": "hucAddress",
+            "name": "ircAddress",
             "type": "address"
           },
           {
@@ -420,7 +420,7 @@ class ContractTest extends TestCase
 
         $this->contract = new Contract($this->webu->getProvider(), $this->testAbi);
         try {
-            $this->accounts = $this->webu->huc->accounts();
+            $this->accounts = $this->webu->irc->accounts();
         }catch (\Exception $err) {
             echo __METHOD__.":".__LINE__." {$err->getMessage()}\n";
             return;
@@ -492,7 +492,7 @@ class ContractTest extends TestCase
 
                 $this->assertTrue((preg_match('/^0x[a-f0-9]{64}$/', $transactionHash) === 1));
 
-                $contract->getHuc()->getTransactionReceipt($transactionHash, function ($err, $transaction) {
+                $contract->getIrc()->getTransactionReceipt($transactionHash, function ($err, $transaction) {
                     if ($err !== null) {
                         echo __METHOD__.":".__LINE__." {$err}\n";
                         return;
@@ -505,7 +505,7 @@ class ContractTest extends TestCase
                         print_r($transaction);
                         echo "\nTransaction has mind:) block number:{$transaction->blockNumber} \$transaction->contractAddress:{$transaction->contractAddress}\n";
                         // validate topics
-                        // $this->assertEquals($this->contract->getHucabi()->encodeEventSignature($this->contract->getEvents()['Transfer']), $topics[0]);
+                        // $this->assertEquals($this->contract->getIrcabi()->encodeEventSignature($this->contract->getEvents()['Transfer']), $topics[0]);
                     }
                 });
             });
@@ -550,7 +550,7 @@ class ContractTest extends TestCase
 //                $this->assertTrue((preg_match('/^0x[a-f0-9]{64}$/', $transactionId) === 1));
 //
 //                try{
-//                    $contract->getHuc()->getTransactionReceipt($transactionId, function ($err, $transaction) {
+//                    $contract->getIrc()->getTransactionReceipt($transactionId, function ($err, $transaction) {
 //                        if ($err !== null) {
 //                            exit($err);
 //                        }
@@ -668,7 +668,7 @@ class ContractTest extends TestCase
                 $transactionId = $result;
                 $this->assertTrue((preg_match('/^0x[a-f0-9]{64}$/', $transactionId) === 1));
 
-                $contract->getHuc()->getTransactionReceipt($transactionId, function ($err, $transaction) use ($fromAccount, $toAccount, $contract) {
+                $contract->getIrc()->getTransactionReceipt($transactionId, function ($err, $transaction) use ($fromAccount, $toAccount, $contract) {
                     if ($err !== null) {
                         echo __METHOD__.":".__LINE__." {$err}\n";
                         return;
@@ -678,7 +678,7 @@ class ContractTest extends TestCase
                         echo "\nTransaction has mind:) block number: " . $transaction->blockNumber . "\n";
 
                         // validate topics
-                        $this->assertEquals($contract->getHucabi()->encodeEventSignature($this->contract->getEvents()['Transfer']), $topics[0]);
+                        $this->assertEquals($contract->getIrcabi()->encodeEventSignature($this->contract->getEvents()['Transfer']), $topics[0]);
                         $this->assertEquals('0x' . Formatter::Integer($fromAccount), $topics[1]);
                         $this->assertEquals('0x' . Formatter::Integer($toAccount)  , $topics[2]);
                     }
@@ -725,7 +725,7 @@ class ContractTest extends TestCase
 
                 $this->assertTrue((preg_match('/^0x[a-f0-9]{64}$/', $transactionId) === 1));
 
-                $contract->getHuc()->getTransactionReceipt($transactionId, function ($err, $transaction) {
+                $contract->getIrc()->getTransactionReceipt($transactionId, function ($err, $transaction) {
                     if ($err !== null) {
                         echo __METHOD__.":".__LINE__." {$err}\n";
                         return;
@@ -791,7 +791,7 @@ class ContractTest extends TestCase
                 $transactionId = $result;
                 $this->assertTrue((preg_match('/^0x[a-f0-9]{64}$/', $transactionId) === 1));
 
-                $contract->getHuc()->getTransactionReceipt($transactionId, function ($err, $transaction) {
+                $contract->getIrc()->getTransactionReceipt($transactionId, function ($err, $transaction) {
                     if ($err !== null) {
                         exit($err);
                     }
@@ -878,7 +878,7 @@ class ContractTest extends TestCase
                 $transactionId = $result;
                 $this->assertTrue((preg_match('/^0x[a-f0-9]{64}$/', $transactionId) === 1));
 
-                $contract->getHuc()->getTransactionReceipt($transactionId, function ($err, $transaction) {
+                $contract->getIrc()->getTransactionReceipt($transactionId, function ($err, $transaction) {
                     if ($err !== null) {
                         exit($err);
                     }
@@ -951,7 +951,7 @@ class ContractTest extends TestCase
                 $transactionId = $result;
                 $this->assertTrue((preg_match('/^0x[a-f0-9]{64}$/', $transactionId) === 1));
 
-                $contract->getHuc()->getTransactionReceipt($transactionId, function ($err, $transaction) {
+                $contract->getIrc()->getTransactionReceipt($transactionId, function ($err, $transaction) {
                     if ($err !== null) {
                         echo __METHOD__.":".__LINE__." {$err}\n";
                         return;
@@ -984,7 +984,7 @@ class ContractTest extends TestCase
                 $transactionId = $result;
                 $this->assertTrue((preg_match('/^0x[a-f0-9]{64}$/', $transactionId) === 1));
 
-                $contract->getHuc()->getTransactionReceipt($transactionId, function ($err, $transaction) use ($fromAccount, $toAccount, $contract) {
+                $contract->getIrc()->getTransactionReceipt($transactionId, function ($err, $transaction) use ($fromAccount, $toAccount, $contract) {
                     if ($err !== null) {
                         echo __METHOD__.":".__LINE__." {$err}\n";
                         return;
@@ -994,7 +994,7 @@ class ContractTest extends TestCase
                         echo "\nTransaction has mind:) block number: " . $transaction->blockNumber . "\n";
 
                         // validate topics
-                        // $this->assertEquals($contract->getHucabi()->encodeEventSignature($this->contract->events['AddUser']), $topics[0]);
+                        // $this->assertEquals($contract->getIrcabi()->encodeEventSignature($this->contract->events['AddUser']), $topics[0]);
                         $this->assertEquals('0x' . Formatter::Address($toAccount), $topics[1]);
                     }
                 });

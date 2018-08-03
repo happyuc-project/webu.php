@@ -7,16 +7,16 @@ use Test\TestCase;
 use Webu\Providers\HttpProvider;
 use Webu\RequestManagers\RequestManager;
 use Webu\RequestManagers\HttpRequestManager;
-use Webu\Huc;
+use Webu\Irc;
 
-class HucTest extends TestCase
+class IrcTest extends TestCase
 {
     /**
-     * huc
+     * irc
      * 
-     * @var \Webu\Huc
+     * @var \Webu\Irc
      */
-    protected $huc;
+    protected $irc;
 
     /**
      * setUp
@@ -27,7 +27,7 @@ class HucTest extends TestCase
     {
         parent::setUp();
 
-        $this->huc = $this->webu->huc;
+        $this->irc = $this->webu->irc;
     }
 
     /**
@@ -61,7 +61,7 @@ class HucTest extends TestCase
         $this->expectException(RuntimeException::class);
 
         try{
-            $this->webu->huc->protocolVersion();
+            $this->webu->irc->protocolVersion();
         }catch (\Exception $err) {
             echo $err->getMessage();
         }

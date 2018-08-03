@@ -28,18 +28,18 @@ class Utils
      * @const array
      */
     const UNITS = [
-       'nohuc' => '0',
+       'noirc' => '0',
          'wei' => '1',
         'kwei' => '1000',
         'mwei' => '1000000',
         'gwei' => '1000000000',
         'twei' => '1000000000000',
         'pwei' => '1000000000000000',
-         'huc' => '1000000000000000000',
-        'khuc' => '1000000000000000000000',
-        'mhuc' => '1000000000000000000000000',
-        'ghuc' => '1000000000000000000000000000',
-        'thuc' => '1000000000000000000000000000000'
+         'irc' => '1000000000000000000',
+        'kirc' => '1000000000000000000000',
+        'mirc' => '1000000000000000000000000',
+        'girc' => '1000000000000000000000000000',
+        'tirc' => '1000000000000000000000000000000'
     ];
 
     /**
@@ -307,23 +307,23 @@ class Utils
     }
 
     /**
-     * toHuc
-     * Change number from unit to huc.
+     * toIrc
+     * Change number from unit to irc.
      * For example:
-     * list($bnq, $bnr) = Utils::toHuc('1', 'khuc'); 
+     * list($bnq, $bnr) = Utils::toIrc('1', 'kirc');
      * $bnq->toString(); // 1000
      * 
      * @param BigNumber|string|int $number
      * @param string $unit
      * @return array
      */
-    public static function toHuc($number, $unit)
+    public static function toIrc($number, $unit)
     {
-        // if ($unit === 'huc') {
+        // if ($unit === 'irc') {
         //     throw new InvalidArgumentException('Please use another unit.');
         // }
         $wei = self::toWei($number, $unit);
-        $bnt = new BigNumber(self::UNITS['huc']);
+        $bnt = new BigNumber(self::UNITS['irc']);
 
         return $wei->divide($bnt);
     }

@@ -5,14 +5,14 @@ namespace Test\Unit;
 use Test\TestCase;
 use phpseclib\Math\BigInteger as BigNumber;
 
-class HucBatchTest extends TestCase
+class IrcBatchTest extends TestCase
 {
     /**
      * eth
      * 
-     * @var \Webu\Huc
+     * @var \Webu\Irc
      */
-    protected $huc;
+    protected $irc;
 
     /**
      * setUp
@@ -23,7 +23,7 @@ class HucBatchTest extends TestCase
     {
         parent::setUp();
 
-        $this->huc = $this->webu->huc;
+        $this->irc = $this->webu->irc;
     }
 
     /**
@@ -33,10 +33,9 @@ class HucBatchTest extends TestCase
      */
     public function testBatch()
     {
-        $huc= $this->huc;
-
-        $data_0 = $huc->protocolVersion();
-        $data_1 = $huc->syncing();
+        $irc    = $this->irc;
+        $data_0 = $irc->protocolVersion();
+        $data_1 = $irc->syncing();
 
         $this->assertTrue($data_0 instanceof BigNumber);
         $this->assertTrue($data_1 !== null);

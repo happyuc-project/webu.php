@@ -2,11 +2,11 @@
 
 require('./exampleBase.php');
 
-$huc = $webu->huc;
+$irc = $webu->irc;
 
-echo 'Huc Get Account and Balance' . PHP_EOL;
+echo 'Irc Get Account and Balance' . PHP_EOL;
 
-$huc->accounts(function ($err, $accounts) use ($huc)
+$irc->accounts(function ($err, $accounts) use ($irc)
 {
     if ($err !== null)
     {
@@ -17,7 +17,7 @@ $huc->accounts(function ($err, $accounts) use ($huc)
     {
         echo 'Account: ' . $account . PHP_EOL;
 
-        $huc->getBalance($account, function ($err, $balance)
+        $irc->getBalance($account, function ($err, $balance)
         {
             if ($err !== null)
             {

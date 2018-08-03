@@ -9,7 +9,7 @@
 
 namespace Webu;
 
-use Webu\Contracts\Hucabi;
+use Webu\Contracts\Ircabi;
 use Webu\Contracts\Types\Address;
 use Webu\Contracts\Types\Boolean;
 use Webu\Contracts\Types\Bytes;
@@ -70,18 +70,18 @@ class Contract
     protected $abi;
 
     /**
-     * huc
+     * irc
      * 
-     * @var \Webu\Huc
+     * @var \Webu\Irc
      */
-    protected $huc;
+    protected $irc;
 
     /**
-     * hucabi
+     * ircabi
      * 
-     * @var \Webu\Contracts\Hucabi
+     * @var \Webu\Contracts\Ircabi
      */
-    protected $hucabi;
+    protected $ircabi;
 
     /**
      * construct
@@ -95,8 +95,8 @@ class Contract
         $this->setAbi($abi);
 
         $this->provider = $provider;
-        $this->huc      = $this->provider->webu->huc;
-        $this->hucabi   = new Hucabi(['address' => new Address, 'bool' => new Boolean, 'bytes' => new Bytes, 'int' => new Integer, 'string' => new Str,'uint' => new Uinteger,]);
+        $this->irc      = $this->provider->webu->irc;
+        $this->ircabi   = new Ircabi(['address' => new Address, 'bool' => new Boolean, 'bytes' => new Bytes, 'int' => new Integer, 'string' => new Str,'uint' => new Uinteger,]);
     }
 
     /**
@@ -131,13 +131,13 @@ class Contract
 
 
     /**
-     * getHucabi
+     * getIrcabi
      * 
-     * @return \Webu\Contracts\Hucabi
+     * @return \Webu\Contracts\Ircabi
      */
-    public function getHucabi()
+    public function getIrcabi()
     {
-        return $this->hucabi;
+        return $this->ircabi;
     }
 
     /**
@@ -149,13 +149,13 @@ class Contract
     }
 
     /**
-     * getHuc
+     * getIrc
      * 
-     * @return \Webu\Huc
+     * @return \Webu\Irc
      */
-    public function getHuc()
+    public function getIrc()
     {
-        return $this->huc;
+        return $this->irc;
     }
 
     /**
@@ -235,7 +235,7 @@ class Contract
                     throw new \InvalidArgumentException('Please call bytecode($bytecode) before getData().');
                 }
                 $params       = array_splice($arguments, 0, count($constructor['inputs']));
-                $data         = $this->hucabi->encodeParameters($constructor, $params);
+                $data         = $this->ircabi->encodeParameters($constructor, $params);
                 $functionData = $this->bytecode . Utils::stripZero($data);
             } else {
                 $method = array_splice($arguments, 0, 1)[0];
@@ -249,9 +249,9 @@ class Contract
                     throw new \InvalidArgumentException('Please make sure you have put all function params and callback.');
                 }
                 $params            = array_splice($arguments, 0, count($function['inputs']));
-                $data              = $this->hucabi->encodeParameters($function, $params);
+                $data              = $this->ircabi->encodeParameters($function, $params);
                 $functionName      = Utils::jsonMethodToString($function);
-                $functionSignature = $this->hucabi->encodeFunctionSignature($functionName);
+                $functionSignature = $this->ircabi->encodeFunctionSignature($functionName);
                 $functionData      = Utils::stripZero($functionSignature) . Utils::stripZero($data);
             }
         }
@@ -333,13 +333,13 @@ class Contract
             // print_r(['$arguments'=>$arguments,'$this->constructor[\'inputs\']'=>$this->constructor['inputs']  ]);
             $inputs         = array_splice($arguments, 0, count($this->constructor['inputs']));
             // print_r(['$arguments'=>$arguments]);
-            $data           = $this->hucabi->encodeParameters($this->constructor, $inputs);
+            $data           = $this->ircabi->encodeParameters($this->constructor, $inputs);
             // print_r(['Utils::stripZero($data)'=>Utils::stripZero($data)]);
             $data           = '0x' . $this->bytecode . Utils::stripZero($data);
             $params         = $arguments[0];
             $params['data'] = $data;
             // print_r(['$params'=>$params]);
-            $this->huc->sendTransaction($params, $callback);
+            $this->irc->sendTransaction($params, $callback);
         }
 
         return $this;
@@ -377,9 +377,9 @@ class Contract
             $arguments2         = array_splice($arguments, 0, count($function['inputs']));
 
             // print_r($arguments);
-            $data              = $this->hucabi->encodeParameters($function, $arguments2);
+            $data              = $this->ircabi->encodeParameters($function, $arguments2);
             $functionName      = Utils::jsonMethodToString($function);
-            $functionSignature = $this->hucabi->encodeFunctionSignature($functionName);
+            $functionSignature = $this->ircabi->encodeFunctionSignature($functionName);
             $params            = [];
 
             if (count($arguments) > 0) {
@@ -391,7 +391,7 @@ class Contract
             // print_r(['to'=>$this->toAddress,'$data'=>$data]);
             $params['data'] = $functionSignature . Utils::stripZero($data);
             // print_r($params);
-            $this->huc->sendTransaction($params, $callback);
+            $this->irc->sendTransaction($params, $callback);
         }
         return $this;
     }
@@ -425,9 +425,9 @@ class Contract
                 throw new \InvalidArgumentException('The last param must be callback function.');
             }
             $params2           = array_splice($arguments, 0, count($function['inputs']));
-            $data              = $this->hucabi->encodeParameters($function, $params2);
+            $data              = $this->ircabi->encodeParameters($function, $params2);
             $functionName      = Utils::jsonMethodToString($function);
-            $functionSignature = $this->hucabi->encodeFunctionSignature($functionName);
+            $functionSignature = $this->ircabi->encodeFunctionSignature($functionName);
             $params            = [];
 
             if (count($arguments) > 0) {
@@ -436,11 +436,11 @@ class Contract
             $params['to']   = $this->toAddress;
             $params['data'] = $functionSignature . Utils::stripZero($data);
 
-            $this->huc->call($params, "latest", function ($err, $data) use ($callback, $function){
+            $this->irc->call($params, "latest", function ($err, $data) use ($callback, $function){
                 if ($err !== null) {
                     return call_user_func($callback, $err, null);
                 }
-                $decodedTransaction = $this->hucabi->decodeParameters($function, $data);
+                $decodedTransaction = $this->ircabi->decodeParameters($function, $data);
                 return call_user_func($callback, null, $decodedTransaction);
             });
         }
@@ -475,7 +475,7 @@ class Contract
                     throw new \InvalidArgumentException('Please call bytecode($bytecode) before estimateGas().');
                 }
                 $params2 = array_splice($arguments, 0, count($constructor['inputs']));
-                $data    = $this->hucabi->encodeParameters($constructor, $params2);
+                $data    = $this->ircabi->encodeParameters($constructor, $params2);
                 $params  = [];
 
                 if (count($arguments) > 0) {
@@ -498,9 +498,9 @@ class Contract
                     throw new \InvalidArgumentException('The last param must be callback function.');
                 }
                 $params2           = array_splice($arguments, 0, count($function['inputs']));
-                $data              = $this->hucabi->encodeParameters($function, $params2);
+                $data              = $this->ircabi->encodeParameters($function, $params2);
                 $functionName      = Utils::jsonMethodToString($function);
-                $functionSignature = $this->hucabi->encodeFunctionSignature($functionName);
+                $functionSignature = $this->ircabi->encodeFunctionSignature($functionName);
                 $params            = [];
 
                 if (count($arguments) > 0) {
@@ -509,7 +509,7 @@ class Contract
                 $params['to']   = $this->toAddress;
                 $params['data'] = $functionSignature . Utils::stripZero($data);
             }
-            return $this->huc->estimateGas( $params, "latest", $callback);
+            return $this->irc->estimateGas( $params, "latest", $callback);
         }
         return $this;
     }

@@ -14,7 +14,7 @@ use stdClass;
 use Webu\Formatter;
 use Webu\Utils;
 
-class Hucabi
+class Ircabi
 {
     /**
      * types

@@ -61,20 +61,20 @@ $webu->clientVersion(function ($err, $version) {
 });
 ```
 
-### Huc
+### Irc
 ```php
 use Webu\Webu;
 
 $webu = new Webu('http://localhost:8545');
-$huc = $webu->huc;
+$irc = $webu->irc;
 ```
 
 Or
 
 ```php
-use Webu\Huc;
+use Webu\Irc;
 
-$huc = new Huc('http://localhost:8545');
+$irc = new Irc('http://localhost:8545');
 ```
 
 ### Net
@@ -112,14 +112,14 @@ $webu->execute(function ($err, $data) {
 });
 ```
 
-huc
+irc
 
 ```php
-$huc->batch(true);
-$huc->protocolVersion();
-$huc->syncing();
+$irc->batch(true);
+$irc->protocolVersion();
+$irc->syncing();
 
-$huc->provider->execute(function ($err, $data) {
+$irc->provider->execute(function ($err, $data) {
     if ($err !== null) {
         // do somhucing
         return;
@@ -208,7 +208,7 @@ $webu->personal->newAccount('123456', function ($err, $account) use (&$newAccoun
 
 To run examples, you need to run HappyUC blockchain local (testrpc).
 
-If you are using docker as development machain, you can try [hucdock](https://github.com/sc0vu/hucdock) to run local HappyUC blockchain, just simply run `docker-compose up -d testrpc` and expose the `8545` port.
+If you are using docker as development machain, you can try [ircdock](https://github.com/sc0vu/ircdock) to run local HappyUC blockchain, just simply run `docker-compose up -d testrpc` and expose the `8545` port.
 
 # Develop
 
