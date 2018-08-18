@@ -79,6 +79,12 @@ class HttpProvider
             'params'  => $params,
             'id'      => ++$this->id
         ]);
+//        print_r([
+//            'jsonrpc' => $this->rpcVersion,
+//            'method'  => $method,
+//            'params'  => $params,
+//            'id'      => ++$this->id
+//        ]);
         $data =  $this->requestManager->payloadReal($payload);
 
 

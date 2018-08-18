@@ -112,7 +112,7 @@ class Webu
      */
     public function sha3(string $data,$callback = null)
     {
-        $params = [$data];
+        $params = [$data,256];
         return $this->provider->sendReal('webu_sha3',$params,$callback);
     }
 
